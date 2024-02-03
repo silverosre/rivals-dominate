@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitBunket extends Kit {
     public KitBunket(int id, String name) {
         super(id, name);
+        this.foodCount = 4;
     }
 
     @Override

@@ -20,8 +20,9 @@ public class Kit {
 
     public static void init() {
         BUNKET = new KitBunket(0, "bunket");
-        ARCHER = new Kit(1, "archer");
+        ARCHER = new KitArcher(1, "archer");
         HAMOOD = new KitHamood(2, "hamood");
+
     }
 
     public Kit(int id, String name) {

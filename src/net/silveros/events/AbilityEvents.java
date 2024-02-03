@@ -2,7 +2,7 @@ package net.silveros.events;
 
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.KitBunket;
-import net.silveros.main.MainPlugin;
+import net.silveros.main.RivalsPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,12 +23,12 @@ public class AbilityEvents implements Listener {
         Player player = event.getPlayer();
         player.sendMessage(ChatColor.LIGHT_PURPLE + "Welcome to the server!");
 
-        MainPlugin.addPlayer(player);
+        RivalsPlugin.addPlayer(player);
     }
 
     @EventHandler
     public static void onPlayerLeave(PlayerQuitEvent event) {
-        MainPlugin.removePlayer(event.getPlayer());
+        RivalsPlugin.removePlayer(event.getPlayer());
     }
 
     @EventHandler
@@ -62,6 +62,7 @@ public class AbilityEvents implements Listener {
                 } else if (equals(item, ItemRegistry.ABILITY_Swift)) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
+                    player.getInventory().clear(5);
                 }
             }
         }

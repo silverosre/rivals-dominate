@@ -1,13 +1,13 @@
-name: TestPlugin
+name: RivalsPlugin
 version: 1.0
 author: Silveros
-main: net.silveros.main.MainPlugin
+main: net.silveros.main.RivalsPlugin
 api-version: 1.14
 
 commands:
   kit:
     description: Gives the specified kit to the player
-    permission: rd.kit
+    permission: rivals.kit
     usage: /kit <kit>
 
 permissions: {}

@@ -1,9 +1,8 @@
 package net.silveros.main;
 
-import net.silveros.commands.RDCommands;
+import net.silveros.commands.RivalsCommands;
 import net.silveros.entity.User;
 import net.silveros.events.AbilityEvents;
-import net.silveros.events.TickEvent;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.utility.Color;
@@ -14,9 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class MainPlugin extends JavaPlugin implements Color {
+public class RivalsPlugin extends JavaPlugin implements Color {
     public static List<User> players = new ArrayList<>();
 
     @Override
@@ -32,7 +30,7 @@ public class MainPlugin extends JavaPlugin implements Color {
         //Util.registerEvent(new TickEvent(this));
         Util.registerEvent(new AbilityEvents());
 
-        Util.registerCommand("kit", new RDCommands(this));
+        Util.registerCommand("kit", new RivalsCommands(this));
         //this.getCommand("kit").setExecutor(new RDCommands(this));
 
         this.startTicking();

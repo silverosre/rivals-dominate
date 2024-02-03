@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class KitHamood extends Kit {
     public KitHamood(int id, String name) {
         super(id, name);
+        this.foodCount = 7;
     }
 
     @Override
@@ -17,6 +18,6 @@ public class KitHamood extends Kit {
 
         inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);
         inv.setItem(4, ItemRegistry.ABILITY_DuneSlice);
-        inv.setItem(5, ItemRegistry.ABILITY_Swift);
+        //inv.setItem(5, ItemRegistry.ABILITY_Swift);
     }
 }

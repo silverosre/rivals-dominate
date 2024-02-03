@@ -1,7 +1,7 @@
 package net.silveros.utility;
 
 import net.silveros.entity.User;
-import net.silveros.main.MainPlugin;
+import net.silveros.main.RivalsPlugin;
 import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class Util {
 
     /**Can return null!*/
     public static User getUserFromId(UUID uuid) {
-        for (User user : MainPlugin.players) {
+        for (User user : RivalsPlugin.players) {
             if (user.playerId.equals(uuid)) {
                 return user;
             }

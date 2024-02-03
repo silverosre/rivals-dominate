@@ -1,9 +1,11 @@
 package net.silveros.entity;
 
+import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.utility.Util;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class User {
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 1200; // 60 seconds
+    public int timeUntil_Swift = 100; // 60 seconds
 
     //Misc
     public int respawnTimer = 0; // will tick down if above zero
@@ -54,8 +56,24 @@ public class User {
             if (this.timeUntil_Swift > 0) {
                 this.timeUntil_Swift--;
             } else {
-
+                this.getInv().setItem(5, ItemRegistry.ABILITY_Swift);
             }
+        }
+    }
+
+    public void setKit(Kit kit) {
+        this.currentKit = kit.kitID;
+        this.activateKit();
+    }
+
+    public void resetKit() {
+        this.currentKit = -1;
+        this.getInv().clear();
+    }
+
+    public void activateKit() {
+        if (this.currentKit != -1) {
+            Kit.KIT_LIST.get(this.currentKit).activateKit(this.getInv());
         }
     }
 
@@ -67,9 +85,7 @@ public class User {
             // need to add code for respawning at base location
 
             this.setGameMode(GameMode.ADVENTURE);
-            if (this.currentKit != -1) {
-                Kit.KIT_LIST.get(this.currentKit).activateKit(this.getPlayer().getInventory());
-            }
+            this.activateKit();
         }
     }
 
@@ -93,5 +109,10 @@ public class User {
     /**Can return null!*/
     public Player getPlayer() {
         return Util.getPlayerFromId(this.playerId);
+    }
+
+    /**Can return null!*/
+    public Inventory getInv() {
+        return this.getPlayer().getInventory();
     }
 }
