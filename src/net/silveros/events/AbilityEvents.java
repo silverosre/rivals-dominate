@@ -4,6 +4,7 @@ import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.KitBunket;
 import net.silveros.main.RivalsPlugin;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -63,6 +65,13 @@ public class AbilityEvents implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
                     player.getInventory().clear(5);
+                } else if (equals(item, ItemRegistry.ABILITY_Fletch)) {
+                    player.getInventory().addItem(new ItemStack(Material.ARROW, 2));
+                    player.getInventory().clear(3);
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
+                } else if (equals(item, ItemRegistry.ABILITY_Snare)) {
+                    world.spawnEntity(local, EntityType.ARMOR_STAND);
+                    player.getInventory().clear(4);
                 }
             }
         }

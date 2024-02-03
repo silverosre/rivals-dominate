@@ -4,6 +4,7 @@ import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.utility.Util;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -15,6 +16,8 @@ public class User {
 
     //Ability cooldowns
     public int cooldown_ShieldUp = 0;
+    public int cooldown_Fletch = 40;
+    public int cooldown_Snare = 40;
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
@@ -49,7 +52,23 @@ public class User {
         }
 
         if (this.currentKit == Kit.ARCHER.kitID) {
-
+            Player player = getPlayer();
+            if (!player.getInventory().contains(ItemRegistry.ABILITY_Fletch)) {
+                if (this.cooldown_Fletch > 0) {
+                    this.cooldown_Fletch--;
+                } else {
+                    this.getInv().setItem(3, ItemRegistry.ABILITY_Fletch);
+                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
+                    this.cooldown_Fletch = 40;
+                }
+            } else if (!player.getInventory().contains(ItemRegistry.ABILITY_Snare)) {
+                if (this.cooldown_Snare > 0) {
+                    this.cooldown_Snare--;
+                } else {
+                    this.getInv().setItem(4, ItemRegistry.ABILITY_Snare);
+                    this.cooldown_Snare = 40;
+                }
+            }
         }
 
         if (this.currentKit == Kit.HAMOOD.kitID) {

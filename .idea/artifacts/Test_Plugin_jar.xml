@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Test Plugin:jar">
-    <output-path>$PROJECT_DIR$/../Plugins/plugin</output-path>
+    <output-path>$USER_HOME$/Desktop/RDtest/plugins</output-path>
     <root id="archive" name="Test Plugin.jar">
       <element id="module-output" name="Test Plugin" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../Plugins/dependencies/spigot-api-1.20.4.jar" path-in-jar="/" />
