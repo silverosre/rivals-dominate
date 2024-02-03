@@ -1,0 +1,13 @@
+name: TestPlugin
+version: 1.0
+author: Silveros
+main: net.silveros.main.MainPlugin
+api-version: 1.14
+
+commands:
+  kit:
+    description: Gives the specified kit to the player
+    permission: rd.kit
+    usage: /kit <kit>
+
+permissions: {}
