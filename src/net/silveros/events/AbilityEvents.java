@@ -2,6 +2,7 @@ package net.silveros.events;
 
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.KitBunket;
+import net.silveros.main.MainPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,13 +11,24 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AbilityEvents implements Listener {
     @EventHandler
     public static void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         player.sendMessage(ChatColor.LIGHT_PURPLE + "Welcome to the server!");
+
+        MainPlugin.addPlayer(player);
+    }
+
+    @EventHandler
+    public static void onPlayerLeave(PlayerQuitEvent event) {
+        MainPlugin.removePlayer(event.getPlayer());
     }
 
     @EventHandler
@@ -43,10 +55,13 @@ public class AbilityEvents implements Listener {
 
         if (eitherAction(event)) {
             if (item != null) {
-                if (item.getItemMeta().equals(ItemRegistry.ABILITY_SelfDestruct.getItemMeta())) {
+                if (equals(item, ItemRegistry.ABILITY_SelfDestruct)) {
                     world.createExplosion(local, 5f);
-                } else if (item.getItemMeta().equals(ItemRegistry.ABILITY_ShieldUp.getItemMeta())) {
+                } else if (equals(item, ItemRegistry.ABILITY_ShieldUp)) {
                     player.getInventory().setItemInOffHand(KitBunket.getShieldItem());
+                } else if (equals(item, ItemRegistry.ABILITY_Swift)) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
                 }
             }
         }
@@ -54,5 +69,10 @@ public class AbilityEvents implements Listener {
 
     private static boolean eitherAction(PlayerInteractEvent event) {
         return event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR;
+    }
+
+    private static boolean equals(ItemStack a, ItemStack b) {
+        ItemMeta meta = a.getItemMeta();
+        return meta != null && meta.equals(b.getItemMeta());
     }
 }

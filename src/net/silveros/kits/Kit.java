@@ -1,6 +1,8 @@
 package net.silveros.kits;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +16,12 @@ public class Kit {
 
     public final String kitName;
     public final int kitID;
+    public int foodCount = 5;
 
     public static void init() {
         BUNKET = new KitBunket(0, "bunket");
         ARCHER = new Kit(1, "archer");
-        HAMOOD = new Kit(2, "hamood");
+        HAMOOD = new KitHamood(2, "hamood");
     }
 
     public Kit(int id, String name) {
@@ -29,5 +32,6 @@ public class Kit {
 
     public void activateKit(Inventory inv) {
         inv.clear();
+        inv.setItem(8, new ItemStack(Material.APPLE, this.foodCount));
     }
 }
