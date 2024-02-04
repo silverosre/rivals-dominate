@@ -48,7 +48,11 @@ public class AbilityEvents implements Listener {
                 if (equals(item, ItemRegistry.ABILITY_EmergencyRepairs)) {
                     //TODO make repair work
 
+                    //remove if you dont like my implementation --Roasty
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, 4, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20, 2, false, false));
                     inv.clear(3);
+                    player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 1);
                 } else if (equals(item, ItemRegistry.ABILITY_SelfDestruct)) {
                     player.setHealth(0);
                     world.createExplosion(local, 5f);

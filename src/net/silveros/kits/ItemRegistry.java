@@ -30,13 +30,13 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_Fletch;
     public static ItemAbility ABILITY_Snare;
     public static ItemAbility ABILITY_Quickshot;
-    public static ItemStack WEAPON_Bow;
+    public static ItemStack WEAPON_ArcherBow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack ARMOR_ArcherBoots;
-    public static ItemStack SKULL_ArcherTest;
+    public static ItemStack SKULL_Archer;
 
     //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
@@ -85,7 +85,10 @@ public class ItemRegistry implements Color {
         generateArcherBow();
         generateArcherSword();
         WEAPON_ArcherArrows = getArrows(10);
+        generateArcherBoots();
+        generateArcherLeggings();
         generateArcherChestplate();
+        SKULL_Archer = getSkull(Skulls.ARCHER, "Archer Head");
 
         //herobrine
         generateHerobrineAxe();
@@ -205,7 +208,7 @@ public class ItemRegistry implements Color {
         meta.setDisplayName(YELLOW + "Archer Bow");
 
         item.setItemMeta(meta);
-        WEAPON_Bow = item;
+        WEAPON_ArcherBow = item;
     }
 
     private static void generateArcherSword() {
@@ -220,16 +223,39 @@ public class ItemRegistry implements Color {
 
     private static void generateArcherChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-        ItemMeta meta = item.getItemMeta();
-        LeatherArmorMeta lmeta = (LeatherArmorMeta)item.getItemMeta();
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        lmeta.setColor(org.bukkit.Color.FUCHSIA); // i was going to fix this and then i saw the horrors -silver
+        meta.setColor(org.bukkit.Color.LIME); // i was going to fix this and then i saw the horrors -silver
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, false);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+        meta.setDisplayName(YELLOW + "Archer Chestplate");
 
         item.setItemMeta(meta);
-
         ARMOR_ArcherChestplate = item;
+    }
+
+    private static void generateArcherLeggings() {
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setDisplayName(YELLOW + "Archer Leggings");
+
+        item.setItemMeta(meta);
+        ARMOR_ArcherLeggings = item;
+    }
+
+    private static void generateArcherBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setDisplayName(YELLOW + "Archer Boots");
+
+        item.setItemMeta(meta);
+        ARMOR_ArcherBoots = item;
     }
 
     //------------
@@ -372,8 +398,9 @@ public class ItemRegistry implements Color {
         SkullMeta meta = (SkullMeta)item.getItemMeta();
         meta.setOwnerProfile(profile);
         meta.setDisplayName(YELLOW + itemName);
-        item.setItemMeta(meta);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
 
+        item.setItemMeta(meta);
         return item;
     }
 }
