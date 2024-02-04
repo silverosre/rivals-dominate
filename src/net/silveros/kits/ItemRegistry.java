@@ -36,7 +36,7 @@ public class ItemRegistry implements Color {
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack ARMOR_ArcherBoots;
-    public static ItemStack ARMOR_ArcherHead;
+    public static ItemStack SKULL_ArcherTest;
 
     //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
