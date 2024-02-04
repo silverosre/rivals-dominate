@@ -17,5 +17,7 @@ public class KitArcher extends Kit{
         inv.setItem(1, ItemRegistry.WEAPON_Bow);
         inv.setItem(0, ItemRegistry.WEAPON_WoodenKnife);
         inv.setItem(7, ItemRegistry.WEAPON_ArcherArrows);
+
+        inv.setChestplate(ItemRegistry.ARMOR_ArcherChestplate);
     }
 }

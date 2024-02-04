@@ -3,9 +3,11 @@ package net.silveros.kits;
 import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
@@ -31,6 +33,10 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_Bow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
+    public static ItemStack ARMOR_ArcherChestplate;
+    public static ItemStack ARMOR_ArcherLeggings;
+    public static ItemStack ARMOR_ArcherBoots;
+    public static ItemStack ARMOR_ArcherHead;
 
     //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
@@ -79,6 +85,7 @@ public class ItemRegistry implements Color {
         generateArcherBow();
         generateArcherSword();
         WEAPON_ArcherArrows = getArrows(10);
+        generateArcherChestplate();
 
         //herobrine
         generateHerobrineAxe();
@@ -209,6 +216,20 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         WEAPON_WoodenKnife = item;
+    }
+
+    private static void generateArcherChestplate() {
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        ItemMeta meta = item.getItemMeta();
+        LeatherArmorMeta lmeta = (LeatherArmorMeta)item.getItemMeta();
+
+        lmeta.setColor(org.bukkit.Color.FUCHSIA); // i was going to fix this and then i saw the horrors -silver
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, false);
+
+        item.setItemMeta(meta);
+
+        ARMOR_ArcherChestplate = item;
     }
 
     //------------
