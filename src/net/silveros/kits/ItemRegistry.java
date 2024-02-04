@@ -2,8 +2,10 @@ package net.silveros.kits;
 
 import net.silveros.utility.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,10 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_Bow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
+    public static ItemStack ARMOR_ArcherChestplate;
+    public static ItemStack ARMOR_ArcherLeggings;
+    public static ItemStack ARMOR_ArcherBoots;
+    public static ItemStack ARMOR_ArcherHead;
 
     //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
@@ -50,6 +56,7 @@ public class ItemRegistry implements Color {
         generateFletch(1);
         generateSnare(1);
         generateQuickshot(7);
+        generateArcherChestplate();
 
         //hamood
         generatePharaohsCurse(1);
@@ -188,6 +195,21 @@ public class ItemRegistry implements Color {
 
     public static void generateArcherArrows(int count) {
         WEAPON_ArcherArrows = new ItemStack(Material.ARROW, count);
+    }
+
+    public static void generateArcherChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        ItemMeta meta = item.getItemMeta();
+        LeatherArmorMeta Lmeta = (LeatherArmorMeta) item.getItemMeta();
+
+        Lmeta.setColor(org.bukkit.Color.FUCHSIA);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, false);
+
+        item.setItemMeta(meta);
+
+        ARMOR_ArcherChestplate = item;
+
     }
 
     //------------

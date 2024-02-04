@@ -1,9 +1,7 @@
 package net.silveros.kits;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+
 
 public class KitArcher extends Kit{
     public KitArcher(int id, String name) {
@@ -20,5 +18,6 @@ public class KitArcher extends Kit{
         inv.setItem(1, ItemRegistry.WEAPON_Bow);
         inv.setItem(0, ItemRegistry.WEAPON_WoodenKnife);
         inv.setItem(7, ItemRegistry.WEAPON_ArcherArrows);
+        inv.setItem(38, ItemRegistry.ARMOR_ArcherChestplate);
     }
 }
