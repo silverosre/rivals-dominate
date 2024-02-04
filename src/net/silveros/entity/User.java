@@ -21,7 +21,7 @@ public class User {
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 100; // 60 seconds
+    public int timeUntil_Swift = 1200; // 60 seconds
 
     //Misc
     public int respawnTimer = 0; // will tick down if above zero

@@ -12,7 +12,6 @@ public class Kit {
     public static Kit BUNKET;
     public static Kit ARCHER;
     public static Kit HAMOOD;
-
     public static Kit HEROBRINE;
     //public final static Kits WIZARD = new Kits("wizard");
 
