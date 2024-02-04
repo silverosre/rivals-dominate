@@ -14,25 +14,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class AbilityEvents implements Listener {
-    @EventHandler
-    public static void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        player.sendMessage(ChatColor.LIGHT_PURPLE + "Welcome to the server!");
-
-        RivalsPlugin.addPlayer(player);
-    }
-
-    @EventHandler
-    public static void onPlayerLeave(PlayerQuitEvent event) {
-        RivalsPlugin.removePlayer(event.getPlayer());
-    }
-
-    @EventHandler
+    /*@EventHandler
     public static void onPlayerWalk(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Location local = player.getLocation();
@@ -45,32 +33,40 @@ public class AbilityEvents implements Listener {
         if (block == Material.STONE) {
             player.sendMessage("You are on a stone block.");
         }
-    }
+    }*/
 
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        PlayerInventory inv = player.getInventory();
         Location local = player.getLocation();
         ItemStack item = event.getItem();
         World world = player.getWorld();
 
         if (eitherAction(event)) {
             if (item != null) {
-                if (equals(item, ItemRegistry.ABILITY_SelfDestruct)) {
+                if (equals(item, ItemRegistry.ABILITY_EmergencyRepairs)) {
+                    //TODO make repair work
+
+                    inv.clear(3);
+                } else if (equals(item, ItemRegistry.ABILITY_SelfDestruct)) {
+                    player.setHealth(0);
                     world.createExplosion(local, 5f);
                 } else if (equals(item, ItemRegistry.ABILITY_ShieldUp)) {
-                    player.getInventory().setItemInOffHand(KitBunket.getShieldItem());
+                    inv.setItemInOffHand(ItemRegistry.WEAPON_BunketShield);
+                    inv.clear(5);
                 } else if (equals(item, ItemRegistry.ABILITY_Swift)) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
-                    player.getInventory().clear(5);
+                    inv.clear(5);
                 } else if (equals(item, ItemRegistry.ABILITY_Fletch)) {
-                    player.getInventory().addItem(new ItemStack(Material.ARROW, 2));
-                    player.getInventory().clear(3);
+                    inv.addItem(new ItemStack(Material.ARROW, 2));
+                    inv.clear(3);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
                 } else if (equals(item, ItemRegistry.ABILITY_Snare)) {
+                    //TODO finish snare
                     world.spawnEntity(local, EntityType.ARMOR_STAND);
-                    player.getInventory().clear(4);
+                    inv.clear(4);
                 }
             }
         }

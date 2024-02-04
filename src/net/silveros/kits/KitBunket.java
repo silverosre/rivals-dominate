@@ -1,10 +1,6 @@
 package net.silveros.kits;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.PlayerInventory;
 
 public class KitBunket extends Kit {
     public KitBunket(int id, String name) {
@@ -13,21 +9,12 @@ public class KitBunket extends Kit {
     }
 
     @Override
-    public void activateKit(Inventory inv) {
+    public void activateKit(PlayerInventory inv) {
         super.activateKit(inv);
 
+        inv.setItemInOffHand(ItemRegistry.WEAPON_BunketShield);
         inv.setItem(3, ItemRegistry.ABILITY_EmergencyRepairs);
         inv.setItem(4, ItemRegistry.ABILITY_SelfDestruct);
         inv.setItem(5, ItemRegistry.ABILITY_ShieldUp);
-    }
-
-    public static ItemStack getShieldItem() {
-        ItemStack item = new ItemStack(Material.SHIELD, 1);
-        ItemMeta meta = item.getItemMeta();
-
-        ((Damageable)meta).setDamage(35);
-
-        item.setItemMeta(meta);
-        return item;
     }
 }

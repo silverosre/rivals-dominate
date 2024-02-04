@@ -3,6 +3,8 @@ package net.silveros.main;
 import net.silveros.commands.RivalsCommands;
 import net.silveros.entity.User;
 import net.silveros.events.AbilityEvents;
+import net.silveros.events.LoginEvent;
+import net.silveros.events.PlayerEvents;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.utility.Color;
@@ -17,6 +19,8 @@ import java.util.List;
 public class RivalsPlugin extends JavaPlugin implements Color {
     public static List<User> players = new ArrayList<>();
 
+    public static final String WELCOME_MESSAGE = LIGHT_PURPLE + "Welcome to Rivals: Dominate!";
+
     @Override
     public void onEnable() {
         Util.initialize(this);
@@ -27,12 +31,13 @@ public class RivalsPlugin extends JavaPlugin implements Color {
         Kit.init();
 
         //register events & commands
-        //Util.registerEvent(new TickEvent(this));
+        Util.registerEvent(new LoginEvent());
         Util.registerEvent(new AbilityEvents());
+        Util.registerEvent(new PlayerEvents());
 
         Util.registerCommand("kit", new RivalsCommands(this));
-        //this.getCommand("kit").setExecutor(new RDCommands(this));
 
+        //misc & tick
         this.startTicking();
     }
 

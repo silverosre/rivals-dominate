@@ -1,9 +1,6 @@
 package net.silveros.kits;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class KitArcher extends Kit{
     public KitArcher(int id, String name) {
@@ -11,7 +8,7 @@ public class KitArcher extends Kit{
     }
 
     @Override
-    public void activateKit(Inventory inv) {
+    public void activateKit(PlayerInventory inv) {
         super.activateKit(inv);
 
         inv.setItem(3, ItemRegistry.ABILITY_Fletch);

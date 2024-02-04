@@ -1,10 +1,6 @@
 package net.silveros.kits;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.PlayerInventory;
 
 public class KitHamood extends Kit {
     public KitHamood(int id, String name) {
@@ -13,7 +9,7 @@ public class KitHamood extends Kit {
     }
 
     @Override
-    public void activateKit(Inventory inv) {
+    public void activateKit(PlayerInventory inv) {
         super.activateKit(inv);
 
         inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);

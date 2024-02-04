@@ -1,19 +1,28 @@
 package net.silveros.kits;
 
 import net.silveros.utility.Color;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class ItemRegistry implements Color {
     //Bunket
     public static ItemAbility ABILITY_EmergencyRepairs;
     public static ItemAbility ABILITY_SelfDestruct;
     public static ItemAbility ABILITY_ShieldUp;
+    public static ItemStack WEAPON_BunketShield;
 
     //Archer
     public static ItemAbility ABILITY_Fletch;
@@ -34,6 +43,7 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_HerobrineAxe;
     public static ItemStack WEAPON_HerobrineArrows;
     public static ItemStack WEAPON_HerobrineBow;
+    public static ItemStack SKULL_Herobrine;
 
     public static void init() {
         generateAbilityItems();
@@ -62,20 +72,35 @@ public class ItemRegistry implements Color {
     }
 
     private static void generateKitItems() {
+        //bunket
+        generateBunketShield(35);
+
         //archer
         generateArcherBow();
         generateArcherSword();
-        generateArcherArrows(10);
+        WEAPON_ArcherArrows = getArrows(10);
 
         //herobrine
         generateHerobrineAxe();
         generateHerobrineBow();
-        generateHerobrineArrows(3);
+        WEAPON_HerobrineArrows = getArrows(3);
+        SKULL_Herobrine = getSkull(Skulls.HEROBRINE, "Herobrine Head");
     }
 
     //------------
     //Bunket items
     //------------
+    private static void generateBunketShield(int durability) {
+        ItemStack item = new ItemStack(Material.SHIELD, 1);
+        Damageable meta = (Damageable)item.getItemMeta();
+
+        meta.setDamage(Material.SHIELD.getMaxDurability() - durability);
+        meta.setDisplayName(YELLOW + "Shield");
+
+        item.setItemMeta(meta);
+        WEAPON_BunketShield = item;
+    }
+
     private static void generateEmergencyRepairs(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
@@ -123,7 +148,7 @@ public class ItemRegistry implements Color {
     //------------
     //Archer items
     //------------
-    public static void generateFletch(int cost) {
+    private static void generateFletch(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
@@ -137,7 +162,7 @@ public class ItemRegistry implements Color {
         ABILITY_Fletch = item;
     }
 
-    public static void generateSnare(int cost) {
+    private static void generateSnare(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
@@ -152,7 +177,7 @@ public class ItemRegistry implements Color {
         ABILITY_Snare = item;
     }
 
-    public static void generateQuickshot(int cost) {
+    private static void generateQuickshot(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
@@ -166,7 +191,7 @@ public class ItemRegistry implements Color {
         ABILITY_Quickshot = item;
     }
 
-    public static void generateArcherBow() {
+    private static void generateArcherBow() {
         ItemStack item = new ItemStack(Material.BOW, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -176,7 +201,7 @@ public class ItemRegistry implements Color {
         WEAPON_Bow = item;
     }
 
-    public static void generateArcherSword() {
+    private static void generateArcherSword() {
         ItemStack item = new ItemStack(Material.WOODEN_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -184,10 +209,6 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         WEAPON_WoodenKnife = item;
-    }
-
-    public static void generateArcherArrows(int count) {
-        WEAPON_ArcherArrows = new ItemStack(Material.ARROW, count);
     }
 
     //------------
@@ -242,14 +263,15 @@ public class ItemRegistry implements Color {
     //-----------
     //Herobrine Items
     //-----------
-    public static void generateHerobrinePower(int cost) {
+    private static void generateHerobrinePower(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Herobrine Power " + itemCost(cost));
         meta.setLore(addLore(
                 WHITE + ITALIC + "Gain Herobrine's ultimate power.",
-                WHITE + ITALIC + "Increases axe and bow power for a short time.",
+                WHITE + ITALIC + "Increases axe and bow power for",
+                WHITE + ITALIC + "a short time.",
                 DARK_AQUA + "Costs " + cost + " energy: 55 second cooldown"
         ));
 
@@ -257,7 +279,7 @@ public class ItemRegistry implements Color {
         ABILITY_HerobrinePower = item;
     }
 
-    public static void generateFogCloak(int cost) {
+    private static void generateFogCloak(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
@@ -273,7 +295,7 @@ public class ItemRegistry implements Color {
         ABILITY_FogCloak = item;
     }
 
-    public static void generateHerobrineAxe() {
+    private static void generateHerobrineAxe() {
         ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -284,7 +306,7 @@ public class ItemRegistry implements Color {
         WEAPON_HerobrineAxe = item;
     }
 
-    public static void generateHerobrineBow() {
+    private static void generateHerobrineBow() {
         ItemStack item = new ItemStack(Material.BOW, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -295,13 +317,13 @@ public class ItemRegistry implements Color {
         WEAPON_HerobrineBow = item;
     }
 
-    public static void generateHerobrineArrows(int count) {
-        WEAPON_HerobrineArrows = new ItemStack(Material.ARROW, 3);
-    }
-
     //Utility
     private static ItemAbility getBlankAbility(int cost) {
         return new ItemAbility(Material.ENCHANTED_BOOK, 1, cost);
+    }
+
+    private static ItemStack getArrows(int count) {
+        return new ItemStack(Material.ARROW, count);
     }
 
     private static String itemCost(int cost) {
@@ -310,5 +332,27 @@ public class ItemRegistry implements Color {
 
     private static List<String> addLore(String... args) {
         return new ArrayList<>(Arrays.asList(args));
+    }
+
+    /**@param id Minecraft URL of specified skull.*/
+    public static ItemStack getSkull(String id, String itemName) {
+        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.fromString("92864445-51c5-4c3b-9039-517c9927d1b4")); // use random ass uuid
+        PlayerTextures textures = profile.getTextures();
+
+        try {
+            textures.setSkin(URI.create("https://textures.minecraft.net/texture/" + id).toURL());
+        } catch (MalformedURLException exception) {
+            throw new RuntimeException("Invalid URL", exception);
+        }
+
+        profile.setTextures(textures);
+
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta)item.getItemMeta();
+        meta.setOwnerProfile(profile);
+        meta.setDisplayName(YELLOW + itemName);
+        item.setItemMeta(meta);
+
+        return item;
     }
 }

@@ -6,7 +6,7 @@ import net.silveros.utility.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
@@ -52,8 +52,8 @@ public class User {
         }
 
         if (this.currentKit == Kit.ARCHER.kitID) {
-            Player player = getPlayer();
-            if (!player.getInventory().contains(ItemRegistry.ABILITY_Fletch)) {
+            Player player = this.getPlayer();
+            if (!this.getInv().contains(ItemRegistry.ABILITY_Fletch)) {
                 if (this.cooldown_Fletch > 0) {
                     this.cooldown_Fletch--;
                 } else {
@@ -61,7 +61,7 @@ public class User {
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
                     this.cooldown_Fletch = 40;
                 }
-            } else if (!player.getInventory().contains(ItemRegistry.ABILITY_Snare)) {
+            } else if (!this.getInv().contains(ItemRegistry.ABILITY_Snare)) {
                 if (this.cooldown_Snare > 0) {
                     this.cooldown_Snare--;
                 } else {
@@ -131,7 +131,7 @@ public class User {
     }
 
     /**Can return null!*/
-    public Inventory getInv() {
+    public PlayerInventory getInv() {
         return this.getPlayer().getInventory();
     }
 }

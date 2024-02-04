@@ -1,14 +1,14 @@
 package net.silveros.kits;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Kit {
-    public static List<Kit> KIT_LIST = new ArrayList<>();
+    public static Map<Integer, Kit> KIT_LIST = new HashMap<>();
     public static Kit BUNKET;
     public static Kit ARCHER;
     public static Kit HAMOOD;
@@ -27,12 +27,12 @@ public class Kit {
     }
 
     public Kit(int id, String name) {
-        KIT_LIST.add(this);
+        KIT_LIST.put(id, this);
         this.kitID = id;
         this.kitName = name;
     }
 
-    public void activateKit(Inventory inv) {
+    public void activateKit(PlayerInventory inv) {
         inv.clear();
         inv.setItem(8, new ItemStack(Material.APPLE, this.foodCount));
     }

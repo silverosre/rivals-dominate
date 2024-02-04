@@ -27,7 +27,7 @@ public class RivalsCommands implements CommandExecutor, Color {
         Player player = (Player)sender;
         if (cmd.getName().equalsIgnoreCase("kit")) {
             if (args.length == 1) {
-                for (Kit kit : Kit.KIT_LIST) {
+                for (Kit kit : Kit.KIT_LIST.values()) {
                     if (kit.kitName.equalsIgnoreCase(args[0])) {
                         User user = Util.getUserFromId(player.getUniqueId());
                         if (user != null) {
@@ -43,6 +43,8 @@ public class RivalsCommands implements CommandExecutor, Color {
                     User user = Util.getUserFromId(player.getUniqueId());
                     if (user != null) {
                         user.resetKit();
+                        player.sendMessage("Reset player's chosen kit.");
+                        return true;
                     }
                 }
 
