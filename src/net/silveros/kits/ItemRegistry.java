@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ItemRegistry implements Color {
-    //bunket
+    //Bunket
     public static ItemAbility ABILITY_EmergencyRepairs;
     public static ItemAbility ABILITY_SelfDestruct;
     public static ItemAbility ABILITY_ShieldUp;
 
-    //archer
+    //Archer
     public static ItemAbility ABILITY_Fletch;
     public static ItemAbility ABILITY_Snare;
     public static ItemAbility ABILITY_Quickshot;
@@ -23,10 +23,17 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
 
-    //hamood
+    //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
     public static ItemAbility ABILITY_DuneSlice;
     public static ItemAbility ABILITY_Swift;
+
+    //Herobrine
+    public static ItemAbility ABILITY_HerobrinePower;
+    public static ItemAbility ABILITY_FogCloak;
+    public static ItemStack WEAPON_HerobrineAxe;
+    public static ItemStack WEAPON_HerobrineArrows;
+    public static ItemStack WEAPON_HerobrineBow;
 
     public static void init() {
         generateAbilityItems();
@@ -48,13 +55,22 @@ public class ItemRegistry implements Color {
         generatePharaohsCurse(1);
         generateDuneSlice(3);
         generateSwift(2);
+
+        //herobrine
+        generateHerobrinePower(6);
+        generateFogCloak(2);
     }
 
-    private static void generateKitItems(){
+    private static void generateKitItems() {
         //archer
         generateArcherBow();
         generateArcherSword();
-        generateArcherArrows();
+        generateArcherArrows(10);
+
+        //herobrine
+        generateHerobrineAxe();
+        generateHerobrineBow();
+        generateHerobrineArrows(3);
     }
 
     //------------
@@ -170,8 +186,8 @@ public class ItemRegistry implements Color {
         WEAPON_WoodenKnife = item;
     }
 
-    public static void generateArcherArrows() {
-        WEAPON_ArcherArrows = new ItemStack(Material.ARROW, 10);
+    public static void generateArcherArrows(int count) {
+        WEAPON_ArcherArrows = new ItemStack(Material.ARROW, count);
     }
 
     //------------
@@ -221,6 +237,66 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         ABILITY_Swift = item;
+    }
+
+    //-----------
+    //Herobrine Items
+    //-----------
+    public static void generateHerobrinePower(int cost) {
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Herobrine Power " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Gain Herobrine's ultimate power.",
+                WHITE + ITALIC + "Increases axe and bow power for a short time.",
+                DARK_AQUA + "Costs " + cost + " energy: 55 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_HerobrinePower = item;
+    }
+
+    public static void generateFogCloak(int cost) {
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Fog Cloak " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Cloak yourself in the mist.",
+                WHITE + ITALIC + "Makes you invisible until you take",
+                WHITE + ITALIC + "damage, attack, or step on a point.",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_FogCloak = item;
+    }
+
+    public static void generateHerobrineAxe() {
+        ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(YELLOW + "Herobrine Axe");
+        //meta.setLore(addLore(GRAY + ITALIC + "The memories call out to you..."));
+
+        item.setItemMeta(meta);
+        WEAPON_HerobrineAxe = item;
+    }
+
+    public static void generateHerobrineBow() {
+        ItemStack item = new ItemStack(Material.BOW, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(YELLOW + "Herobrine Bow");
+        //meta.setLore(addLore(GRAY + ITALIC + "Stand in the distance..."));
+
+        item.setItemMeta(meta);
+        WEAPON_HerobrineBow = item;
+    }
+
+    public static void generateHerobrineArrows(int count) {
+        WEAPON_HerobrineArrows = new ItemStack(Material.ARROW, 3);
     }
 
     //Utility
