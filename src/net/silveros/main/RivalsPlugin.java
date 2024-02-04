@@ -3,7 +3,6 @@ package net.silveros.main;
 import net.silveros.commands.RivalsCommands;
 import net.silveros.entity.User;
 import net.silveros.events.AbilityEvents;
-import net.silveros.events.LoginEvent;
 import net.silveros.events.PlayerEvents;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
@@ -31,7 +30,6 @@ public class RivalsPlugin extends JavaPlugin implements Color {
         Kit.init();
 
         //register events & commands
-        Util.registerEvent(new LoginEvent());
         Util.registerEvent(new AbilityEvents());
         Util.registerEvent(new PlayerEvents());
 
