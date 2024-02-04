@@ -15,9 +15,11 @@ public class User {
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
     //Ability cooldowns
-    public int cooldown_ShieldUp = 0;
+    public int cooldown_ShieldUp = 1100;
     public int cooldown_Fletch = 40;
     public int cooldown_Snare = 40;
+    public int cooldown_ArcherCrossbow = 200;
+    public int cooldown_Quickshot = 1100;
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
@@ -44,10 +46,13 @@ public class User {
 
         //Kit cooldowns
         if (this.currentKit == Kit.BUNKET.kitID) {
-            if (this.cooldown_ShieldUp > 0) {
-                this.cooldown_ShieldUp--;
-            } else {
-
+            if (!this.getInv().contains(ItemRegistry.ABILITY_ShieldUp)) {
+                if (this.cooldown_ShieldUp > 0) {
+                    this.cooldown_ShieldUp--;
+                } else {
+                    this.getInv().setItem(5, ItemRegistry.ABILITY_ShieldUp);
+                    this.cooldown_ShieldUp = 1100;
+                }
             }
         }
 
@@ -67,6 +72,19 @@ public class User {
                 } else {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_Snare);
                     this.cooldown_Snare = 40;
+                }
+            } else if (!this.getInv().contains(ItemRegistry.ABILITY_Quickshot)) {
+                if (this.cooldown_Quickshot > 0) {
+                    this.cooldown_Quickshot--;
+                } else {
+                    this.getInv().setItem(5, ItemRegistry.ABILITY_Quickshot);
+                    this.cooldown_Quickshot = 1100;
+                }
+                if (this.cooldown_ArcherCrossbow > 0) {
+                    this.cooldown_ArcherCrossbow--;
+                } else {
+                    this.getInv().setItem(1, ItemRegistry.WEAPON_ArcherBow);
+                    this.cooldown_ArcherCrossbow = 200;
                 }
             }
         }

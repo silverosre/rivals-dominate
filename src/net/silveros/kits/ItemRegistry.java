@@ -4,6 +4,7 @@ import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,6 +26,10 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_SelfDestruct;
     public static ItemAbility ABILITY_ShieldUp;
     public static ItemStack WEAPON_BunketShield;
+    public static ItemStack ARMOR_BunketChestplate;
+    public static ItemStack ARMOR_BunketLeggings;
+    public static ItemStack ARMOR_BunketBoots;
+    public static ItemStack SKULL_Bunket;
 
     //Archer
     public static ItemAbility ABILITY_Fletch;
@@ -33,6 +38,7 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_ArcherBow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
+    public static ItemStack WEAPON_ArcherCrossbow;
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack ARMOR_ArcherBoots;
@@ -80,11 +86,16 @@ public class ItemRegistry implements Color {
     private static void generateKitItems() {
         //bunket
         generateBunketShield(35);
+        generateBunketChestplate();
+        generateBunketLeggings();
+        generateBunketBoots();
+        SKULL_Bunket = getSkull(Skulls.BUNKET, "Bunket Head");
 
         //archer
         generateArcherBow();
         generateArcherSword();
         WEAPON_ArcherArrows = getArrows(10);
+        generateArcherCrossbow();
         generateArcherBoots();
         generateArcherLeggings();
         generateArcherChestplate();
@@ -155,6 +166,39 @@ public class ItemRegistry implements Color {
         ABILITY_ShieldUp = item;
     }
 
+    public static void generateBunketChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+        meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 5, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketChestplate = item;
+    }
+    public static void generateBunketLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketLeggings = item;
+    }
+    public static void generateBunketBoots(){
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketBoots = item;
+    }
+
     //------------
     //Archer items
     //------------
@@ -219,6 +263,15 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         WEAPON_WoodenKnife = item;
+    }
+    private static void generateArcherCrossbow() {
+        ItemStack item = new ItemStack(Material.CROSSBOW, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.addEnchant(Enchantment.QUICK_CHARGE, 5, true);
+
+        item.setItemMeta(meta);
+        WEAPON_ArcherCrossbow = item;
     }
 
     private static void generateArcherChestplate() {

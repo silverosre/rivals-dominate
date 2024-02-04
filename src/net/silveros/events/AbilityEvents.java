@@ -64,13 +64,23 @@ public class AbilityEvents implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
                     inv.clear(5);
                 } else if (equals(item, ItemRegistry.ABILITY_Fletch)) {
-                    inv.addItem(new ItemStack(Material.ARROW, 2));
-                    inv.clear(3);
-                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
+                    if (player.getInventory().contains(Material.ARROW)){
+                        inv.addItem(new ItemStack(Material.ARROW, 2));
+                        inv.clear(3);
+                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+                    } else {
+                        inv.setItem(7, new ItemStack(Material.ARROW, 2));
+                        inv.clear(3);
+                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+                    }
                 } else if (equals(item, ItemRegistry.ABILITY_Snare)) {
                     //TODO finish snare
                     world.spawnEntity(local, EntityType.ARMOR_STAND);
                     inv.clear(4);
+                } else if (equals(item, ItemRegistry.ABILITY_Quickshot)) {
+                    inv.setItem(1, ItemRegistry.WEAPON_ArcherCrossbow);
+                    inv.clear(5);
+                    player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1, 1);
                 }
             }
         }
