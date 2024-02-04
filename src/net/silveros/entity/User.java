@@ -15,11 +15,16 @@ public class User {
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
     //Ability cooldowns
+    //bunket
     public int cooldown_ShieldUp = 1100;
+    //archer
     public int cooldown_Fletch = 40;
     public int cooldown_Snare = 40;
     public int cooldown_ArcherCrossbow = 200;
     public int cooldown_Quickshot = 1100;
+    //hamood
+    public int cooldown_AbilityDuneSlice = 600;
+    public int cooldown_DuneSlicer = 100;
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
@@ -90,10 +95,26 @@ public class User {
         }
 
         if (this.currentKit == Kit.HAMOOD.kitID) {
-            if (this.timeUntil_Swift > 0) {
-                this.timeUntil_Swift--;
-            } else {
-                this.getInv().setItem(5, ItemRegistry.ABILITY_Swift);
+            if (!this.getInv().contains(ItemRegistry.ABILITY_Swift)) {
+                if (this.timeUntil_Swift > 0) {
+                    this.timeUntil_Swift--;
+                } else {
+                    this.getInv().setItem(5, ItemRegistry.ABILITY_Swift);
+                }
+            }
+            if (!this.getInv().contains(ItemRegistry.ABILITY_DuneSlice)) {
+                if (this.cooldown_AbilityDuneSlice > 0) {
+                    this.cooldown_AbilityDuneSlice--;
+                } else {
+                    this.getInv().setItem(4, ItemRegistry.ABILITY_DuneSlice);
+                    this.cooldown_AbilityDuneSlice = 600;
+                }
+                if (this.cooldown_DuneSlicer > 0) {
+                    this.cooldown_DuneSlicer--;
+                } else {
+                    this.getInv().setItem(0, ItemRegistry.WEAPON_HamoodSword);
+                    this.cooldown_DuneSlicer = 100;
+                }
             }
         }
     }

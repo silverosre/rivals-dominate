@@ -48,6 +48,12 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_PharaohsCurse;
     public static ItemAbility ABILITY_DuneSlice;
     public static ItemAbility ABILITY_Swift;
+    public static ItemStack WEAPON_HamoodSword;
+    public static ItemStack WEAPON_DuneSlicer;
+    public static ItemStack ARMOR_HamoodChestplate;
+    public static ItemStack ARMOR_HamoodLeggings;
+    public static ItemStack ARMOR_HamoodBoots;
+    public static ItemStack SKULL_Hamood;
 
     //Herobrine
     public static ItemAbility ABILITY_HerobrinePower;
@@ -100,6 +106,14 @@ public class ItemRegistry implements Color {
         generateArcherLeggings();
         generateArcherChestplate();
         SKULL_Archer = getSkull(Skulls.ARCHER, "Archer Head");
+
+        //hamood
+        generateHamoodSword();
+        generateHamoodChestplate();
+        generateHamoodLeggings();
+        generateHamoodBoots();
+        generateDuneSlicer();
+        SKULL_Hamood = getSkull(Skulls.HAMOOD, "Hamood Head");
 
         //herobrine
         generateHerobrineAxe();
@@ -320,10 +334,8 @@ public class ItemRegistry implements Color {
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Pharaoh's Curse " + itemCost(cost));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Quickly heal back to full health",
-                WHITE + ITALIC + "at the cost of your passive ability",
-                WHITE + ITALIC + "and a bit of time.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                WHITE + ITALIC + "Throw a blinding sand block",
+                DARK_AQUA + "Costs " + cost + " energy: 10 second cooldown"
         ));
 
         item.setItemMeta(meta);
@@ -336,8 +348,9 @@ public class ItemRegistry implements Color {
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Dune Slice " + itemCost(cost));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Go out with a bang.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                WHITE + ITALIC + "Increase your sword's damage",
+                WHITE + ITALIC + "Effect lasts for 10 seconds",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
         ));
 
         item.setItemMeta(meta);
@@ -358,6 +371,57 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         ABILITY_Swift = item;
+    }
+    public static void generateHamoodSword() {
+        ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(YELLOW + "Hamood Sword");
+
+        item.setItemMeta(meta);
+        WEAPON_HamoodSword = item;
+    }
+    public static void generateDuneSlicer() {
+        ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Dune Slicer");
+        meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+
+        item.setItemMeta(meta);
+        WEAPON_DuneSlicer = item;
+    }
+    private static void generateHamoodChestplate() {
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_HamoodChestplate = item;
+    }
+    private static void generateHamoodLeggings() {
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.MAROON);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_HamoodLeggings = item;
+    }
+    private static void generateHamoodBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.BLACK);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+
+        ARMOR_HamoodBoots = item;
     }
 
     //-----------
