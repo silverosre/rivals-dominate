@@ -4,6 +4,7 @@ import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,6 +26,10 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_SelfDestruct;
     public static ItemAbility ABILITY_ShieldUp;
     public static ItemStack WEAPON_BunketShield;
+    public static ItemStack ARMOR_BunketChestplate;
+    public static ItemStack ARMOR_BunketLeggings;
+    public static ItemStack ARMOR_BunketBoots;
+    public static ItemStack SKULL_Bunket;
 
     //Archer
     public static ItemAbility ABILITY_Fletch;
@@ -33,6 +38,7 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_ArcherBow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
+    public static ItemStack WEAPON_ArcherCrossbow;
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack ARMOR_ArcherBoots;
@@ -42,6 +48,12 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_PharaohsCurse;
     public static ItemAbility ABILITY_DuneSlice;
     public static ItemAbility ABILITY_Swift;
+    public static ItemStack WEAPON_HamoodSword;
+    public static ItemStack WEAPON_DuneSlicer;
+    public static ItemStack ARMOR_HamoodChestplate;
+    public static ItemStack ARMOR_HamoodLeggings;
+    public static ItemStack ARMOR_HamoodBoots;
+    public static ItemStack SKULL_Hamood;
 
     //Herobrine
     public static ItemAbility ABILITY_HerobrinePower;
@@ -80,15 +92,28 @@ public class ItemRegistry implements Color {
     private static void generateKitItems() {
         //bunket
         generateBunketShield(35);
+        generateBunketChestplate();
+        generateBunketLeggings();
+        generateBunketBoots();
+        SKULL_Bunket = getSkull(Skulls.BUNKET, "Bunket Head");
 
         //archer
         generateArcherBow();
         generateArcherSword();
         WEAPON_ArcherArrows = getArrows(10);
+        generateArcherCrossbow();
         generateArcherBoots();
         generateArcherLeggings();
         generateArcherChestplate();
         SKULL_Archer = getSkull(Skulls.ARCHER, "Archer Head");
+
+        //hamood
+        generateHamoodSword();
+        generateHamoodChestplate();
+        generateHamoodLeggings();
+        generateHamoodBoots();
+        generateDuneSlicer();
+        SKULL_Hamood = getSkull(Skulls.HAMOOD, "Hamood Head");
 
         //herobrine
         generateHerobrineAxe();
@@ -153,6 +178,39 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         ABILITY_ShieldUp = item;
+    }
+
+    public static void generateBunketChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
+        meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 5, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketChestplate = item;
+    }
+    public static void generateBunketLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketLeggings = item;
+    }
+    public static void generateBunketBoots(){
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.WHITE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_BunketBoots = item;
     }
 
     //------------
@@ -220,6 +278,15 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         WEAPON_WoodenKnife = item;
     }
+    private static void generateArcherCrossbow() {
+        ItemStack item = new ItemStack(Material.CROSSBOW, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.addEnchant(Enchantment.QUICK_CHARGE, 5, true);
+
+        item.setItemMeta(meta);
+        WEAPON_ArcherCrossbow = item;
+    }
 
     private static void generateArcherChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
@@ -267,10 +334,8 @@ public class ItemRegistry implements Color {
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Pharaoh's Curse " + itemCost(cost));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Quickly heal back to full health",
-                WHITE + ITALIC + "at the cost of your passive ability",
-                WHITE + ITALIC + "and a bit of time.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                WHITE + ITALIC + "Throw a blinding sand block",
+                DARK_AQUA + "Costs " + cost + " energy: 10 second cooldown"
         ));
 
         item.setItemMeta(meta);
@@ -283,8 +348,9 @@ public class ItemRegistry implements Color {
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Dune Slice " + itemCost(cost));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Go out with a bang.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                WHITE + ITALIC + "Increase your sword's damage",
+                WHITE + ITALIC + "Effect lasts for 10 seconds",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
         ));
 
         item.setItemMeta(meta);
@@ -305,6 +371,57 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         ABILITY_Swift = item;
+    }
+    public static void generateHamoodSword() {
+        ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(YELLOW + "Hamood Sword");
+
+        item.setItemMeta(meta);
+        WEAPON_HamoodSword = item;
+    }
+    public static void generateDuneSlicer() {
+        ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Dune Slicer");
+        meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+
+        item.setItemMeta(meta);
+        WEAPON_DuneSlicer = item;
+    }
+    private static void generateHamoodChestplate() {
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_HamoodChestplate = item;
+    }
+    private static void generateHamoodLeggings() {
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.MAROON);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_HamoodLeggings = item;
+    }
+    private static void generateHamoodBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.BLACK);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+
+        ARMOR_HamoodBoots = item;
     }
 
     //-----------
