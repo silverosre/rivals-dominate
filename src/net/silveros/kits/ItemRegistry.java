@@ -63,6 +63,33 @@ public class ItemRegistry implements Color {
     public static ItemStack WEAPON_HerobrineBow;
     public static ItemStack SKULL_Herobrine;
 
+    //Gummy Bear
+    public static ItemAbility ABILITY_NormalBear;
+    public static ItemAbility ABILITY_AttackBear;
+    public static ItemAbility ABILITY_DefenseBear;
+    public static ItemAbility ABILITY_SpeedBear;
+    public static ItemAbility ABILITY_Numb;
+    public static ItemAbility ABILITY_ChaosZone;
+    public static ItemAbility ABILITY_StinkBomb;
+    public static ItemStack WEAPON_GummyClub;
+    public static ItemStack SKULL_GummyBear;
+    public static ItemStack SKULL_AttackBear;
+    public static ItemStack SKULL_DefenseBear;
+    public static ItemStack SKULL_SpeedBear;
+    public static ItemStack ARMOR_NormalBearChestplate;
+    public static ItemStack ARMOR_AttackBearChestplate;
+    public static ItemStack ARMOR_DefenseBearChestplate;
+    public static ItemStack ARMOR_SpeedBearChestplate;
+    public static ItemStack ARMOR_NormalBearLeggings;
+    public static ItemStack ARMOR_AttackBearLeggings;
+    public static ItemStack ARMOR_DefenseBearLeggings;
+    public static ItemStack ARMOR_SpeedBearLeggings;
+    public static ItemStack ARMOR_NormalBearBoots;
+    public static ItemStack ARMOR_AttackBearBoots;
+    public static ItemStack ARMOR_DefenseBearBoots;
+    public static ItemStack ARMOR_SpeedBearBoots;
+    public static ItemStack ITEM_GummyEssence;
+
     public static void init() {
         generateAbilityItems();
         generateKitItems();
@@ -87,6 +114,15 @@ public class ItemRegistry implements Color {
         //herobrine
         generateHerobrinePower(6);
         generateFogCloak(2);
+
+        //gummy bear
+        generateNormalBear(0);
+        generateSpeedBear(1);
+        generateAttackBear(1);
+        generateDefenseBear(1);
+        generateStinkBonb(2);
+        generateNumb(3);
+        generateChaosZone(3);
     }
 
     private static void generateKitItems() {
@@ -120,6 +156,26 @@ public class ItemRegistry implements Color {
         generateHerobrineBow();
         WEAPON_HerobrineArrows = getArrows(3);
         SKULL_Herobrine = getSkull(Skulls.HEROBRINE, "Herobrine Head");
+
+        //gummy bear
+        generateGummyClub();
+        generateNormalBearChestplate();
+        generateDefenseBearChestplate();
+        generateSpeedBearChestplate();
+        generateAttackBearChestplate();
+        generateNormalBearLeggings();
+        generateDefenseBearLeggings();
+        generateSpeedBearLeggings();
+        generateAttackBearLeggings();
+        generateNormalBearBoots();
+        generateDefenseBearBoots();
+        generateSpeedBearBoots();
+        generateAttackBearBoots();
+        generateGummyEssence();
+        SKULL_GummyBear = getSkull(Skulls.GUMMY_BEAR, "Gummy Bear Head");
+        SKULL_AttackBear = getSkull(Skulls.ATTACK_BEAR, "Attack Bear Head");
+        SKULL_DefenseBear = getSkull(Skulls.DEFENSE_BEAR, "Defense Bear Head");
+        SKULL_SpeedBear = getSkull(Skulls.SPEED_BEAR, "Speed Bear Head");
     }
 
     //------------
@@ -479,6 +535,254 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         WEAPON_HerobrineBow = item;
+    }
+
+    //----------------
+    //Gummy Bear Items
+    //----------------
+    private static void generateNormalBear(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Normal Bear " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Changes you back into",
+                WHITE + ITALIC + "your average bear!",
+                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_NormalBear = item;
+    }
+    private static void generateDefenseBear(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Defense Bear " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Increases Defensive abilities",
+                WHITE + ITALIC + "at the cost of some Attack and Speed.",
+                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_DefenseBear = item;
+    }
+    private static void generateAttackBear(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Attack Bear " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Increases Attack",
+                WHITE + ITALIC + "At the cost of Defense and some Speed",
+                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_AttackBear = item;
+    }
+    private static void generateSpeedBear(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Speed Bear " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Increase Speed Substantially",
+                WHITE + ITALIC + "At the cost of Defense and Attack",
+                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_SpeedBear = item;
+    }
+    private static void generateChaosZone(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Chaos Zone " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Places a circle at your feet",
+                WHITE + ITALIC + "that increases you and your team's attack",
+                WHITE + ITALIC + "and damages enemy players in the zone",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_ChaosZone = item;
+    }
+    private static void generateNumb(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Numb " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Damage you take is tallied up",
+                WHITE + ITALIC + "and delivered after 10 seconds",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_Numb = item;
+    }
+    private static void generateStinkBonb(int cost){
+        ItemAbility item = getBlankAbility(cost);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Stink Bomb " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Creates a nauseating, blinding smoke",
+                WHITE + ITALIC + "Smoke screen lasts 10 seconds",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ABILITY_StinkBomb = item;
+    }
+    private static void generateGummyClub(){
+        ItemStack item = new ItemStack(Material.DIAMOND_SHOVEL, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(YELLOW + "Gummy Club");
+
+        item.setItemMeta(meta);
+        WEAPON_GummyClub = item;
+    }
+    private static void generateNormalBearChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_NormalBearChestplate = item;
+    }
+    private static void generateDefenseBearChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.BLUE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
+        meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 2, true);
+
+        item.setItemMeta(meta);
+        ARMOR_DefenseBearChestplate = item;
+    }
+    private static void generateAttackBearChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.RED);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_AttackBearChestplate = item;
+    }
+    private static void generateSpeedBearChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.YELLOW);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_SpeedBearChestplate = item;
+    }
+    private static void generateNormalBearLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE,1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_NormalBearLeggings = item;
+    }
+    private static void generateDefenseBearLeggings(){
+        ItemStack item =  new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.BLUE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_DefenseBearLeggings = item;
+    }
+    private static void generateAttackBearLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.RED);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_AttackBearLeggings = item;
+    }
+    private static void generateSpeedBearLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.YELLOW);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_SpeedBearLeggings = item;
+    }
+    private static void generateNormalBearBoots(){
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.LIME);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_NormalBearBoots = item;
+    }
+    private static void generateDefenseBearBoots(){
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.BLUE);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_DefenseBearBoots = item;
+    }
+    private static void generateAttackBearBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.RED);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_AttackBearBoots = item;
+    }
+    private static void generateSpeedBearBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+
+        meta.setColor(org.bukkit.Color.YELLOW);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ARMOR_SpeedBearBoots = item;
+    }
+    private static void generateGummyEssence() {
+        ItemStack item = new ItemStack(Material.SLIME_BALL, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(BLUE + ITALIC + "Gummy Essense");
+        meta.setLore(addLore(
+                GRAY + ITALIC + "It's a ball of gummy flesh",
+                GRAY + ITALIC + "It doesnt seem to do anything"
+        ));
+
+        item.setItemMeta(meta);
+        ITEM_GummyEssence = item;
     }
 
     //Utility

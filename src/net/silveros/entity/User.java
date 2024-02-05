@@ -25,6 +25,7 @@ public class User {
     //hamood
     public int cooldown_AbilityDuneSlice = 600;
     public int cooldown_DuneSlicer = 100;
+    public int cooldown_NormalBear = 100;
     public static final int COOLDOWN_ShieldUp_RESET = 1100; // 55 seconds
 
     //Time until abilities can be used
@@ -114,6 +115,17 @@ public class User {
                 } else {
                     this.getInv().setItem(0, ItemRegistry.WEAPON_HamoodSword);
                     this.cooldown_DuneSlicer = 100;
+                }
+            }
+        }
+        if (this.currentKit == Kit.GUMMY_BEAR.kitID) {
+            if (!this.getInv().contains(ItemRegistry.ITEM_GummyEssence)) {
+                if (this.cooldown_NormalBear > 0) {
+                    this.cooldown_NormalBear--;
+                } else {
+                    this.getInv().setItem(4, ItemRegistry.ABILITY_NormalBear);
+                    this.getInv().setItem(9, ItemRegistry.ITEM_GummyEssence);
+                    this.cooldown_NormalBear = 100;
                 }
             }
         }
