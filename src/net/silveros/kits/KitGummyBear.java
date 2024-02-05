@@ -23,4 +23,9 @@ public class KitGummyBear extends Kit{
         inv.setBoots(ItemRegistry.ARMOR_NormalBearBoots);
         inv.setHelmet(ItemRegistry.SKULL_GummyBear);
     }
+
+    @Override
+    public int getStartingEnergy() {
+        return 3;
+    }
 }
