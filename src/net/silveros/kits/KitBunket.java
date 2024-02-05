@@ -21,4 +21,9 @@ public class KitBunket extends Kit {
         inv.setBoots(ItemRegistry.ARMOR_BunketBoots);
         inv.setHelmet(ItemRegistry.SKULL_Bunket);
     }
+
+    @Override
+    public int getStartingEnergy() {
+        return 1;
+    }
 }

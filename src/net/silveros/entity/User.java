@@ -14,23 +14,35 @@ public class User {
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
+    //Ability cooldown presets (formula: seconds * 20)
+    private static final int PRESET_ShieldUp = 55 * 20;
+    private static final int PRESET_Fletch = 2 * 20;
+    private static final int PRESET_Snare = 2 * 20;
+    private static final int PRESET_FromAbove = 55 * 20;
+    private static final int PRESET_DuneSlice = 30 * 20;
+    private static final int PRESET_DuneSlicerActive = 5 * 20;
+
     //Ability cooldowns
+
     //bunket
-    public int cooldown_ShieldUp = 1100;
+    public int cooldown_ShieldUp = PRESET_ShieldUp;
     //archer
-    public int cooldown_Fletch = 40;
-    public int cooldown_Snare = 40;
-    public int cooldown_ArcherCrossbow = 200;
-    public int cooldown_Quickshot = 1100;
+    public int cooldown_Fletch = PRESET_Fletch;
+    public int cooldown_Snare = PRESET_Snare;
+    public int cooldown_FromAbove = PRESET_FromAbove;
     //hamood
-    public int cooldown_AbilityDuneSlice = 600;
-    public int cooldown_DuneSlicer = 100;
+    public int cooldown_DuneSlice = PRESET_DuneSlice;
+    public int cooldown_DuneSlicerActive = 5 * 20;
+    //gummybear
     public int cooldown_NormalBear = 100;
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 1200; // 60 seconds
+    public int timeUntil_Swift = 60 * 20;
+
+
 
     //Misc
+    public int totalEnergy = 0;
     public int respawnTimer = 0; // will tick down if above zero
     private boolean isDead = false;
 
@@ -69,27 +81,21 @@ public class User {
                 } else {
                     this.getInv().setItem(3, ItemRegistry.ABILITY_Fletch);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
-                    this.cooldown_Fletch = 40;
+                    this.cooldown_Fletch = PRESET_Fletch;
                 }
             } else if (!this.getInv().contains(ItemRegistry.ABILITY_Snare)) {
                 if (this.cooldown_Snare > 0) {
                     this.cooldown_Snare--;
                 } else {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_Snare);
-                    this.cooldown_Snare = 40;
+                    this.cooldown_Snare = PRESET_Snare;
                 }
-            } else if (!this.getInv().contains(ItemRegistry.ABILITY_Quickshot)) {
-                if (this.cooldown_Quickshot > 0) {
-                    this.cooldown_Quickshot--;
+            } else if (!this.getInv().contains(ItemRegistry.ABILITY_FromAbove)) {
+                if (this.cooldown_FromAbove > 0) {
+                    this.cooldown_FromAbove--;
                 } else {
-                    this.getInv().setItem(5, ItemRegistry.ABILITY_Quickshot);
-                    this.cooldown_Quickshot = 1100;
-                }
-                if (this.cooldown_ArcherCrossbow > 0) {
-                    this.cooldown_ArcherCrossbow--;
-                } else {
-                    this.getInv().setItem(1, ItemRegistry.WEAPON_ArcherBow);
-                    this.cooldown_ArcherCrossbow = 200;
+                    this.getInv().setItem(5, ItemRegistry.ABILITY_FromAbove);
+                    this.cooldown_FromAbove = PRESET_FromAbove;
                 }
             }
         }
@@ -102,18 +108,20 @@ public class User {
                     this.getInv().setItem(5, ItemRegistry.ABILITY_Swift);
                 }
             }
+
             if (!this.getInv().contains(ItemRegistry.ABILITY_DuneSlice)) {
-                if (this.cooldown_AbilityDuneSlice > 0) {
-                    this.cooldown_AbilityDuneSlice--;
+                if (this.cooldown_DuneSlice > 0) {
+                    this.cooldown_DuneSlice--;
                 } else {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_DuneSlice);
-                    this.cooldown_AbilityDuneSlice = 600;
+                    this.cooldown_DuneSlice = PRESET_DuneSlice;
                 }
-                if (this.cooldown_DuneSlicer > 0) {
-                    this.cooldown_DuneSlicer--;
+
+                if (this.cooldown_DuneSlicerActive > 0) {
+                    this.cooldown_DuneSlicerActive--;
                 } else {
                     this.getInv().setItem(0, ItemRegistry.WEAPON_HamoodSword);
-                    this.cooldown_DuneSlicer = 100;
+                    this.cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
                 }
             }
         }
