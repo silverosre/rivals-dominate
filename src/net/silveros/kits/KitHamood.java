@@ -21,4 +21,9 @@ public class KitHamood extends Kit {
         inv.setBoots(ItemRegistry.ARMOR_HamoodBoots);
         inv.setHelmet(ItemRegistry.SKULL_Hamood);
     }
+
+    @Override
+    public int getStartingEnergy() {
+        return 2;
+    }
 }

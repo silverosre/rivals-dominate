@@ -1,23 +1,20 @@
 package net.silveros.events;
 
 import net.silveros.kits.ItemRegistry;
-import net.silveros.kits.KitBunket;
-import net.silveros.main.RivalsPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 public class AbilityEvents implements Listener {
     /*@EventHandler
@@ -86,10 +83,17 @@ public class AbilityEvents implements Listener {
                     //TODO finish snare
                     world.spawnEntity(local, EntityType.ARMOR_STAND);
                     inv.clear(4);
-                } else if (equals(item, ItemRegistry.ABILITY_Quickshot)) {
-                    inv.setItem(1, ItemRegistry.WEAPON_ArcherCrossbow);
+                } else if (equals(item, ItemRegistry.ABILITY_FromAbove)) {
+                    //TODO finish from above
+
+                    Item flare = world.dropItemNaturally(local, new ItemStack(Material.RED_CANDLE));
+                    flare.setPickupDelay(Integer.MAX_VALUE);
+                    flare.addScoreboardTag("rivals.archer_flare");
+                    flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
+                    world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
+                    world.playSound(local, Sound.BLOCK_ANVIL_PLACE, 0.75f, 0.25f);
+
                     inv.clear(5);
-                    player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1, 1);
                 }
                 //gummy bear
                 else if (equals(item, ItemRegistry.ABILITY_DefenseBear)) {
