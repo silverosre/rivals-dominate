@@ -95,6 +95,60 @@ public class AbilityEvents implements Listener {
 
                     inv.clear(5);
                 }
+                //gummy bear
+                else if (equals(item, ItemRegistry.ABILITY_DefenseBear)) {
+                    inv.clear(3);
+                    inv.clear(4);
+                    inv.clear(5);
+                    inv.clear(9);;
+                    inv.setChestplate(ItemRegistry.ARMOR_DefenseBearChestplate);
+                    inv.setLeggings(ItemRegistry.ARMOR_DefenseBearLeggings);
+                    inv.setBoots(ItemRegistry.ARMOR_DefenseBearBoots);
+                    inv.setHelmet(ItemRegistry.SKULL_DefenseBear);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2, false, false));
+                    inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
+                    player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
+                } else if (equals(item, ItemRegistry.ABILITY_NormalBear)) {
+                    inv.clear(4);
+                    inv.clear(5);
+                    inv.setChestplate(ItemRegistry.ARMOR_NormalBearChestplate);
+                    inv.setLeggings(ItemRegistry.ARMOR_NormalBearLeggings);
+                    inv.setBoots(ItemRegistry.ARMOR_NormalBearBoots);
+                    inv.setHelmet(ItemRegistry.SKULL_GummyBear);
+                    for(PotionEffect e : player.getActivePotionEffects()){
+                        player.removePotionEffect(e.getType());
+                    }
+                    inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
+                    inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
+                    inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
+                } else if (equals(item, ItemRegistry.ABILITY_AttackBear)) {
+                    inv.clear(3);
+                    inv.clear(4);
+                    inv.clear(5);
+                    inv.clear(9);
+                    inv.setChestplate(ItemRegistry.ARMOR_AttackBearChestplate);
+                    inv.setLeggings(ItemRegistry.ARMOR_AttackBearLeggings);
+                    inv.setBoots(ItemRegistry.ARMOR_AttackBearBoots);
+                    inv.setHelmet(ItemRegistry.SKULL_AttackBear);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2, false, false));
+                    inv.setItem(5, ItemRegistry.ABILITY_Numb);
+                    player.playSound(player.getLocation(), Sound.ENTITY_VINDICATOR_HURT, 1, 1);
+                } else if (equals(item, ItemRegistry.ABILITY_SpeedBear)) {
+                    inv.clear(3);
+                    inv.clear(4);
+                    inv.clear(5);
+                    inv.clear(9);
+                    inv.setChestplate(ItemRegistry.ARMOR_SpeedBearChestplate);
+                    inv.setLeggings(ItemRegistry.ARMOR_SpeedBearLeggings);
+                    inv.setBoots(ItemRegistry.ARMOR_SpeedBearBoots);
+                    inv.setHelmet(ItemRegistry.SKULL_SpeedBear);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 2, false, false));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 7, false, false));
+                    inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
+                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1, 1);
+                }
             }
         }
     }

@@ -13,6 +13,7 @@ public abstract class Kit {
     public static Kit ARCHER;
     public static Kit HAMOOD;
     public static Kit HEROBRINE;
+    public static Kit GUMMY_BEAR;
     //public final static Kits WIZARD = new Kits("wizard");
 
     public final String kitName;
@@ -24,6 +25,7 @@ public abstract class Kit {
         ARCHER = new KitArcher(1, "archer");
         HAMOOD = new KitHamood(2, "hamood");
         HEROBRINE = new KitHerobrine(3, "herobrine");
+        GUMMY_BEAR = new KitGummyBear(4, "gummy");
     }
 
     public Kit(int id, String name) {
