@@ -1,4 +1,4 @@
-package net.silveros.kits;
+package net.silveros.kits.items;
 
 public class Skulls {
     public static final String BUNKET = "da6e0429ccaabb6f5f0c5d513c795bed6d80fce72f57f4bc3a616aee23e12572";

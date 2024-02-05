@@ -39,8 +39,6 @@ public class User {
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
 
-
-
     //Misc
     public int totalEnergy = 0;
     public int respawnTimer = 0; // will tick down if above zero
