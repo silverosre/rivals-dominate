@@ -7,7 +7,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Kit {
+public abstract class Kit {
     public static Map<Integer, Kit> KIT_LIST = new HashMap<>();
     public static Kit BUNKET;
     public static Kit ARCHER;
@@ -36,4 +36,6 @@ public class Kit {
         inv.clear();
         inv.setItem(8, new ItemStack(Material.APPLE, this.foodCount));
     }
+
+    public abstract int getStartingEnergy();
 }

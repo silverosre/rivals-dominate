@@ -19,4 +19,9 @@ public class KitHerobrine extends Kit {
 
         inv.setHelmet(ItemRegistry.SKULL_Herobrine);
     }
+
+    @Override
+    public int getStartingEnergy() {
+        return 3;
+    }
 }

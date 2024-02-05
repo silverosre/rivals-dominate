@@ -4,7 +4,6 @@ import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -34,11 +33,10 @@ public class ItemRegistry implements Color {
     //Archer
     public static ItemAbility ABILITY_Fletch;
     public static ItemAbility ABILITY_Snare;
-    public static ItemAbility ABILITY_Quickshot;
+    public static ItemAbility ABILITY_FromAbove;
     public static ItemStack WEAPON_ArcherBow;
     public static ItemStack WEAPON_ArcherArrows;
     public static ItemStack WEAPON_WoodenKnife;
-    public static ItemStack WEAPON_ArcherCrossbow;
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack ARMOR_ArcherBoots;
@@ -77,7 +75,7 @@ public class ItemRegistry implements Color {
         //archer
         generateFletch(1);
         generateSnare(1);
-        generateQuickshot(7);
+        generateFromAbove(3);
 
         //hamood
         generatePharaohsCurse(1);
@@ -101,7 +99,6 @@ public class ItemRegistry implements Color {
         generateArcherBow();
         generateArcherSword();
         WEAPON_ArcherArrows = getArrows(10);
-        generateArcherCrossbow();
         generateArcherBoots();
         generateArcherLeggings();
         generateArcherChestplate();
@@ -180,7 +177,7 @@ public class ItemRegistry implements Color {
         ABILITY_ShieldUp = item;
     }
 
-    public static void generateBunketChestplate(){
+    private static void generateBunketChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
@@ -192,7 +189,8 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         ARMOR_BunketChestplate = item;
     }
-    public static void generateBunketLeggings(){
+
+    private static void generateBunketLeggings() {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
@@ -202,7 +200,8 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         ARMOR_BunketLeggings = item;
     }
-    public static void generateBunketBoots(){
+
+    private static void generateBunketBoots() {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
@@ -245,18 +244,19 @@ public class ItemRegistry implements Color {
         ABILITY_Snare = item;
     }
 
-    private static void generateQuickshot(int cost) {
+    private static void generateFromAbove(int cost) {
         ItemAbility item = getBlankAbility(cost);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Quickshot " + itemCost(cost));
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: From Above " + itemCost(cost));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Shoot a ton of arrows.",
-                DARK_AQUA + "Costs " + cost + " energy: 55 second cooldown"
+                WHITE + ITALIC + "Tosses a flare that marks an",
+                WHITE + ITALIC + "area for air strike by arrows.",
+                DARK_AQUA + "Costs " + cost + " energy: 20 second cooldown"
         ));
 
         item.setItemMeta(meta);
-        ABILITY_Quickshot = item;
+        ABILITY_FromAbove = item;
     }
 
     private static void generateArcherBow() {
@@ -277,15 +277,6 @@ public class ItemRegistry implements Color {
 
         item.setItemMeta(meta);
         WEAPON_WoodenKnife = item;
-    }
-    private static void generateArcherCrossbow() {
-        ItemStack item = new ItemStack(Material.CROSSBOW, 1);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.addEnchant(Enchantment.QUICK_CHARGE, 5, true);
-
-        item.setItemMeta(meta);
-        WEAPON_ArcherCrossbow = item;
     }
 
     private static void generateArcherChestplate() {
@@ -372,7 +363,8 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         ABILITY_Swift = item;
     }
-    public static void generateHamoodSword() {
+
+    private static void generateHamoodSword() {
         ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -381,7 +373,8 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         WEAPON_HamoodSword = item;
     }
-    public static void generateDuneSlicer() {
+
+    private static void generateDuneSlicer() {
         ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -391,6 +384,7 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         WEAPON_DuneSlicer = item;
     }
+
     private static void generateHamoodChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
@@ -402,6 +396,7 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         ARMOR_HamoodChestplate = item;
     }
+
     private static void generateHamoodLeggings() {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
@@ -412,6 +407,7 @@ public class ItemRegistry implements Color {
         item.setItemMeta(meta);
         ARMOR_HamoodLeggings = item;
     }
+
     private static void generateHamoodBoots() {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();

@@ -4,6 +4,7 @@ import net.silveros.entity.User;
 import net.silveros.main.RivalsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -14,10 +15,12 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Random;
 import java.util.UUID;
 
 public class Util {
     private static JavaPlugin mainPlugin;
+    public static Random rand = new Random();
 
     public static void initialize(JavaPlugin plugin) {
         mainPlugin = plugin;
@@ -39,8 +42,12 @@ public class Util {
         return mainPlugin;
     }
 
-    private static Server server() {
+    public static Server server() {
         return getPlugin().getServer();
+    }
+
+    public static World getWorld() {
+        return server().getWorld(server().getWorldType());
     }
 
     /**Can return null!*/
@@ -78,5 +85,9 @@ public class Util {
 
     public static URL getUrlFromBase64(String base64) throws MalformedURLException {
         return new URL(new String(Base64.getDecoder().decode(base64)));
+    }
+
+    public static double range(double radius) {
+        return radius - ((rand.nextDouble() * radius) * 2);
     }
 }
