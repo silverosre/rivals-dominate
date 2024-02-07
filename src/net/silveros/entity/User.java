@@ -6,8 +6,10 @@ import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scoreboard.Team;
 
@@ -56,6 +58,12 @@ public class User {
 
     /**Player tick loop*/
     public void onTick() {
+        //Update energy
+        ItemStack energyItem = this.getInv().getItem(6);
+        if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
+            this.getInv().setItem(6, new ItemStack(Material.DIAMOND, this.totalEnergy));
+        }
+
         //Misc gameplay
         if (this.isDead) {
             if (this.respawnTimer > 0) {
@@ -183,7 +191,26 @@ public class User {
 
     public void activateKit() {
         if (this.currentKit != -1) {
-            Kit.KIT_LIST.get(this.currentKit).activateKit(this.getInv());
+            Kit kit = Kit.KIT_LIST.get(this.currentKit);
+
+            this.setTotalEnergy(kit.getStartingEnergy());
+            kit.activateKit(this.getInv());
+        }
+    }
+
+    public int getTotalEnergy() {
+        return this.totalEnergy;
+    }
+
+    public void setTotalEnergy(int num) {
+        this.totalEnergy = num;
+    }
+
+    public void removeEnergy(int num) {
+        this.totalEnergy -= num;
+
+        if (this.totalEnergy < 0) {
+            System.err.println("WARNING: " + this.getPlayer().getName() + "'s energy went below zero!");
         }
     }
 

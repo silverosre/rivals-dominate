@@ -88,6 +88,7 @@ public class AbilityEvents implements Listener {
                     //TODO finish snare
                     world.spawnEntity(local, EntityType.ARMOR_STAND);
                     inv.clear(4);
+                    user.removeEnergy(ItemRegistry.ABILITY_Snare.energyCost);
                 } else if (equals(item, ItemRegistry.ABILITY_FromAbove)) {
                     //TODO finish from above
 
