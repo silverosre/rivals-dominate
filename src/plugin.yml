@@ -10,4 +10,9 @@ commands:
     permission: rivals.kit
     usage: /kit <kit>
 
+  rteam:
+    description: Sets what Rivals team the specified player is on.
+    permission: rivals.rteam
+    usage: /rteam <team>
+
 permissions: {}

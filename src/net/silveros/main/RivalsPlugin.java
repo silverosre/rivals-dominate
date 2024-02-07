@@ -1,25 +1,26 @@
 package net.silveros.main;
 
-import net.silveros.commands.RivalsCommands;
-import net.silveros.entity.RivalsTags;
+import net.silveros.commands.*;
 import net.silveros.entity.User;
 import net.silveros.events.AbilityEvents;
 import net.silveros.events.PlayerEvents;
+import net.silveros.game.RivalsCore;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
-import net.silveros.kits.KitArcher;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RivalsPlugin extends JavaPlugin implements Color {
     public static List<User> players = new ArrayList<>();
-    public static RivalsCore core = new RivalsCore();
+    public static RivalsCore core;
 
     public static final String WELCOME_MESSAGE = LIGHT_PURPLE + "Welcome to Rivals: Dominate!";
 
@@ -36,14 +37,20 @@ public class RivalsPlugin extends JavaPlugin implements Color {
         Util.registerEvent(new AbilityEvents());
         Util.registerEvent(new PlayerEvents());
 
-        Util.registerCommand("kit", new RivalsCommands(this));
+        Util.registerCommand("kit", new CommandKit(this));
+        Util.registerCommand("rteam", new CommandRTeam(this));
 
         //misc & tick
         this.startTicking();
     }
 
-    //Main tick loop
     private void startTicking() {
+        //initialize Rivals core after the server has officially finished booting up
+        Bukkit.getScheduler().runTask(this, () -> {
+            core = new RivalsCore();
+        });
+
+        //main tick loop
         new BukkitRunnable() {
             @Override
             public void run() {

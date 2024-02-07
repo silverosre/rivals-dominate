@@ -1,17 +1,21 @@
 package net.silveros.events;
 
+import net.silveros.entity.User;
 import net.silveros.main.RivalsPlugin;
+import net.silveros.utility.Color;
+import net.silveros.utility.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PlayerEvents implements Listener {
+public class PlayerEvents implements Listener, Color {
     @EventHandler
     public static void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -31,5 +35,28 @@ public class PlayerEvents implements Listener {
         if (event.getItem().getType() == Material.APPLE) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 2, false, false));
         }
+    }
+
+    @EventHandler
+    public static void onMessageSent(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        User user = Util.getUserFromId(player.getUniqueId());
+        String prefix = "";
+        String color = "";
+
+        if (user != null) {
+            if (user.getTeam(RivalsPlugin.core.TEAM_RED)) {
+                prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
+                color = RED;
+            } else if (user.getTeam(RivalsPlugin.core.TEAM_BLUE)) {
+                prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
+                color = BLUE;
+            } else if (user.getTeam(RivalsPlugin.core.TEAM_SPECTATOR)) {
+                prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
+                color = GRAY;
+            }
+        }
+
+        event.setFormat(prefix + RESET + "<" + color + player.getName() + RESET + "> " + event.getMessage());
     }
 }

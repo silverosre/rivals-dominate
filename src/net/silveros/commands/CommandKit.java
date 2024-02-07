@@ -10,10 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class RivalsCommands implements CommandExecutor, Color {
-    public RivalsPlugin plugin;
+public class CommandKit implements CommandExecutor, Color {
+    private RivalsPlugin plugin;
 
-    public RivalsCommands(RivalsPlugin plugin) {
+    public CommandKit(RivalsPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -25,6 +25,7 @@ public class RivalsCommands implements CommandExecutor, Color {
         }
 
         Player player = (Player)sender;
+
         if (cmd.getName().equalsIgnoreCase("kit")) {
             if (args.length == 1) {
                 for (Kit kit : Kit.KIT_LIST.values()) {

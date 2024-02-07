@@ -1,6 +1,9 @@
 package net.silveros.events;
 
+import net.silveros.entity.User;
 import net.silveros.kits.ItemRegistry;
+import net.silveros.main.RivalsPlugin;
+import net.silveros.utility.Util;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -14,6 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 public class AbilityEvents implements Listener {
@@ -35,6 +39,7 @@ public class AbilityEvents implements Listener {
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        User user = Util.getUserFromId(player.getUniqueId());
         PlayerInventory inv = player.getInventory();
         Location local = player.getLocation();
         ItemStack item = event.getItem();
@@ -86,10 +91,11 @@ public class AbilityEvents implements Listener {
                 } else if (equals(item, ItemRegistry.ABILITY_FromAbove)) {
                     //TODO finish from above
 
-                    Item flare = world.dropItemNaturally(local, new ItemStack(Material.RED_CANDLE));
+                    Item flare = world.dropItemNaturally(local, new ItemStack(user.getTeam(RivalsPlugin.core.TEAM_BLUE) ? Material.BLUE_CANDLE : Material.RED_CANDLE));
                     flare.setPickupDelay(Integer.MAX_VALUE);
                     flare.addScoreboardTag("rivals.archer_flare");
                     flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
+
                     world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
                     world.playSound(local, Sound.BLOCK_ANVIL_PLACE, 0.75f, 0.25f);
 
@@ -119,6 +125,8 @@ public class AbilityEvents implements Listener {
                     for(PotionEffect e : player.getActivePotionEffects()){
                         player.removePotionEffect(e.getType());
                     }
+
+                    //why not just player.getActivePotionEffects().clear()
                     inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
                     inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
                     inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);

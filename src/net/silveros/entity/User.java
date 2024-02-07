@@ -1,16 +1,21 @@
 package net.silveros.entity;
 
+import net.silveros.game.RivalsCore;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
+import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scoreboard.Team;
 
 import java.util.UUID;
 
 public class User {
+    public int team = 0;
+
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
@@ -21,6 +26,7 @@ public class User {
     private static final int PRESET_FromAbove = 55 * 20;
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
+    private static final int PRESET_NormalBear = 5 * 20;
 
     //Ability cooldowns
 
@@ -32,16 +38,16 @@ public class User {
     public int cooldown_FromAbove = PRESET_FromAbove;
     //hamood
     public int cooldown_DuneSlice = PRESET_DuneSlice;
-    public int cooldown_DuneSlicerActive = 5 * 20;
+    public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     //gummybear
-    public int cooldown_NormalBear = 100;
+    public int cooldown_NormalBear = PRESET_NormalBear;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
 
     //Misc
-    public int totalEnergy = 0;
-    public int respawnTimer = 0; // will tick down if above zero
+    private int totalEnergy = 0;
+    private int respawnTimer = 0; // will tick down if above zero
     private boolean isDead = false;
 
     public User(UUID uuid) {
@@ -66,7 +72,7 @@ public class User {
                     this.cooldown_ShieldUp--;
                 } else {
                     this.getInv().setItem(5, ItemRegistry.ABILITY_ShieldUp);
-                    this.cooldown_ShieldUp = 1100;
+                    this.cooldown_ShieldUp = PRESET_ShieldUp;
                 }
             }
         }
@@ -130,8 +136,37 @@ public class User {
                 } else {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_NormalBear);
                     this.getInv().setItem(9, ItemRegistry.ITEM_GummyEssence);
-                    this.cooldown_NormalBear = 100;
+                    this.cooldown_NormalBear = PRESET_NormalBear;
                 }
+            }
+        }
+    }
+
+    public boolean getTeam(Team team) {
+        Player player = this.getPlayer();
+
+        if (player != null) {
+            return team.hasEntry(player.getName());
+        }
+
+        return false;
+    }
+
+    public void setTeam(Team team) {
+        Player player = this.getPlayer();
+
+        if (player != null) {
+            player.setScoreboard(RivalsPlugin.core.board);
+            RivalsCore.addEntryToTeam(team, player);
+        }
+    }
+
+    public void resetTeam() {
+        Player player = this.getPlayer();
+
+        if (player != null) {
+            for (Team team : RivalsPlugin.core.board.getTeams()) {
+                RivalsCore.removeEntryFromTeam(team, player);
             }
         }
     }
