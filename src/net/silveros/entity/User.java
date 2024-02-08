@@ -29,6 +29,9 @@ public class User {
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
+    private static final int PRESET_FogCloak = 30 * 20;
+    private static final int PRESET_HerobrinePower = 55 * 20;
+    private static final int PRESET_HerobrinePowerActive = 10 * 20;
 
     //Ability cooldowns
 
@@ -43,6 +46,10 @@ public class User {
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
+    //herobrine
+    public int cooldown_FogCloak = PRESET_FogCloak;
+    public int cooldown_HerobrinePower = PRESET_HerobrinePower;
+    public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
@@ -145,6 +152,43 @@ public class User {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_NormalBear);
                     this.getInv().setItem(9, ItemRegistry.ITEM_GummyEssence);
                     this.cooldown_NormalBear = PRESET_NormalBear;
+                }
+            }
+        }
+        if (this.currentKit == Kit.HEROBRINE.kitID) {
+            if(!this.getInv().contains(ItemRegistry.ABILITY_HerobrinePower)) {
+                if (this.cooldown_HerobrinePower > 0) {
+                    this.cooldown_HerobrinePower--;
+                } else {
+                    this.getInv().setItem(3, ItemRegistry.ABILITY_HerobrinePower);
+                    this.cooldown_HerobrinePower = PRESET_HerobrinePower;
+                }
+                if (this.cooldown_HerobrinePowerActive > 0) {
+                    this.cooldown_HerobrinePowerActive--;
+                } else {
+                    this.getInv().setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
+                    this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                    this.cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
+                }
+            }
+            if(!this.getInv().contains(ItemRegistry.ABILITY_FogCloak)) {
+                if(this.getPlayer().getActivePotionEffects().isEmpty()){
+                    if (this.cooldown_FogCloak > 0) {
+                        this.cooldown_FogCloak--;
+                    } else {
+                        this.getInv().setItem(4, ItemRegistry.ABILITY_FogCloak);
+                        this.cooldown_FogCloak = PRESET_FogCloak;
+                    }
+                    if(this.getInv().contains(ItemRegistry.ABILITY_Uncloak)){
+                        //checks to see if fog cloak was taken away
+                        this.getInv().clear(4);
+                        this.getInv().setHelmet(ItemRegistry.SKULL_Herobrine);
+                        this.getInv().setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
+                        this.getInv().setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
+                        this.getInv().setBoots(ItemRegistry.ARMOR_HerobrineBoots);
+                        this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                        this.getInv().setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                    }
                 }
             }
         }

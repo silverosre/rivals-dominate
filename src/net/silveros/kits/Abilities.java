@@ -16,6 +16,7 @@ public enum Abilities {
     //Herobrine
     HEROBRINE_POWER,
     FOG_CLOAK,
+    UNCLOAK,
     //Gummybear
     NORMAL_BEAR,
     DEFENSE_BEAR,

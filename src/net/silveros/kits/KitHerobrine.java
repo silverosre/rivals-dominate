@@ -18,6 +18,9 @@ public class KitHerobrine extends Kit {
         inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
 
         inv.setHelmet(ItemRegistry.SKULL_Herobrine);
+        inv.setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
+        inv.setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
+        inv.setBoots(ItemRegistry.ARMOR_HerobrineBoots);
     }
 
     @Override
