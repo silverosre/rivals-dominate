@@ -5,10 +5,9 @@ import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scoreboard.Team;
@@ -185,13 +184,18 @@ public class User {
                     }
                     if(this.getInv().contains(ItemRegistry.ABILITY_Uncloak)){
                         //checks to see if fog cloak was taken away
-                        this.getInv().clear(4);
+                        Player player = this.getPlayer();
+                        Location local = this.getPlayer().getLocation();
+                        Inventory inv = this.getInv();
+                        inv.clear(4);
                         this.getInv().setHelmet(ItemRegistry.SKULL_Herobrine);
                         this.getInv().setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
                         this.getInv().setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
                         this.getInv().setBoots(ItemRegistry.ARMOR_HerobrineBoots);
-                        this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
-                        this.getInv().setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                        inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                        inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                        player.playSound(local, Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+                        player.spawnParticle(Particle.SMOKE_LARGE, local, 20);
                     }
                 }
             }

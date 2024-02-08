@@ -217,13 +217,13 @@ public class AbilityEvents implements Listener, Color {
                                     inv.clear(37);
                                     inv.clear(38);
                                     inv.clear(39);
-                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, player.getLocation(), 10, 0, 0, 0);
+                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, player.getLocation(), 20);
+                                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1, 1);
                                     break;
                                 case UNCLOAK:
                                     for(PotionEffect e : player.getActivePotionEffects()) {
                                         player.removePotionEffect(e.getType());
                                     }
-                                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1);
                                     break;
                             }
                         } else {
