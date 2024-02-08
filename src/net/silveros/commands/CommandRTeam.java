@@ -19,43 +19,42 @@ public class CommandRTeam implements CommandExecutor, Color {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            err(sender, "Only players may use this command.");
-            return true;
-        }
-
-        Player player = (Player)sender;
-
         if (cmd.getName().equalsIgnoreCase("rteam")) {
-            if (args.length == 1) {
-                User user = Util.getUserFromId(player.getUniqueId());
+            if (args.length == 2) {
+                Player player = this.plugin.getServer().getPlayer(args[0]);
 
-                if (user != null) {
-                    String team = args[0].toLowerCase();
+                if (player != null) {
+                    User user = Util.getUserFromId(player.getUniqueId());
 
-                    switch (team) {
-                        case "red":
-                            user.setTeam(RivalsPlugin.core.TEAM_RED);
-                            player.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_RED.getDisplayName());
-                            return true;
-                        case "blue":
-                            user.setTeam(RivalsPlugin.core.TEAM_BLUE);
-                            player.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_BLUE.getDisplayName());
-                            return true;
-                        case "spectator":
-                            user.setTeam(RivalsPlugin.core.TEAM_SPECTATOR);
-                            player.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_SPECTATOR.getDisplayName());
-                            return true;
-                        case "reset":
-                            user.resetTeam();
-                            player.sendMessage("Reset player's chosen team.");
-                            return true;
+                    if (user != null) {
+                        String team = args[1].toLowerCase();
+
+                        switch (team) {
+                            case "red":
+                                user.setTeam(RivalsPlugin.core.TEAM_RED);
+                                sender.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_RED.getDisplayName());
+                                return true;
+                            case "blue":
+                                user.setTeam(RivalsPlugin.core.TEAM_BLUE);
+                                sender.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_BLUE.getDisplayName());
+                                return true;
+                            case "spectator":
+                                user.setTeam(RivalsPlugin.core.TEAM_SPECTATOR);
+                                sender.sendMessage("Set player's team to " + RivalsPlugin.core.TEAM_SPECTATOR.getDisplayName());
+                                return true;
+                            case "reset":
+                                user.resetTeam();
+                                sender.sendMessage("Reset player's chosen team.");
+                                return true;
+                        }
                     }
-                }
 
-                err(player, "Invalid team.");
+                    err(sender, "Invalid team.");
+                } else {
+                    err(sender, "Invalid player!  Make sure you typed the correct username.");
+                }
             } else {
-                err(player, "Invalid usage.");
+                err(sender, "Invalid usage.");
             }
         }
 

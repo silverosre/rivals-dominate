@@ -19,39 +19,38 @@ public class CommandKit implements CommandExecutor, Color {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            err(sender, "Only players may use this command.");
-            return true;
-        }
-
-        Player player = (Player)sender;
-
         if (cmd.getName().equalsIgnoreCase("kit")) {
-            if (args.length == 1) {
-                for (Kit kit : Kit.KIT_LIST.values()) {
-                    if (kit.kitName.equalsIgnoreCase(args[0])) {
+            if (args.length == 2) {
+                Player player = this.plugin.getServer().getPlayer(args[0]);
+
+                if (player != null) {
+                    for (Kit kit : Kit.KIT_LIST.values()) {
+                        if (kit.kitName.equalsIgnoreCase(args[1])) {
+                            User user = Util.getUserFromId(player.getUniqueId());
+                            if (user != null) {
+                                user.setKit(kit);
+                            }
+
+                            sender.sendMessage("Successfully applied kit to player.");
+                            return true;
+                        }
+                    }
+
+                    if ("reset".equalsIgnoreCase(args[1])) {
                         User user = Util.getUserFromId(player.getUniqueId());
                         if (user != null) {
-                            user.setKit(kit);
+                            user.resetKit();
+                            sender.sendMessage("Reset player's chosen kit.");
+                            return true;
                         }
-
-                        player.sendMessage("Successfully applied kit to player.");
-                        return true;
                     }
-                }
 
-                if ("reset".equalsIgnoreCase(args[0])) {
-                    User user = Util.getUserFromId(player.getUniqueId());
-                    if (user != null) {
-                        user.resetKit();
-                        player.sendMessage("Reset player's chosen kit.");
-                        return true;
-                    }
+                    err(sender, "Invalid kit.");
+                } else {
+                    err(sender, "Invalid player!  Make sure you typed the correct username.");
                 }
-
-                err(player, "Invalid kit.");
             } else {
-                err(player, "Invalid usage.");
+                err(sender, "Invalid usage.");
             }
         }
 

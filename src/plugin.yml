@@ -8,11 +8,16 @@ commands:
   kit:
     description: Gives the specified kit to the player
     permission: rivals.kit
-    usage: /kit <kit>
+    usage: /kit <player> <kit>
 
   rteam:
     description: Sets what Rivals team the specified player is on.
     permission: rivals.rteam
-    usage: /rteam <team>
+    usage: /rteam <player> <team>
+
+  energy:
+    description: Sets the specified player's energy count.
+    permission: rivals.energy
+    usage: /energy <player> <amount>
 
 permissions: {}
