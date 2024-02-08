@@ -17,6 +17,7 @@ import java.util.UUID;
 
 public class User {
     public int team = 0;
+    public int fogCloakCheck = 0;
 
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
@@ -30,6 +31,7 @@ public class User {
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
+    private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
 
@@ -48,6 +50,7 @@ public class User {
     public int cooldown_NormalBear = PRESET_NormalBear;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
+    public int cooldown_FogCloakMin = PRESET_FogCloakMin;
     public int cooldown_HerobrinePower = PRESET_HerobrinePower;
     public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
 
@@ -178,6 +181,7 @@ public class User {
                     } else {
                         this.getInv().setItem(4, ItemRegistry.ABILITY_FogCloak);
                         this.cooldown_FogCloak = PRESET_FogCloak;
+                        this.fogCloakCheck = 0;
                     }
                     if(this.getInv().contains(ItemRegistry.ABILITY_Uncloak)){
                         //checks to see if fog cloak was taken away
@@ -189,6 +193,15 @@ public class User {
                         this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
                         this.getInv().setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
                     }
+                }
+            }
+            if(!this.getInv().contains(ItemRegistry.ABILITY_Uncloak) && !this.getInv().contains(ItemRegistry.ABILITY_FogCloak) && this.fogCloakCheck == 0) {
+                if (this.cooldown_FogCloakMin > 0) {
+                    this.cooldown_FogCloakMin--;
+                } else {
+                    this.getInv().setItem(4, ItemRegistry.ABILITY_Uncloak);
+                    this.cooldown_FogCloakMin = PRESET_FogCloakMin;
+                    this.fogCloakCheck = 1;
                 }
             }
         }

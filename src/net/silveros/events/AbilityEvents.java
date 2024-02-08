@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,15 +43,24 @@ public class AbilityEvents implements Listener, Color {
     @EventHandler
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
+        Entity damager = event.getDamager();
         if (entity.getType().equals(EntityType.PLAYER)) {
             Player player = (Player) event.getEntity();
-            //checks if player being damaged is invisible
-            //for Fog Cloak --roasty
-            if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            //checks if player being damaged has uncloak --roasty
+            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+            }
+        }
+        if (damager.getType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getDamager();
+            //checks if a cloaked herobrine has hit an entity
+            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
             }
         }
     }
@@ -207,7 +217,6 @@ public class AbilityEvents implements Listener, Color {
                                     inv.clear(37);
                                     inv.clear(38);
                                     inv.clear(39);
-                                    inv.setItem(4, ItemRegistry.ABILITY_Uncloak);
                                     player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, player.getLocation(), 10, 0, 0, 0);
                                     break;
                                 case UNCLOAK:
