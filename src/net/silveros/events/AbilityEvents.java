@@ -1,6 +1,8 @@
 package net.silveros.events;
 
+import net.silveros.entity.RivalsTags;
 import net.silveros.entity.User;
+import net.silveros.game.RivalsCore;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.main.RivalsPlugin;
@@ -10,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Marker;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -115,13 +118,17 @@ public class AbilityEvents implements Listener, Color {
                                     }
                                     break;
                                 case SNARE:
-                                    world.spawnEntity(local, EntityType.ARMOR_STAND);
+                                    Marker snare = (Marker)world.spawnEntity(local, EntityType.MARKER);
+                                    snare.addScoreboardTag(RivalsTags.SNARE_ENTITY);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), snare);
+
+                                    world.playSound(local, Sound.BLOCK_WET_GRASS_PLACE, 0.75f, 0.5f);
                                     inv.clear(4);
                                     break;
                                 case FROM_ABOVE:
                                     Item flare = world.dropItemNaturally(local, new ItemStack(user.getTeam(RivalsPlugin.core.TEAM_BLUE) ? Material.BLUE_CANDLE : Material.RED_CANDLE));
                                     flare.setPickupDelay(Integer.MAX_VALUE);
-                                    flare.addScoreboardTag("rivals.archer_flare");
+                                    flare.addScoreboardTag(RivalsTags.FLARE_ENTITY);
                                     flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
 
                                     world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
