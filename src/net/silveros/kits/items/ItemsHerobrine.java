@@ -3,6 +3,7 @@ package net.silveros.kits.items;
 import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -15,14 +16,20 @@ public class ItemsHerobrine extends Items {
     protected void prepareFeatures() {
         generateHerobrinePower(6);
         generateFogCloak(2);
+        generateUncloak(0);
         generateHerobrineAxe();
         generateHerobrineBow();
+        generateHerobrinePowerAxe();
+        generateHerobrinePowerBow();
         ItemRegistry.WEAPON_HerobrineArrows = getArrows(3);
     }
 
     @Override
     protected void prepareArmor() {
         ItemRegistry.SKULL_Herobrine = getSkull(Skulls.HEROBRINE, "Herobrine Head");
+        generateHerobrineChestplate();
+        generateHerobrineLeggings();
+        generateHerobrineBoots();
     }
 
     private static void generateHerobrinePower(int cost) {
@@ -56,6 +63,19 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_FogCloak = item;
     }
+    private static void generateUncloak(int cost) {
+        ItemAbility item = getBlankAbility(cost, Abilities.UNCLOAK);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Ability: Uncloak " + itemCost(cost));
+        meta.setLore(addLore(
+                WHITE + ITALIC + "Uncloak yourself",
+                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+        ));
+
+        item.setItemMeta(meta);
+        ItemRegistry.ABILITY_Uncloak = item;
+    }
 
     private static void generateHerobrineAxe() {
         ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
@@ -77,5 +97,55 @@ public class ItemsHerobrine extends Items {
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrineBow = item;
+    }
+    private static void generateHerobrinePowerAxe() {
+        ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Herobrine Power Axe");
+        meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
+
+        item.setItemMeta(meta);
+        ItemRegistry.WEAPON_HerobrinePowerAxe = item;
+    }
+    private static void generateHerobrinePowerBow(){
+        ItemStack item = new ItemStack(Material.BOW, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(LIGHT_PURPLE + "Herobrine Power Bow");
+        meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+
+        item.setItemMeta(meta);
+        ItemRegistry.WEAPON_HerobrinePowerBow = item;
+    }
+    private static void generateHerobrineChestplate(){
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+
+        meta.setColor(Color.AQUA);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ItemRegistry.ARMOR_HerobrineChestplate = item;
+    }
+    private static void generateHerobrineLeggings(){
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+
+        meta.setColor(Color.TEAL);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ItemRegistry.ARMOR_HerobrineLeggings = item;
+    }
+    private static void generateHerobrineBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+
+        meta.setColor(Color.GRAY);
+        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        item.setItemMeta(meta);
+        ItemRegistry.ARMOR_HerobrineBoots = item;
     }
 }

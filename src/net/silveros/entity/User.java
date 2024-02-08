@@ -6,7 +6,7 @@ import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
@@ -19,6 +19,7 @@ import java.util.UUID;
 
 public class User {
     public int team = 0;
+    public int fogCloakCheck = 0;
 
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
@@ -31,6 +32,10 @@ public class User {
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
+    private static final int PRESET_FogCloak = 30 * 20;
+    private static final int PRESET_FogCloakMin = 2 * 20;
+    private static final int PRESET_HerobrinePower = 55 * 20;
+    private static final int PRESET_HerobrinePowerActive = 10 * 20;
 
     //Ability cooldowns
 
@@ -45,6 +50,11 @@ public class User {
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
+    //herobrine
+    public int cooldown_FogCloak = PRESET_FogCloak;
+    public int cooldown_FogCloakMin = PRESET_FogCloakMin;
+    public int cooldown_HerobrinePower = PRESET_HerobrinePower;
+    public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
@@ -228,6 +238,58 @@ public class User {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_NormalBear);
                     this.getInv().setItem(9, ItemRegistry.ITEM_GummyEssence);
                     this.cooldown_NormalBear = PRESET_NormalBear;
+                }
+            }
+        }
+        if (this.currentKit == Kit.HEROBRINE.kitID) {
+            if(!this.getInv().contains(ItemRegistry.ABILITY_HerobrinePower)) {
+                if (this.cooldown_HerobrinePower > 0) {
+                    this.cooldown_HerobrinePower--;
+                } else {
+                    this.getInv().setItem(3, ItemRegistry.ABILITY_HerobrinePower);
+                    this.cooldown_HerobrinePower = PRESET_HerobrinePower;
+                }
+                if (this.cooldown_HerobrinePowerActive > 0) {
+                    this.cooldown_HerobrinePowerActive--;
+                } else {
+                    this.getInv().setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
+                    this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                    this.cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
+                }
+            }
+            if(!this.getInv().contains(ItemRegistry.ABILITY_FogCloak)) {
+                if(this.getPlayer().getActivePotionEffects().isEmpty()){
+                    if (this.cooldown_FogCloak > 0) {
+                        this.cooldown_FogCloak--;
+                    } else {
+                        this.getInv().setItem(4, ItemRegistry.ABILITY_FogCloak);
+                        this.cooldown_FogCloak = PRESET_FogCloak;
+                        this.fogCloakCheck = 0;
+                    }
+                    if(this.getInv().contains(ItemRegistry.ABILITY_Uncloak)){
+                        //checks to see if fog cloak was taken away
+                        Player player = this.getPlayer();
+                        Location local = this.getPlayer().getLocation();
+                        Inventory inv = this.getInv();
+                        inv.clear(4);
+                        this.getInv().setHelmet(ItemRegistry.SKULL_Herobrine);
+                        this.getInv().setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
+                        this.getInv().setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
+                        this.getInv().setBoots(ItemRegistry.ARMOR_HerobrineBoots);
+                        inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                        inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                        player.playSound(local, Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+                        player.spawnParticle(Particle.SMOKE_LARGE, local, 20);
+                    }
+                }
+            }
+            if(!this.getInv().contains(ItemRegistry.ABILITY_Uncloak) && !this.getInv().contains(ItemRegistry.ABILITY_FogCloak) && this.fogCloakCheck == 0) {
+                if (this.cooldown_FogCloakMin > 0) {
+                    this.cooldown_FogCloakMin--;
+                } else {
+                    this.getInv().setItem(4, ItemRegistry.ABILITY_Uncloak);
+                    this.cooldown_FogCloakMin = PRESET_FogCloakMin;
+                    this.fogCloakCheck = 1;
                 }
             }
         }

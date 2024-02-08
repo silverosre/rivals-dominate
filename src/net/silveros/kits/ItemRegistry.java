@@ -41,6 +41,7 @@ public class ItemRegistry implements Color {
         //Herobrine
         addToMap(ABILITY_HerobrinePower);
         addToMap(ABILITY_FogCloak);
+        addToMap(ABILITY_Uncloak);
         //Gummybear
         addToMap(ABILITY_NormalBear);
         addToMap(ABILITY_DefenseBear);
@@ -107,9 +108,15 @@ public class ItemRegistry implements Color {
     //Herobrine
     public static ItemAbility ABILITY_HerobrinePower;
     public static ItemAbility ABILITY_FogCloak;
+    public static ItemAbility ABILITY_Uncloak;
     public static ItemStack WEAPON_HerobrineAxe;
     public static ItemStack WEAPON_HerobrineArrows;
     public static ItemStack WEAPON_HerobrineBow;
+    public static ItemStack WEAPON_HerobrinePowerAxe;
+    public static ItemStack WEAPON_HerobrinePowerBow;
+    public static ItemStack ARMOR_HerobrineChestplate;
+    public static ItemStack ARMOR_HerobrineLeggings;
+    public static ItemStack ARMOR_HerobrineBoots;
     public static ItemStack SKULL_Herobrine;
 
     //Gummy Bear

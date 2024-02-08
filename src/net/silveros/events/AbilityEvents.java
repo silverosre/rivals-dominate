@@ -9,6 +9,7 @@ import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Marker;
@@ -16,7 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -40,6 +43,30 @@ public class AbilityEvents implements Listener, Color {
             player.sendMessage("You are on a stone block.");
         }
     }*/
+    @EventHandler
+    public static void onPlayerHit(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        Entity damager = event.getDamager();
+        if (entity.getType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getEntity();
+            //checks if player being damaged has uncloak --roasty
+            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+            }
+        }
+        if (damager.getType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getDamager();
+            //checks if a cloaked herobrine has hit an entity
+            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+            }
+        }
+    }
 
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
@@ -177,6 +204,33 @@ public class AbilityEvents implements Listener, Color {
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 7, false, false));
                                     inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
                                     world.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1, 1);
+                                    break;
+                                //herobrine
+                                case HEROBRINE_POWER:
+                                    inv.clear(0);
+                                    inv.clear(1);
+                                    inv.clear(7);
+                                    inv.clear(3);
+                                    inv.setItem(0, ItemRegistry.WEAPON_HerobrinePowerAxe);
+                                    inv.setItem(1, ItemRegistry.WEAPON_HerobrinePowerBow);
+                                    inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                                    break;
+                                case FOG_CLOAK:
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
+                                    inv.clear(1);
+                                    inv.clear(4);
+                                    inv.clear(7);
+                                    inv.clear(36);
+                                    inv.clear(37);
+                                    inv.clear(38);
+                                    inv.clear(39);
+                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, player.getLocation(), 20);
+                                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1, 1);
+                                    break;
+                                case UNCLOAK:
+                                    for(PotionEffect e : player.getActivePotionEffects()) {
+                                        player.removePotionEffect(e.getType());
+                                    }
                                     break;
                             }
                         } else {
