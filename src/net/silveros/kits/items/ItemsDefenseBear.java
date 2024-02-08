@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public class ItemsDefenseBear extends Items {
     }
 
     private static void generateDefenseBear(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.DEFENSE_BEAR);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Defense Bear " + itemCost(cost));
@@ -39,7 +40,7 @@ public class ItemsDefenseBear extends Items {
     }
 
     private static void generateChaosZone(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.CHAOS_ZONE);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Chaos Zone " + itemCost(cost));

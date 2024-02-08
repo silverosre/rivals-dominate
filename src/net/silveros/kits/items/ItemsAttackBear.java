@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public class ItemsAttackBear extends Items {
     }
 
     private static void generateAttackBear(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.ATTACK_BEAR);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Attack Bear " + itemCost(cost));
@@ -39,7 +40,7 @@ public class ItemsAttackBear extends Items {
     }
 
     private static void generateNumb(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.NUMB);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Numb " + itemCost(cost));

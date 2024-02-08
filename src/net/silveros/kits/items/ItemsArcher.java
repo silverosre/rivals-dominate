@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -28,7 +29,7 @@ public class ItemsArcher extends Items {
     }
 
     private static void generateFletch(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.FLETCH);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Fletch " + itemCost(cost));
@@ -42,7 +43,7 @@ public class ItemsArcher extends Items {
     }
 
     private static void generateSnare(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.SNARE);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Snare " + itemCost(cost));
@@ -57,7 +58,7 @@ public class ItemsArcher extends Items {
     }
 
     private static void generateFromAbove(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.FROM_ABOVE);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: From Above " + itemCost(cost));

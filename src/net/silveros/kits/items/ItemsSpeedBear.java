@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -24,7 +25,7 @@ public class ItemsSpeedBear extends Items {
     }
 
     private static void generateSpeedBear(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.SPEED_BEAR);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Speed Bear " + itemCost(cost));
@@ -39,7 +40,7 @@ public class ItemsSpeedBear extends Items {
     }
 
     private static void generateStinkBomb(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.STINK_BOMB);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Stink Bomb " + itemCost(cost));

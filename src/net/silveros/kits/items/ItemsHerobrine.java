@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -25,7 +26,7 @@ public class ItemsHerobrine extends Items {
     }
 
     private static void generateHerobrinePower(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.HEROBRINE_POWER);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Herobrine Power " + itemCost(cost));
@@ -41,7 +42,7 @@ public class ItemsHerobrine extends Items {
     }
 
     private static void generateFogCloak(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.FOG_CLOAK);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Fog Cloak " + itemCost(cost));

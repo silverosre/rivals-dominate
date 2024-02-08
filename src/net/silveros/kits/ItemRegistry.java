@@ -4,7 +4,12 @@ import net.silveros.kits.items.*;
 import net.silveros.utility.Color;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ItemRegistry implements Color {
+    public static Map<String, ItemAbility> abilityMap = new HashMap<>();
+
     public static void init() {
         new ItemsBunket().prepareItems();
         new ItemsArcher().prepareItems();
@@ -14,6 +19,34 @@ public class ItemRegistry implements Color {
         new ItemsDefenseBear().prepareItems();
         new ItemsAttackBear().prepareItems();
         new ItemsSpeedBear().prepareItems();
+
+        //Bunket
+        addToMap(ABILITY_ShieldUp);
+        addToMap(ABILITY_EmergencyRepairs);
+        addToMap(ABILITY_SelfDestruct);
+        //Archer
+        addToMap(ABILITY_Snare);
+        addToMap(ABILITY_Fletch);
+        addToMap(ABILITY_FromAbove);
+        //Hamood
+        addToMap(ABILITY_DuneSlice);
+        addToMap(ABILITY_PharaohsCurse);
+        addToMap(ABILITY_Swift);
+        //Herobrine
+        addToMap(ABILITY_HerobrinePower);
+        addToMap(ABILITY_FogCloak);
+        //Gummybear
+        addToMap(ABILITY_NormalBear);
+        addToMap(ABILITY_DefenseBear);
+        addToMap(ABILITY_AttackBear);
+        addToMap(ABILITY_SpeedBear);
+        addToMap(ABILITY_Numb);
+        addToMap(ABILITY_StinkBomb);
+        addToMap(ABILITY_ChaosZone);
+    }
+
+    private static void addToMap(ItemAbility ability) {
+        abilityMap.put(ability.getItemMeta().getDisplayName(), ability);
     }
 
     //Bunket

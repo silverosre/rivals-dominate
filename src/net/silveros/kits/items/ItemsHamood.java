@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
@@ -27,7 +28,7 @@ public class ItemsHamood extends Items {
     }
 
     private static void generatePharaohsCurse(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.PHARAOHS_CURSE);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Pharaoh's Curse " + itemCost(cost));
@@ -41,7 +42,7 @@ public class ItemsHamood extends Items {
     }
 
     private static void generateDuneSlice(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.DUNE_SLICE);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Dune Slice " + itemCost(cost));
@@ -56,7 +57,7 @@ public class ItemsHamood extends Items {
     }
 
     private static void generateSwift(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.SWIFT);
         ItemMeta meta = item.getItemMeta();
 
 

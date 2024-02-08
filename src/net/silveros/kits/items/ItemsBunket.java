@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.utility.Color;
@@ -39,7 +40,7 @@ public class ItemsBunket extends Items {
     }
 
     private static void generateEmergencyRepairs(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.EMERGENCY_REPAIRS);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Emergency Repairs " + itemCost(cost));
@@ -55,7 +56,7 @@ public class ItemsBunket extends Items {
     }
 
     private static void generateSelfDestruct(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.SELF_DESTRUCT);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Self Destruct " + itemCost(cost));
@@ -69,7 +70,7 @@ public class ItemsBunket extends Items {
     }
 
     private static void generateShieldUp(int cost) {
-        ItemAbility item = getBlankAbility(cost);
+        ItemAbility item = getBlankAbility(cost, Abilities.SHIELD_UP);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(LIGHT_PURPLE + "Ability: Shield Up " + itemCost(cost));

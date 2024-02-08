@@ -1,5 +1,6 @@
 package net.silveros.kits.items;
 
+import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
@@ -28,8 +29,8 @@ public abstract class Items implements Color {
     protected abstract void prepareArmor();
 
     //Utility
-    protected static ItemAbility getBlankAbility(int cost) {
-        return new ItemAbility(Material.ENCHANTED_BOOK, 1, cost);
+    protected static ItemAbility getBlankAbility(int cost, Abilities ability) {
+        return new ItemAbility(Material.ENCHANTED_BOOK, 1, cost, ability);
     }
 
     protected static ItemStack getArrows(int count) {
