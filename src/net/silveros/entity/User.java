@@ -5,13 +5,15 @@ import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.Transformation;
 
 import java.util.UUID;
 
@@ -58,6 +60,9 @@ public class User {
 
     /**Player tick loop*/
     public void onTick() {
+        Player player = this.getPlayer();
+        World world = player.getWorld();
+
         //Update energy
         ItemStack energyItem = this.getInv().getItem(6);
         if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
@@ -70,6 +75,85 @@ public class User {
                 this.respawnTimer--;
             } else {
                 this.respawn();
+            }
+        }
+
+
+        for (Entity e : world.getEntitiesByClass(Marker.class)) {
+            //Archer "Snare" ability
+            if (e.getScoreboardTags().contains(RivalsTags.SNARE_ENTITY)) {
+                Location l = e.getLocation().subtract(0, 1, 0);
+                world.spawnParticle(Particle.BLOCK_CRACK, e.getLocation(), 5, 0, 0, 0, 0.1, world.getBlockAt(l).getBlockData());
+
+                if (e.getNearbyEntities(1, 1, 1).contains(player)) {
+                    if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 2, false, false));
+                        world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
+                        e.remove();
+                    }
+                }
+            }
+
+            //Energy block check
+            if (e.getScoreboardTags().contains(RivalsTags.ENERGY_BLOCK_ENTITY)) {
+                Location l = e.getLocation().subtract(0, 1, 0);
+
+                if (world.getBlockAt(l).getType() == Material.DIAMOND_BLOCK) {
+                    if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
+                        Score cooldown = RivalsPlugin.core.energyBlockCooldown.getScore(e.getUniqueId().toString());
+                        if (cooldown.getScore() <= 0) {
+                            this.addEnergy(1);
+
+                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+
+                            cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
+                            RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
+
+                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                            text.addScoreboardTag(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY);
+                            text.setBillboard(Display.Billboard.VERTICAL);
+                            text.setDisplayWidth(1f);
+
+                            Score cooldownText = RivalsPlugin.core.energyBlockCooldown.getScore(text.getUniqueId().toString());
+                            cooldownText.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
+
+                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                        }
+                    }
+                }
+            }
+
+            //Restock block check
+            if (e.getScoreboardTags().contains(RivalsTags.RESTOCK_BLOCK_ENTITY)) {
+                Location l = e.getLocation().subtract(0, 1, 0);
+
+                if (world.getBlockAt(l).getType() == Material.GOLD_BLOCK) {
+                    if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
+                        Score cooldown = RivalsPlugin.core.restockBlockCooldown.getScore(e.getUniqueId().toString());
+                        if (cooldown.getScore() <= 0) {
+                            this.activateKit();
+
+                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+
+                            cooldown.setScore(RivalsCore.RESTOCK_TIMER);
+                            RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
+
+                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                            text.addScoreboardTag(RivalsTags.RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY);
+                            text.setBillboard(Display.Billboard.VERTICAL);
+                            text.setDisplayWidth(1f);
+
+                            Score cooldownText = RivalsPlugin.core.restockBlockCooldown.getScore(text.getUniqueId().toString());
+                            cooldownText.setScore(RivalsCore.RESTOCK_TIMER);
+
+                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                        }
+                    }
+                }
             }
         }
 
@@ -86,7 +170,6 @@ public class User {
         }
 
         if (this.currentKit == Kit.ARCHER.kitID) {
-            Player player = this.getPlayer();
             if (!this.getInv().contains(ItemRegistry.ABILITY_Fletch)) {
                 if (this.cooldown_Fletch > 0) {
                     this.cooldown_Fletch--;
@@ -160,6 +243,16 @@ public class User {
         return false;
     }
 
+    public Team getTeam() {
+        if (this.getTeam(RivalsPlugin.core.TEAM_RED)) {
+            return RivalsPlugin.core.TEAM_RED;
+        } else if (this.getTeam(RivalsPlugin.core.TEAM_BLUE)) {
+            return RivalsPlugin.core.TEAM_BLUE;
+        }
+
+        return RivalsPlugin.core.TEAM_SPECTATOR;
+    }
+
     public void setTeam(Team team) {
         Player player = this.getPlayer();
 
@@ -182,6 +275,7 @@ public class User {
     public void setKit(Kit kit) {
         this.currentKit = kit.kitID;
         this.activateKit();
+        this.setTotalEnergy(kit.getStartingEnergy());
     }
 
     public void resetKit() {
@@ -192,8 +286,6 @@ public class User {
     public void activateKit() {
         if (this.currentKit != -1) {
             Kit kit = Kit.KIT_LIST.get(this.currentKit);
-
-            this.setTotalEnergy(kit.getStartingEnergy());
             kit.activateKit(this.getInv());
         }
     }
@@ -212,6 +304,10 @@ public class User {
         if (this.totalEnergy < 0) {
             System.err.println("WARNING: " + this.getPlayer().getName() + "'s energy went below zero!");
         }
+    }
+
+    public void addEnergy(int num) {
+        this.totalEnergy += num;
     }
 
     public void respawn() {
