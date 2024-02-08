@@ -49,10 +49,10 @@ public class PlayerEvents implements Listener, Color {
                 prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
                 color = RED;
             } else if (user.getTeam(RivalsPlugin.core.TEAM_BLUE)) {
-                prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
+                prefix = RivalsPlugin.core.TEAM_BLUE.getPrefix();
                 color = BLUE;
             } else if (user.getTeam(RivalsPlugin.core.TEAM_SPECTATOR)) {
-                prefix = RivalsPlugin.core.TEAM_RED.getPrefix();
+                prefix = RivalsPlugin.core.TEAM_SPECTATOR.getPrefix();
                 color = GRAY;
             }
         }

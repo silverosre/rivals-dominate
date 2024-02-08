@@ -61,7 +61,7 @@ public class User {
         //Update energy
         ItemStack energyItem = this.getInv().getItem(6);
         if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
-            this.getInv().setItem(6, new ItemStack(Material.DIAMOND, this.totalEnergy));
+            this.getInv().setItem(6, ItemRegistry.getEnergy(this.totalEnergy));
         }
 
         //Misc gameplay

@@ -2,15 +2,21 @@ package net.silveros.kits;
 
 import net.silveros.kits.items.*;
 import net.silveros.utility.Color;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ItemRegistry implements Color {
     public static Map<String, ItemAbility> abilityMap = new HashMap<>();
+    public static ItemStack ITEM_Energy;
 
     public static void init() {
+        generateEnergyItem();
+
         new ItemsBunket().prepareItems();
         new ItemsArcher().prepareItems();
         new ItemsHamood().prepareItems();
@@ -47,6 +53,22 @@ public class ItemRegistry implements Color {
 
     private static void addToMap(ItemAbility ability) {
         abilityMap.put(ability.getItemMeta().getDisplayName(), ability);
+    }
+
+    private static void generateEnergyItem() {
+        ItemStack item = new ItemStack(Material.DIAMOND, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(DARK_AQUA + BOLD + "Energy");
+
+        item.setItemMeta(meta);
+        ITEM_Energy = item;
+    }
+
+    public static ItemStack getEnergy(int amount) {
+        ItemStack item = ITEM_Energy.clone();
+        item.setAmount(amount);
+        return item;
     }
 
     //Bunket

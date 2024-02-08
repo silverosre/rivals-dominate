@@ -28,6 +28,6 @@ public class KitArcher extends Kit{
 
     @Override
     public int getStartingEnergy() {
-        return 2;
+        return 3;
     }
 }
