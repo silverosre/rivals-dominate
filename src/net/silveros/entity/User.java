@@ -146,7 +146,7 @@ public class User {
                     if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
                         Score cooldown = RivalsPlugin.core.restockBlockCooldown.getScore(e.getUniqueId().toString());
                         if (cooldown.getScore() <= 0) {
-                            this.activateKit();
+                            this.activateKit(true);
 
                             world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
                             world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
@@ -372,8 +372,7 @@ public class User {
 
     public void setKit(Kit kit) {
         this.currentKit = kit.kitID;
-        this.activateKit();
-        this.setTotalEnergy(kit.getStartingEnergy());
+        this.activateKit(false);
     }
 
     public void resetKit() {
@@ -381,10 +380,18 @@ public class User {
         this.getInv().clear();
     }
 
-    public void activateKit() {
+    public void activateKit(boolean keepEnergy) {
         if (this.currentKit != -1) {
             Kit kit = Kit.KIT_LIST.get(this.currentKit);
             kit.activateKit(this.getInv());
+
+            if (keepEnergy) {
+                if (this.getTotalEnergy() < kit.getStartingEnergy()) {
+                    this.setTotalEnergy(kit.getStartingEnergy());
+                }
+            } else {
+                this.setTotalEnergy(kit.getStartingEnergy());
+            }
         }
     }
 
@@ -416,7 +423,7 @@ public class User {
             // need to add code for respawning at base location
 
             this.setGameMode(GameMode.ADVENTURE);
-            this.activateKit();
+            this.activateKit(false);
         }
     }
 
