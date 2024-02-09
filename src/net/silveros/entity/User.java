@@ -168,6 +168,37 @@ public class User {
                     }
                 }
             }
+
+            //Score block check
+            if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_ENTITY)) {
+                Location l = e.getLocation().subtract(0, 1, 0);
+
+                if (world.getBlockAt(l).getType() == Material.EMERALD_BLOCK) {
+                    if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
+                        Score cooldown = RivalsPlugin.core.scoreBlockCooldown.getScore(e.getUniqueId().toString());
+                        if (cooldown.getScore() <= 0) {
+                            RivalsPlugin.core.addScoreBlockPoints(this.getTeam());
+
+                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+
+                            cooldown.setScore(RivalsCore.SCORE_BLOCK_TIMER);
+                            RivalsCore.spawnFirework(e.getLocation(), Color.LIME);
+
+                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                            text.addScoreboardTag(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY);
+                            text.setBillboard(Display.Billboard.VERTICAL);
+                            text.setDisplayWidth(1f);
+
+                            Score cooldownText = RivalsPlugin.core.scoreBlockCooldown.getScore(text.getUniqueId().toString());
+                            cooldownText.setScore(RivalsCore.SCORE_BLOCK_TIMER);
+
+                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                        }
+                    }
+                }
+            }
         }
 
         //Kit cooldowns

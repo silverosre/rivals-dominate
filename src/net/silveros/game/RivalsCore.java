@@ -1,11 +1,15 @@
 package net.silveros.game;
 
 import net.silveros.entity.RivalsTags;
+import net.silveros.entity.User;
 import net.silveros.kits.KitArcher;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
 import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scoreboard.*;
@@ -15,31 +19,80 @@ public class RivalsCore implements Color {
     public Scoreboard board;
 
     public Team TEAM_RED, TEAM_BLUE, TEAM_SPECTATOR;
+    public Objective energyBlockCooldown, restockBlockCooldown, scoreBlockCooldown;
 
-    public Objective energyBlockCooldown, restockBlockCooldown;
+    public BossBar redPointsBar, bluePointsBar;
+
+    public static Gamemode gamemode = Gamemode.DOMINATE;
+    public static boolean gameInProgress = false;
 
     //formula: seconds * 20
     public static final int ENERGY_BLOCK_TIMER = 60 * 20;
     public static final int RESTOCK_TIMER = 60 * 20;
+    public static final int SCORE_BLOCK_TIMER = 90 * 20;
 
     public RivalsCore() {
         this.manager = Bukkit.getScoreboardManager();
         this.board  = this.manager.getNewScoreboard();
 
-        this.TEAM_RED = this.board.registerNewTeam("rivals.red");
-        this.TEAM_BLUE = this.board.registerNewTeam("rivals.blue");
-        this.TEAM_SPECTATOR = this.board.registerNewTeam("rivals.spectator");
-
         this.initTeams();
 
         this.energyBlockCooldown = this.board.registerNewObjective(RivalsTags.ENERGY_BLOCK_COOLDOWN, Criteria.DUMMY, "EnergyBlockCooldown");
         this.restockBlockCooldown = this.board.registerNewObjective(RivalsTags.RESTOCK_BLOCK_COOLDOWN, Criteria.DUMMY, "RestockBlockCooldown");
+        this.scoreBlockCooldown = this.board.registerNewObjective(RivalsTags.SCORE_BLOCK_COOLDOWN, Criteria.DUMMY, "ScoreBlockCooldown");
 
-        this.energyBlockCooldown.setDisplaySlot(DisplaySlot.BELOW_NAME);
-        this.restockBlockCooldown.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        this.redPointsBar = Bukkit.createBossBar(WHITE + "Red Team's Points", BarColor.RED, BarStyle.SOLID);
+        this.bluePointsBar = Bukkit.createBossBar(WHITE + "Blue Team's Points", BarColor.BLUE, BarStyle.SOLID);
+
+        this.startDominateGame();
+    }
+
+    public void startDominateGame() {
+        gamemode = Gamemode.DOMINATE;
+        this.toggleDominateProgressBars(true);
+
+        this.redPointsBar.setProgress(0);
+        this.bluePointsBar.setProgress(0);
+
+        for (User user : RivalsPlugin.players) {
+            this.addPlayerToBossbars(user.getPlayer());
+        }
+
+        gameInProgress = true;
+    }
+
+    public void addPlayerToBossbars(Player player) {
+        this.redPointsBar.addPlayer(player);
+        this.bluePointsBar.addPlayer(player);
+    }
+
+    public void toggleDominateProgressBars(boolean state) {
+        this.redPointsBar.setVisible(state);
+        this.bluePointsBar.setVisible(state);
+    }
+
+    public BossBar getTeamProgressBar(Team team) {
+        return team.getName().equals("rivals.red") ? this.redPointsBar : this.bluePointsBar;
+    }
+
+    public void addScoreBlockPoints(Team team) {
+        BossBar bar = this.getTeamProgressBar(team);
+
+        double added = 0.05;
+        double sum = bar.getProgress() + added;
+
+        if (sum > 1) {
+            sum = 1;
+        }
+
+        bar.setProgress(sum);
     }
 
     private void initTeams() {
+        this.TEAM_RED = this.board.registerNewTeam("rivals.red");
+        this.TEAM_BLUE = this.board.registerNewTeam("rivals.blue");
+        this.TEAM_SPECTATOR = this.board.registerNewTeam("rivals.spectator");
+
         this.TEAM_RED.setPrefix(GRAY + "[" + RED + "Red" + GRAY + "]" + RED);
         this.TEAM_BLUE.setPrefix(GRAY + "[" + BLUE + "Blue" + GRAY + "]" + BLUE);
         this.TEAM_SPECTATOR.setPrefix(GRAY + "[" + WHITE + "Spectator" + GRAY + "]" + GRAY);
@@ -81,6 +134,18 @@ public class RivalsCore implements Color {
                     e.remove();
                 }
             }
+
+            if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY)) {
+                Score cooldown = this.scoreBlockCooldown.getScore(e.getUniqueId().toString());
+                e.setText(GREEN + ((cooldown.getScore()/20) + 1)); // add 1 to make the final second look like 1 instead of 0
+
+                if (cooldown.getScore() > 0) {
+                    cooldown.setScore(cooldown.getScore() - 1);
+                } else {
+                    world.playSound(e.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.75f, 1);
+                    e.remove();
+                }
+            }
         }
 
         for (Marker e : world.getEntitiesByClass(Marker.class)) {
@@ -107,6 +172,19 @@ public class RivalsCore implements Color {
                     Location l = e.getLocation().subtract(0, 1, 0);
                     if (world.getBlockAt(l).getType() == Material.IRON_BLOCK) {
                         world.setBlockData(l, Material.GOLD_BLOCK.createBlockData());
+                    }
+                }
+            }
+
+            if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_ENTITY)) {
+                Score cooldown = this.scoreBlockCooldown.getScore(e.getUniqueId().toString());
+
+                if (cooldown.getScore() > 0) {
+                    cooldown.setScore(cooldown.getScore() - 1);
+                } else {
+                    Location l = e.getLocation().subtract(0, 1, 0);
+                    if (world.getBlockAt(l).getType() == Material.IRON_BLOCK) {
+                        world.setBlockData(l, Material.EMERALD_BLOCK.createBlockData());
                     }
                 }
             }

@@ -20,4 +20,9 @@ commands:
     permission: rivals.energy
     usage: /energy <player> <amount>
 
+  score:
+    description: Sets the specified team's Dominate score.
+    permission: rivals.score
+    usage: /score <team> <amount>
+
 permissions: {}

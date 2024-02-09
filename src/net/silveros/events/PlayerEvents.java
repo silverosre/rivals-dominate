@@ -1,6 +1,7 @@
 package net.silveros.events;
 
 import net.silveros.entity.User;
+import net.silveros.game.RivalsCore;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
@@ -22,6 +23,10 @@ public class PlayerEvents implements Listener, Color {
         player.sendMessage(RivalsPlugin.WELCOME_MESSAGE);
 
         RivalsPlugin.addPlayer(player);
+
+        if (RivalsCore.gameInProgress) {
+            RivalsPlugin.core.addPlayerToBossbars(player);
+        }
     }
 
     @EventHandler

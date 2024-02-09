@@ -8,7 +8,10 @@ public class RivalsTags {
     public static final String ENERGY_BLOCK_COOLDOWN = "rivals.energy_block_cooldown";
     public static final String RESTOCK_BLOCK_ENTITY = "rivals.restock_block";
     public static final String RESTOCK_BLOCK_COOLDOWN = "rivals.restock_block_cooldown";
+    public static final String SCORE_BLOCK_ENTITY = "rivals.score_block";
+    public static final String SCORE_BLOCK_COOLDOWN = "rivals.score_block_cooldown";
 
     public static final String ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.energy_block_cooldown_text";
     public static final String RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.restock_cooldown_text";
+    public static final String SCORE_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.score_block_cooldown_text";
 }
