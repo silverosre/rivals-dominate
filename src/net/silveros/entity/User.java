@@ -6,6 +6,7 @@ import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 public class User {
     public int team = 0;
-    public int fogCloakCheck = 0;
+    public boolean fogCloakCheck = false;
 
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
@@ -72,11 +73,13 @@ public class User {
     public void onTick() {
         Player player = this.getPlayer();
         World world = player.getWorld();
+        Location local = player.getLocation();
+        PlayerInventory inv = this.getInv();
 
         //Update energy
-        ItemStack energyItem = this.getInv().getItem(6);
+        ItemStack energyItem = inv.getItem(6);
         if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
-            this.getInv().setItem(6, ItemRegistry.getEnergy(this.totalEnergy));
+            inv.setItem(6, ItemRegistry.getEnergy(this.totalEnergy));
         }
 
         //Misc gameplay
@@ -115,8 +118,8 @@ public class User {
                             this.addEnergy(1);
 
                             world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
 
                             cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
                             RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
@@ -146,8 +149,8 @@ public class User {
                             this.activateKit();
 
                             world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-                            world.playSound(this.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
 
                             cooldown.setScore(RivalsCore.RESTOCK_TIMER);
                             RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
@@ -169,127 +172,129 @@ public class User {
 
         //Kit cooldowns
         if (this.currentKit == Kit.BUNKET.kitID) {
-            if (!this.getInv().contains(ItemRegistry.ABILITY_ShieldUp)) {
+            if (!inv.contains(ItemRegistry.ABILITY_ShieldUp)) {
                 if (this.cooldown_ShieldUp > 0) {
                     this.cooldown_ShieldUp--;
                 } else {
-                    this.getInv().setItem(5, ItemRegistry.ABILITY_ShieldUp);
+                    inv.setItem(5, ItemRegistry.ABILITY_ShieldUp);
                     this.cooldown_ShieldUp = PRESET_ShieldUp;
                 }
             }
         }
 
         if (this.currentKit == Kit.ARCHER.kitID) {
-            if (!this.getInv().contains(ItemRegistry.ABILITY_Fletch)) {
+            if (!inv.contains(ItemRegistry.ABILITY_Fletch)) {
                 if (this.cooldown_Fletch > 0) {
                     this.cooldown_Fletch--;
                 } else {
-                    this.getInv().setItem(3, ItemRegistry.ABILITY_Fletch);
+                    inv.setItem(3, ItemRegistry.ABILITY_Fletch);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
                     this.cooldown_Fletch = PRESET_Fletch;
                 }
-            } else if (!this.getInv().contains(ItemRegistry.ABILITY_Snare)) {
+            } else if (!inv.contains(ItemRegistry.ABILITY_Snare)) {
                 if (this.cooldown_Snare > 0) {
                     this.cooldown_Snare--;
                 } else {
-                    this.getInv().setItem(4, ItemRegistry.ABILITY_Snare);
+                    inv.setItem(4, ItemRegistry.ABILITY_Snare);
                     this.cooldown_Snare = PRESET_Snare;
                 }
-            } else if (!this.getInv().contains(ItemRegistry.ABILITY_FromAbove)) {
+            } else if (!inv.contains(ItemRegistry.ABILITY_FromAbove)) {
                 if (this.cooldown_FromAbove > 0) {
                     this.cooldown_FromAbove--;
                 } else {
-                    this.getInv().setItem(5, ItemRegistry.ABILITY_FromAbove);
+                    inv.setItem(5, ItemRegistry.ABILITY_FromAbove);
                     this.cooldown_FromAbove = PRESET_FromAbove;
                 }
             }
         }
 
         if (this.currentKit == Kit.HAMOOD.kitID) {
-            if (!this.getInv().contains(ItemRegistry.ABILITY_Swift)) {
+            if (!inv.contains(ItemRegistry.ABILITY_Swift)) {
                 if (this.timeUntil_Swift > 0) {
                     this.timeUntil_Swift--;
                 } else {
-                    this.getInv().setItem(5, ItemRegistry.ABILITY_Swift);
+                    inv.setItem(5, ItemRegistry.ABILITY_Swift);
                 }
             }
 
-            if (!this.getInv().contains(ItemRegistry.ABILITY_DuneSlice)) {
+            if (!inv.contains(ItemRegistry.ABILITY_DuneSlice)) {
                 if (this.cooldown_DuneSlice > 0) {
                     this.cooldown_DuneSlice--;
                 } else {
-                    this.getInv().setItem(4, ItemRegistry.ABILITY_DuneSlice);
+                    inv.setItem(4, ItemRegistry.ABILITY_DuneSlice);
                     this.cooldown_DuneSlice = PRESET_DuneSlice;
                 }
 
                 if (this.cooldown_DuneSlicerActive > 0) {
                     this.cooldown_DuneSlicerActive--;
                 } else {
-                    this.getInv().setItem(0, ItemRegistry.WEAPON_HamoodSword);
+                    inv.setItem(0, ItemRegistry.WEAPON_HamoodSword);
                     this.cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
                 }
             }
         }
+
         if (this.currentKit == Kit.GUMMY_BEAR.kitID) {
-            if (!this.getInv().contains(ItemRegistry.ITEM_GummyEssence)) {
+            if (!inv.contains(ItemRegistry.ITEM_GummyEssence)) {
                 if (this.cooldown_NormalBear > 0) {
                     this.cooldown_NormalBear--;
                 } else {
-                    this.getInv().setItem(4, ItemRegistry.ABILITY_NormalBear);
-                    this.getInv().setItem(9, ItemRegistry.ITEM_GummyEssence);
+                    inv.setItem(4, ItemRegistry.ABILITY_NormalBear);
+                    inv.setItem(9, ItemRegistry.ITEM_GummyEssence);
                     this.cooldown_NormalBear = PRESET_NormalBear;
                 }
             }
         }
+
         if (this.currentKit == Kit.HEROBRINE.kitID) {
-            if(!this.getInv().contains(ItemRegistry.ABILITY_HerobrinePower)) {
+            if (!inv.contains(ItemRegistry.ABILITY_HerobrinePower)) {
                 if (this.cooldown_HerobrinePower > 0) {
                     this.cooldown_HerobrinePower--;
                 } else {
-                    this.getInv().setItem(3, ItemRegistry.ABILITY_HerobrinePower);
+                    inv.setItem(3, ItemRegistry.ABILITY_HerobrinePower);
                     this.cooldown_HerobrinePower = PRESET_HerobrinePower;
                 }
                 if (this.cooldown_HerobrinePowerActive > 0) {
                     this.cooldown_HerobrinePowerActive--;
                 } else {
-                    this.getInv().setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
-                    this.getInv().setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+                    inv.setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
+                    inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
                     this.cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
                 }
             }
-            if(!this.getInv().contains(ItemRegistry.ABILITY_FogCloak)) {
-                if(this.getPlayer().getActivePotionEffects().isEmpty()){
+
+            if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
+                if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     if (this.cooldown_FogCloak > 0) {
                         this.cooldown_FogCloak--;
                     } else {
-                        this.getInv().setItem(4, ItemRegistry.ABILITY_FogCloak);
+                        inv.setItem(4, ItemRegistry.ABILITY_FogCloak);
                         this.cooldown_FogCloak = PRESET_FogCloak;
-                        this.fogCloakCheck = 0;
+                        this.fogCloakCheck = false;
                     }
-                    if(this.getInv().contains(ItemRegistry.ABILITY_Uncloak)){
+
+                    if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
                         //checks to see if fog cloak was taken away
-                        Player player = this.getPlayer();
-                        Location local = this.getPlayer().getLocation();
-                        Inventory inv = this.getInv();
                         inv.clear(4);
-                        this.getInv().setHelmet(ItemRegistry.SKULL_Herobrine);
-                        this.getInv().setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
-                        this.getInv().setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
-                        this.getInv().setBoots(ItemRegistry.ARMOR_HerobrineBoots);
+                        inv.setHelmet(ItemRegistry.SKULL_Herobrine);
+                        inv.setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
+                        inv.setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
+                        inv.setBoots(ItemRegistry.ARMOR_HerobrineBoots);
                         inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
                         inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
-                        player.playSound(local, Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+                        player.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
                         player.spawnParticle(Particle.SMOKE_LARGE, local, 20);
                     }
                 }
             }
-            if(!this.getInv().contains(ItemRegistry.ABILITY_Uncloak) && !this.getInv().contains(ItemRegistry.ABILITY_FogCloak) && this.fogCloakCheck == 0) {
+
+            if (!this.getInv().contains(ItemRegistry.ABILITY_Uncloak) && !this.getInv().contains(ItemRegistry.ABILITY_FogCloak) && !this.fogCloakCheck) {
                 if (this.cooldown_FogCloakMin > 0) {
                     this.cooldown_FogCloakMin--;
                 } else {
                     this.getInv().setItem(4, ItemRegistry.ABILITY_Uncloak);
                     this.cooldown_FogCloakMin = PRESET_FogCloakMin;
-                    this.fogCloakCheck = 1;
+                    this.fogCloakCheck = true;
                 }
             }
         }

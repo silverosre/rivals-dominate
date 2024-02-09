@@ -43,21 +43,24 @@ public class AbilityEvents implements Listener, Color {
             player.sendMessage("You are on a stone block.");
         }
     }*/
+
     @EventHandler
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
-        Entity damager = event.getDamager();
+        Entity attacker = event.getDamager();
+
         if (entity.getType().equals(EntityType.PLAYER)) {
             Player player = (Player) event.getEntity();
-            //checks if player being damaged has uncloak --roasty
+            //checks if player being damaged has uncloak
             if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
                 for (PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
                 }
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 1, 1);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
             }
         }
-        if (damager.getType().equals(EntityType.PLAYER)) {
+
+        if (attacker.getType().equals(EntityType.PLAYER)) {
             Player player = (Player) event.getDamager();
             //checks if a cloaked herobrine has hit an entity
             if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
@@ -90,6 +93,7 @@ public class AbilityEvents implements Listener, Color {
 
                             switch (ability.ability) {
                                 case SHIELD_UP:
+                                    world.playSound(local, Sound.ENTITY_VILLAGER_WORK_TOOLSMITH, 1, 1);
                                     inv.setItemInOffHand(ItemRegistry.WEAPON_BunketShield);
                                     inv.clear(5);
                                     break;
@@ -100,7 +104,7 @@ public class AbilityEvents implements Listener, Color {
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, 4, false, false));
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20, 2, false, false));
                                     inv.clear(3);
-                                    player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 1);
+                                    world.playSound(local, Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 1);
                                     break;
                                 case SELF_DESTRUCT:
                                     player.setHealth(0);
@@ -110,11 +114,11 @@ public class AbilityEvents implements Listener, Color {
                                     if (player.getInventory().contains(Material.ARROW)) {
                                         inv.addItem(new ItemStack(Material.ARROW, 2));
                                         inv.clear(3);
-                                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+                                        world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
                                     } else {
                                         inv.setItem(7, new ItemStack(Material.ARROW, 2));
                                         inv.clear(3);
-                                        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+                                        world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
                                     }
                                     break;
                                 case SNARE:
@@ -143,7 +147,7 @@ public class AbilityEvents implements Listener, Color {
                                     break;
                                 case DUNE_SLICE:
                                     inv.setItem(0, ItemRegistry.WEAPON_DuneSlicer);
-                                    player.playSound(player.getLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
+                                    world.playSound(local, Sound.ITEM_TOTEM_USE, 1, 1);
                                     inv.clear(4);
                                     break;
                                 case NORMAL_BEAR:
@@ -153,11 +157,11 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setLeggings(ItemRegistry.ARMOR_NormalBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_NormalBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_GummyBear);
+
                                     for (PotionEffect e : player.getActivePotionEffects()) {
                                         player.removePotionEffect(e.getType());
                                     }
 
-                                    //why not just player.getActivePotionEffects().clear()
                                     inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
                                     inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
                                     inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
@@ -172,10 +176,10 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setLeggings(ItemRegistry.ARMOR_DefenseBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_DefenseBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_DefenseBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 2, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 1, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 2, false, false));
                                     inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
-                                    world.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
+                                    world.playSound(local, Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
                                     break;
                                 case ATTACK_BEAR:
                                     inv.clear(3);
@@ -186,10 +190,10 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setLeggings(ItemRegistry.ARMOR_AttackBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_AttackBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_AttackBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 1, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 2, false, false));
                                     inv.setItem(5, ItemRegistry.ABILITY_Numb);
-                                    world.playSound(player.getLocation(), Sound.ENTITY_VINDICATOR_HURT, 1, 1);
+                                    world.playSound(local, Sound.ENTITY_VINDICATOR_HURT, 1, 1);
                                     break;
                                 case SPEED_BEAR:
                                     inv.clear(3);
@@ -200,12 +204,11 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setLeggings(ItemRegistry.ARMOR_SpeedBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_SpeedBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_SpeedBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 2, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 7, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, PotionEffect.INFINITE_DURATION, 2, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 7, false, false));
                                     inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
-                                    world.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1, 1);
+                                    world.playSound(local, Sound.ENTITY_ENDERMAN_STARE, 1, 1);
                                     break;
-                                //herobrine
                                 case HEROBRINE_POWER:
                                     inv.clear(0);
                                     inv.clear(1);
@@ -216,7 +219,7 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
                                     break;
                                 case FOG_CLOAK:
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, PotionEffect.INFINITE_DURATION, 0, false, false));
                                     inv.clear(1);
                                     inv.clear(4);
                                     inv.clear(7);
@@ -224,13 +227,15 @@ public class AbilityEvents implements Listener, Color {
                                     inv.clear(37);
                                     inv.clear(38);
                                     inv.clear(39);
-                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, player.getLocation(), 20);
-                                    player.playSound(player.getLocation(), Sound.AMBIENT_CAVE, 1, 1);
+                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local, 20, 0, 0, 0, 0);
+                                    world.playSound(local, Sound.AMBIENT_CAVE, 1, 1);
                                     break;
                                 case UNCLOAK:
-                                    for(PotionEffect e : player.getActivePotionEffects()) {
+                                    for (PotionEffect e : player.getActivePotionEffects()) {
                                         player.removePotionEffect(e.getType());
                                     }
+                                    player.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0, 0, 0, 0);
+                                    world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
                                     break;
                             }
                         } else {
