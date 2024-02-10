@@ -33,6 +33,8 @@ public class User {
     private static final int PRESET_NormalBear = 5 * 20;
     private static final int PRESET_NumbActive = 10 * 20;
     private static final int PRESET_Numb = 30 * 20;
+    private static final int PRESET_ChaosZone = 30 * 20;
+    private static final int PRESET_ChaosZoneActive = 10 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
@@ -53,6 +55,8 @@ public class User {
     public int cooldown_NormalBear = PRESET_NormalBear;
     public int cooldown_Numb = PRESET_Numb;
     public int cooldown_NumbActive = PRESET_NumbActive;
+    public int cooldown_ChaosZone = PRESET_ChaosZone;
+    public int cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
@@ -64,8 +68,11 @@ public class User {
     public int timeUntil_BearAbilities = 40;
 
     //Misc
+    private float radius = 2f;
+    private float angle = 0f;
     public double numbDamage = 0;
     public double dealtDamage = 0;
+    public int chaosDamage = 20;
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
     private boolean isDead = false;
@@ -147,6 +154,38 @@ public class User {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 2, false, false));
                         world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
                         e.remove();
+                    }
+                }
+            }
+            //Chaos Zone Ability
+            if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
+                Location l = e.getLocation();
+                double x = (radius * Math.sin(angle));
+                double z = (radius * Math.cos(angle));
+                angle += 0.1;
+
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0.4, 1, 1, new Particle.DustOptions(Color.AQUA, 5));
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0.4, 1, 1, new Particle.DustOptions(Color.AQUA, 5));
+                if (cooldown_ChaosZoneActive > 0) {
+                    cooldown_ChaosZoneActive--;
+                } else {
+                    e.remove();
+                    cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
+                }
+                if (e.getNearbyEntities(2, 1, 2).contains(player)) {
+                    if(RivalsCore.matchingTeams(this.getTeam(), e, player)){
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 3, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 99, true, true));
+                    }
+                    if(!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 2, true, true));
+                        if (chaosDamage > 0) {
+                            chaosDamage--;
+                        } else {
+                            player.damage(2);
+                            chaosDamage = 20;
+                        }
                     }
                 }
             }
@@ -330,6 +369,7 @@ public class User {
                     timeUntil_BearAbilities = 40;
                 }
             }
+            //attack bear
             if(inv.getHelmet().equals(ItemRegistry.SKULL_AttackBear)) {
                 if (inv.contains(ItemRegistry.ITEM_Numbness)) {
                     if (this.cooldown_NumbActive > 0) {
@@ -353,6 +393,17 @@ public class User {
                         this.cooldown_Numb--;
                     } else {
                         inv.setItem(5, ItemRegistry.ABILITY_Numb);
+                    }
+                }
+            }
+            //Defense bear
+            if(inv.getHelmet().equals(ItemRegistry.SKULL_DefenseBear)) {
+                if(!inv.contains(ItemRegistry.ABILITY_ChaosZone)) {
+                    if (this.cooldown_ChaosZone > 0) {
+                        this.cooldown_ChaosZone--;
+                    } else {
+                        inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
+                        this.cooldown_ChaosZone = PRESET_ChaosZone;
                     }
                 }
             }

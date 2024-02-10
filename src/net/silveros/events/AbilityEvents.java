@@ -183,6 +183,17 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
                                     world.playSound(local, Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
                                     break;
+                                case CHAOS_ZONE:
+                                    inv.clear(5);
+                                    Marker chaos = (Marker)world.spawnEntity(local, EntityType.MARKER);
+                                    chaos.addScoreboardTag(RivalsTags.CHAOS_ZONE_ENTITY);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), chaos);
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX(), local.getBlockY()+1, local.getBlockZ(), 10, 0.001, 0.2, 0.2, 0.2, new Particle.DustOptions(org.bukkit.Color.GRAY, 20));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+1, local.getBlockY()+1, local.getBlockZ()-1, 10, 0.001, 0.2, 0.2, 0.2, new Particle.DustOptions(org.bukkit.Color.GRAY, 20));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()-1, local.getBlockY()+1, local.getBlockZ()+1, 10, 0.001, 0.2, 0.2, 0.2, new Particle.DustOptions(org.bukkit.Color.GRAY, 20));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()-1, local.getBlockY()+1, local.getBlockZ()-1, 10, 0.001, 0.2, 0.2, 0.2, new Particle.DustOptions(org.bukkit.Color.GRAY, 20));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+1, local.getBlockY()+1, local.getBlockZ()+1, 10, 0.001, 0.2, 0.2, 0.2, new Particle.DustOptions(org.bukkit.Color.GRAY, 20));
+                                    break;
                                 case ATTACK_BEAR:
                                     inv.clear(3);
                                     inv.clear(4);

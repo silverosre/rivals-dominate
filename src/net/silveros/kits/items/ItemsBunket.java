@@ -84,23 +84,21 @@ public class ItemsBunket extends Items {
     }
 
     private static void generateBunketChestplate() {
-        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
-        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+        ItemStack item = new ItemStack(Material.IRON_CHESTPLATE, 1);
+        ItemMeta meta = item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.WHITE);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-        meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 5, true);
+        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+        meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1, true);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_BunketChestplate = item;
     }
 
     private static void generateBunketLeggings() {
-        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
-        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+        ItemStack item = new ItemStack(Material.IRON_LEGGINGS, 1);
+        ItemMeta meta = item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.WHITE);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
 
         item.setItemMeta(meta);
@@ -108,10 +106,9 @@ public class ItemsBunket extends Items {
     }
 
     private static void generateBunketBoots() {
-        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
-        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
+        ItemStack item = new ItemStack(Material.IRON_BOOTS, 1);
+        ItemMeta meta = item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.WHITE);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
 
         item.setItemMeta(meta);
