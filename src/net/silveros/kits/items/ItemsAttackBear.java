@@ -14,6 +14,7 @@ public class ItemsAttackBear extends Items {
     protected void prepareFeatures() {
         generateAttackBear(1);
         generateNumb(3);
+        generateNumbness();
     }
 
     @Override
@@ -85,5 +86,18 @@ public class ItemsAttackBear extends Items {
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_AttackBearBoots = item;
+    }
+    private static void generateNumbness() {
+        ItemStack item = new ItemStack(Material.MAGMA_CREAM, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(RED + BOLD + "Numbness");
+        meta.setLore(addLore(
+                GRAY + ITALIC + "You arent sure what it does",
+                GRAY + ITALIC + "But this ball makes you numb."
+        ));
+
+        item.setItemMeta(meta);
+        ItemRegistry.ITEM_Numbness = item;
     }
 }

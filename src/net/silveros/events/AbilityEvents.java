@@ -48,9 +48,11 @@ public class AbilityEvents implements Listener, Color {
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity attacker = event.getDamager();
+        Player player = (Player) event.getEntity();
+        Player attackplayer = (Player) event.getDamager();
+        User user = Util.getUserFromId(player.getUniqueId());
 
         if (entity.getType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getEntity();
             //checks if player being damaged has uncloak
             if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
                 for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -58,14 +60,18 @@ public class AbilityEvents implements Listener, Color {
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
             }
+            //damage handler for numb
+            if (player.getInventory().contains(ItemRegistry.ITEM_Numbness)) {
+                user.dealtDamage = event.getDamage();
+                user.numbDamage = user.numbDamage + user.dealtDamage;
+            }
         }
 
         if (attacker.getType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getDamager();
             //checks if a cloaked herobrine has hit an entity
-            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
-                for (PotionEffect effect : player.getActivePotionEffects()) {
-                    player.removePotionEffect(effect.getType());
+            if (attackplayer.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
+                for (PotionEffect effect : attackplayer.getActivePotionEffects()) {
+                    attackplayer.removePotionEffect(effect.getType());
                 }
             }
         }
@@ -161,10 +167,6 @@ public class AbilityEvents implements Listener, Color {
                                     for (PotionEffect e : player.getActivePotionEffects()) {
                                         player.removePotionEffect(e.getType());
                                     }
-
-                                    inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
-                                    inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
-                                    inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
                                     break;
                                 case DEFENSE_BEAR:
                                     inv.clear(3);
@@ -208,6 +210,12 @@ public class AbilityEvents implements Listener, Color {
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 7, false, false));
                                     inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
                                     world.playSound(local, Sound.ENTITY_ENDERMAN_STARE, 1, 1);
+                                    break;
+                                case NUMB:
+                                    inv.clear(5);
+                                    inv.setItem(10, ItemRegistry.ITEM_Numbness);
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 99, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 3, false, false));
                                     break;
                                 case HEROBRINE_POWER:
                                     inv.clear(0);

@@ -31,6 +31,8 @@ public class User {
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
+    private static final int PRESET_NumbActive = 10 * 20;
+    private static final int PRESET_Numb = 30 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
@@ -49,6 +51,8 @@ public class User {
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
+    public int cooldown_Numb = PRESET_Numb;
+    public int cooldown_NumbActive = PRESET_NumbActive;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
@@ -57,8 +61,11 @@ public class User {
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
+    public int timeUntil_BearAbilities = 40;
 
     //Misc
+    public double numbDamage = 0;
+    public double dealtDamage = 0;
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
     private boolean isDead = false;
@@ -310,6 +317,43 @@ public class User {
                     inv.setItem(4, ItemRegistry.ABILITY_NormalBear);
                     inv.setItem(9, ItemRegistry.ITEM_GummyEssence);
                     this.cooldown_NormalBear = PRESET_NormalBear;
+                }
+            }
+            //normal bear
+            if (inv.getHelmet().equals(ItemRegistry.SKULL_GummyBear)) {
+                if (timeUntil_BearAbilities > 0) {
+                    timeUntil_BearAbilities--;
+                } else {
+                    inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
+                    inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
+                    inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
+                    timeUntil_BearAbilities = 40;
+                }
+            }
+            if(inv.getHelmet().equals(ItemRegistry.SKULL_AttackBear)) {
+                if (inv.contains(ItemRegistry.ITEM_Numbness)) {
+                    if (this.cooldown_NumbActive > 0) {
+                        this.cooldown_NumbActive--;
+                        if (this.cooldown_NumbActive % 5 == 0) {
+                            player.spawnParticle(Particle.CRIMSON_SPORE, local, 20);
+                        }
+                    } else {
+                        player.damage(this.numbDamage);
+                        inv.clear(10);
+                        player.removePotionEffect(PotionEffectType.REGENERATION);
+                        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2, false, false));
+                        this.numbDamage = 0;
+                        this.cooldown_NumbActive = PRESET_NumbActive;
+                        this.cooldown_Numb = PRESET_Numb;
+                    }
+                }
+                if (!inv.contains(ItemRegistry.ABILITY_Numb) && !inv.contains(ItemRegistry.ITEM_Numbness)) {
+                    if (this.cooldown_Numb > 0) {
+                        this.cooldown_Numb--;
+                    } else {
+                        inv.setItem(5, ItemRegistry.ABILITY_Numb);
+                    }
                 }
             }
         }
