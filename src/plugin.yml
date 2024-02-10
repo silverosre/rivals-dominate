@@ -25,4 +25,9 @@ commands:
     permission: rivals.score
     usage: /score <team> <amount>
 
+  setuppoints:
+    description: Test command for setting up or resetting capture points.
+    permission: rivals.setuppoints
+    usage: /setuppoints <start/reset>
+
 permissions: {}

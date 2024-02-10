@@ -7,14 +7,12 @@ import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Transformation;
 
 import java.util.UUID;
 
@@ -93,6 +91,45 @@ public class User {
 
 
         for (Entity e : world.getEntitiesByClass(Marker.class)) {
+            //Capture points
+            if (e.getScoreboardTags().contains(RivalsTags.CAPTURE_POINT)) {
+                if (e.getNearbyEntities(3, 1, 3).contains(player)) {
+                    Material block = world.getBlockAt(player.getLocation().subtract(0, 1, 0)).getType();
+                    if (RivalsCore.viablePointBlocks.contains(block)) {
+                        Location l = e.getLocation();
+
+                        for (int i=0; i<10; i++) {
+                            int modX = Util.rand.nextInt(5);
+                            int modZ = Util.rand.nextInt(5);
+                            int x = l.getBlockX() + modX - 2;
+                            int z = l.getBlockZ() + modZ - 2;
+
+                            if (RivalsCore.capturePointParticleBlocks[modX][modZ]) {
+                                world.spawnParticle(Particle.BLOCK_CRACK, x + 0.5, l.getY(), z + 0.5, 5, 0, 0, 0, 0, world.getBlockAt(x, l.getBlockY() - 1, z).getBlockData());
+                            }
+                        }
+                    }
+
+                    boolean pointA = e.getScoreboardTags().contains(RivalsTags.POINT_A);
+                    boolean pointB = e.getScoreboardTags().contains(RivalsTags.POINT_B);
+                    boolean pointC = e.getScoreboardTags().contains(RivalsTags.POINT_C);
+                    boolean pointD = e.getScoreboardTags().contains(RivalsTags.POINT_D);
+                    boolean pointE = e.getScoreboardTags().contains(RivalsTags.POINT_E);
+
+                    /*if (pointA) {
+                        player.sendMessage("On point A");
+                    } else if (pointB) {
+                        player.sendMessage("On point B");
+                    } else if (pointC) {
+                        player.sendMessage("On point C");
+                    } else if (pointD) {
+                        player.sendMessage("On point D");
+                    } else if (pointE) {
+                        player.sendMessage("On point E");
+                    }*/
+                }
+            }
+
             //Archer "Snare" ability
             if (e.getScoreboardTags().contains(RivalsTags.SNARE_ENTITY)) {
                 Location l = e.getLocation().subtract(0, 1, 0);

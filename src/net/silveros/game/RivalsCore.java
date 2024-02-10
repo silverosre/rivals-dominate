@@ -6,6 +6,7 @@ import net.silveros.kits.KitArcher;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
+import net.silveros.utility.Vec3;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -13,6 +14,11 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scoreboard.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RivalsCore implements Color {
     public ScoreboardManager manager;
@@ -22,9 +28,20 @@ public class RivalsCore implements Color {
     public Objective energyBlockCooldown, restockBlockCooldown, scoreBlockCooldown;
 
     public BossBar redPointsBar, bluePointsBar;
+    public Map<Points, Marker> capturePoints = new HashMap<>();
+    public RivalsMap currentMap = RivalsMap.GRASSLANDS;
 
     public static Gamemode gamemode = Gamemode.DOMINATE;
     public static boolean gameInProgress = false;
+
+    public static boolean[][] capturePointParticleBlocks = {
+            {false, true, true, true, false},
+            {true, true, true, true, true},
+            {true, true, false, true, true},
+            {true, true, true, true, true},
+            {false, true, true, true, false},
+    };
+    public static List<Material> viablePointBlocks = new ArrayList<>(6);
 
     //formula: seconds * 20
     public static final int ENERGY_BLOCK_TIMER = 60 * 20;
@@ -36,6 +53,8 @@ public class RivalsCore implements Color {
         this.board  = this.manager.getNewScoreboard();
 
         this.initTeams();
+        this.addViablePointBlocks();
+        CapturePointLocations.init();
 
         this.energyBlockCooldown = this.board.registerNewObjective(RivalsTags.ENERGY_BLOCK_COOLDOWN, Criteria.DUMMY, "EnergyBlockCooldown");
         this.restockBlockCooldown = this.board.registerNewObjective(RivalsTags.RESTOCK_BLOCK_COOLDOWN, Criteria.DUMMY, "RestockBlockCooldown");
@@ -44,11 +63,13 @@ public class RivalsCore implements Color {
         this.redPointsBar = Bukkit.createBossBar(WHITE + "Red Team's Points", BarColor.RED, BarStyle.SOLID);
         this.bluePointsBar = Bukkit.createBossBar(WHITE + "Blue Team's Points", BarColor.BLUE, BarStyle.SOLID);
 
-        this.startDominateGame();
+        //this.startDominateGame(RivalsMap.GRASSLANDS);
     }
 
-    public void startDominateGame() {
+    public void startDominateGame(RivalsMap map) {
         gamemode = Gamemode.DOMINATE;
+        this.currentMap = map;
+        this.setupCapturePoints(this.currentMap);
         this.toggleDominateProgressBars(true);
 
         this.redPointsBar.setProgress(0);
@@ -59,6 +80,72 @@ public class RivalsCore implements Color {
         }
 
         gameInProgress = true;
+    }
+
+    private void setupCapturePoints(RivalsMap map) {
+        World world = RivalsPlugin.getWorld();
+
+        if (world != null) {
+            this.capturePoints.clear();
+
+            /*for (Points point : pointsMap.keySet()) {
+                Vec3 vec = pointsMap.get(point);
+                Location location = new Location(world, vec.posX, vec.posY, vec.posZ);
+                this.placeCapturePoint(world, location, point);
+            }*/
+
+            Vec3 vecA = CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_A);
+            Location pointA = new Location(world, vecA.posX, vecA.posY, vecA.posZ);
+            this.placeCapturePoint(world, pointA, Points.POINT_A);
+
+            Vec3 vecB = CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_B);
+            Location pointB = new Location(world, vecB.posX, vecB.posY, vecB.posZ);
+            this.placeCapturePoint(world, pointB, Points.POINT_B);
+
+            Vec3 vecC = CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_C);
+            Location pointC = new Location(world, vecC.posX, vecC.posY, vecC.posZ);
+            this.placeCapturePoint(world, pointC, Points.POINT_C);
+
+            Vec3 vecD = CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_D);
+            Location pointD = new Location(world, vecD.posX, vecD.posY, vecD.posZ);
+            this.placeCapturePoint(world, pointD, Points.POINT_D);
+
+            Vec3 vecE = CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_E);
+            Location pointE = new Location(world, vecE.posX, vecE.posY, vecE.posZ);
+            this.placeCapturePoint(world, pointE, Points.POINT_E);
+        }
+    }
+
+    public void endDominateGame() {
+        this.removeCapturePoints();
+
+        //TODO:
+        //teleport all playyers back to lobby
+        //finish game
+
+        gameInProgress = false;
+    }
+
+    private void removeCapturePoints() {
+        World world = RivalsPlugin.getWorld();
+
+        if (world != null) {
+            //this.capturePoints.clear();
+
+            for (Marker e : world.getEntitiesByClass(Marker.class)) {
+                if (e.getScoreboardTags().contains(RivalsTags.CAPTURE_POINT)) {
+                    e.remove();
+                }
+            }
+        }
+    }
+
+    private void placeCapturePoint(World world, Location l, Points point) {
+        Marker e = (Marker)world.spawnEntity(l, EntityType.MARKER);
+        e.addScoreboardTag(point.tag);
+        e.addScoreboardTag(RivalsTags.CAPTURE_POINT);
+
+        //this.capturePoints.put(point, e);
     }
 
     public void addPlayerToBossbars(Player player) {
@@ -106,6 +193,15 @@ public class RivalsCore implements Color {
         this.TEAM_RED.setAllowFriendlyFire(false);
         this.TEAM_BLUE.setAllowFriendlyFire(false);
         this.TEAM_SPECTATOR.setAllowFriendlyFire(false);
+    }
+
+    private void addViablePointBlocks() {
+        viablePointBlocks.add(Material.WHITE_WOOL);
+        viablePointBlocks.add(Material.BLUE_WOOL);
+        viablePointBlocks.add(Material.RED_WOOL);
+        viablePointBlocks.add(Material.WHITE_STAINED_GLASS);
+        viablePointBlocks.add(Material.BLUE_STAINED_GLASS);
+        viablePointBlocks.add(Material.RED_STAINED_GLASS);
     }
 
     public void onTick(World world) {

@@ -14,4 +14,14 @@ public class RivalsTags {
     public static final String ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.energy_block_cooldown_text";
     public static final String RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.restock_cooldown_text";
     public static final String SCORE_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.score_block_cooldown_text";
+
+    public static final String CAPTURE_POINT = "rivals.capture_point";
+    public static final String POINT_A = "rivals.point_a";
+    public static final String POINT_B = "rivals.point_b";
+    public static final String POINT_C = "rivals.point_c";
+    public static final String POINT_D = "rivals.point_d";
+    public static final String POINT_E = "rivals.point_e";
+
+    public static final String MAP_GRASSLANDS = "rivals.map_grasslands";
+    public static final String MAP_ARID = "rivals.map_arid";
 }

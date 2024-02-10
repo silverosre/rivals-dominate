@@ -41,6 +41,7 @@ public class RivalsPlugin extends JavaPlugin implements Color {
         Util.registerCommand("rteam", new CommandRTeam(this));
         Util.registerCommand("energy", new CommandEnergy(this));
         Util.registerCommand("score", new CommandScore(this));
+        Util.registerCommand("setuppoints", new CommandSetupPoints(this));
 
         //misc & tick
         this.startTicking();
