@@ -48,9 +48,11 @@ public class AbilityEvents implements Listener, Color {
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity attacker = event.getDamager();
+        Player player = (Player) event.getEntity();
+        Player attackplayer = (Player) event.getDamager();
+        User user = Util.getUserFromId(player.getUniqueId());
 
         if (entity.getType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getEntity();
             //checks if player being damaged has uncloak
             if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
                 for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -58,14 +60,18 @@ public class AbilityEvents implements Listener, Color {
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
             }
+            //damage handler for numb
+            if (player.getInventory().contains(ItemRegistry.ITEM_Numbness)) {
+                user.dealtDamage = event.getDamage();
+                user.numbDamage = user.numbDamage + user.dealtDamage;
+            }
         }
 
         if (attacker.getType().equals(EntityType.PLAYER)) {
-            Player player = (Player) event.getDamager();
             //checks if a cloaked herobrine has hit an entity
-            if (player.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
-                for (PotionEffect effect : player.getActivePotionEffects()) {
-                    player.removePotionEffect(effect.getType());
+            if (attackplayer.getInventory().contains(ItemRegistry.ABILITY_Uncloak)) {
+                for (PotionEffect effect : attackplayer.getActivePotionEffects()) {
+                    attackplayer.removePotionEffect(effect.getType());
                 }
             }
         }
@@ -157,31 +163,38 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setLeggings(ItemRegistry.ARMOR_NormalBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_NormalBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_GummyBear);
+                                    player.playSound(local, Sound.BLOCK_BEACON_DEACTIVATE, 1, 1);
 
                                     for (PotionEffect e : player.getActivePotionEffects()) {
                                         player.removePotionEffect(e.getType());
                                     }
-
-                                    inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
-                                    inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
-                                    inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
                                     break;
                                 case DEFENSE_BEAR:
+                                    user.bearAbility = true;
                                     inv.clear(3);
                                     inv.clear(4);
                                     inv.clear(5);
                                     inv.clear(9);
-                                    ;
                                     inv.setChestplate(ItemRegistry.ARMOR_DefenseBearChestplate);
                                     inv.setLeggings(ItemRegistry.ARMOR_DefenseBearLeggings);
                                     inv.setBoots(ItemRegistry.ARMOR_DefenseBearBoots);
                                     inv.setHelmet(ItemRegistry.SKULL_DefenseBear);
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 1, false, false));
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 2, false, false));
-                                    inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
                                     world.playSound(local, Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
                                     break;
+                                case CHAOS_ZONE:
+                                    inv.clear(5);
+                                    Marker chaos = (Marker)world.spawnEntity(local, EntityType.MARKER);
+                                    chaos.addScoreboardTag(RivalsTags.CHAOS_ZONE_ENTITY);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), chaos);
+                                    player.playSound(local, Sound.ENTITY_WITHER_DEATH, 1, 1);
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
+                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
+                                    break;
                                 case ATTACK_BEAR:
+                                    user.bearAbility = true;
                                     inv.clear(3);
                                     inv.clear(4);
                                     inv.clear(5);
@@ -192,10 +205,17 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setHelmet(ItemRegistry.SKULL_AttackBear);
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 1, false, false));
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 2, false, false));
-                                    inv.setItem(5, ItemRegistry.ABILITY_Numb);
                                     world.playSound(local, Sound.ENTITY_VINDICATOR_HURT, 1, 1);
                                     break;
+                                case NUMB:
+                                    inv.clear(5);
+                                    inv.setItem(10, ItemRegistry.ITEM_Numbness);
+                                    player.playSound(local, Sound.ITEM_TRIDENT_RIPTIDE_3, 1, 1);
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 99, false, false));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 3, false, false));
+                                    break;
                                 case SPEED_BEAR:
+                                    user.bearAbility = true;
                                     inv.clear(3);
                                     inv.clear(4);
                                     inv.clear(5);
@@ -206,8 +226,14 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setHelmet(ItemRegistry.SKULL_SpeedBear);
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, PotionEffect.INFINITE_DURATION, 2, false, false));
                                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 7, false, false));
-                                    inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
                                     world.playSound(local, Sound.ENTITY_ENDERMAN_STARE, 1, 1);
+                                    break;
+                                case STINK_BOMB:
+                                    inv.clear(5);
+                                    Marker stink = (Marker)world.spawnEntity(local, EntityType.MARKER);
+                                    stink.addScoreboardTag(RivalsTags.STINK_BOMB_ENTITY);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), stink);
+                                    player.playSound(local, Sound.ENTITY_WITHER_SHOOT, 1, 1);
                                     break;
                                 case HEROBRINE_POWER:
                                     inv.clear(0);

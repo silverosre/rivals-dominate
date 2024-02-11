@@ -145,4 +145,5 @@ public class ItemRegistry implements Color {
     public static ItemStack ARMOR_DefenseBearBoots;
     public static ItemStack ARMOR_SpeedBearBoots;
     public static ItemStack ITEM_GummyEssence;
+    public static ItemStack ITEM_Numbness;
 }

@@ -31,6 +31,12 @@ public class User {
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
+    private static final int PRESET_NumbActive = 10 * 20;
+    private static final int PRESET_Numb = 30 * 20;
+    private static final int PRESET_ChaosZone = 30 * 20;
+    private static final int PRESET_ChaosZoneActive = 10 * 20;
+    private static final int PRESET_StinkBomb = 30 * 20;
+    private static final int PRESET_StinkBombActive = 10 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
@@ -49,6 +55,12 @@ public class User {
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
+    public int cooldown_Numb = PRESET_Numb;
+    public int cooldown_NumbActive = PRESET_NumbActive;
+    public int cooldown_ChaosZone = PRESET_ChaosZone;
+    public int cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
+    public int cooldown_StinkBomb = PRESET_StinkBomb;
+    public int cooldown_StickBombActive = PRESET_StinkBombActive;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
@@ -57,11 +69,22 @@ public class User {
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
+    public int timeUntil_BearAbilities = 40;
 
     //Misc
+    public boolean bearAbility = false;
+    private float radius = 2f;
+    private float angle = 0f;
+    public double numbDamage = 0;
+    public double dealtDamage = 0;
+    public int chaosDamage = 20;
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
     private boolean isDead = false;
+    //random number generator
+    public double randomPosition (double min, double max) {
+        return ((Math.random() * (max - min)) + min);
+    }
 
     public User(UUID uuid) {
         this.playerId = uuid;
@@ -140,6 +163,65 @@ public class User {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 2, false, false));
                         world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
                         e.remove();
+                    }
+                }
+            }
+            //Chaos Zone Ability
+            if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
+                Location l = e.getLocation();
+                double x = (radius * Math.sin(angle));
+                double z = (radius * Math.cos(angle));
+                angle += 0.1;
+
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
+                if (cooldown_ChaosZoneActive > 0) {
+                    cooldown_ChaosZoneActive--;
+                } else {
+                    e.remove();
+                    cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
+                }
+                if (e.getNearbyEntities(2, 1, 2).contains(player)) {
+                    if(RivalsCore.matchingTeams(this.getTeam(), e, player)){
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 3, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 99, true, true));
+                    }
+                    if(!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 2, true, true));
+                        if (chaosDamage > 0) {
+                            chaosDamage--;
+                        } else {
+                            player.damage(2);
+                            chaosDamage = 20;
+                        }
+                    }
+                }
+            }
+            //Stink Bomb ability
+            if(e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
+                Location l = e.getLocation();
+                //generates random locations and deltas for particle cloud
+                double x = l.getBlockX()+this.randomPosition(-2, 2);
+                double y = l.getBlockY()+this.randomPosition(-1, 3);
+                double z = l.getBlockZ()+this.randomPosition(-2, 2);
+                double dX = this.randomPosition(-0.7, 0.7);
+                double dY = this.randomPosition(-0.7, 0.7);
+                double dZ = this.randomPosition(-0.7, 0.7);
+                double dA = this.randomPosition(-0.4, 0.4);
+
+                world.spawnParticle(Particle.REDSTONE, x, y, z, 30, dX, dY, dZ, dA, new Particle.DustOptions(Color.YELLOW, 40));
+                if (cooldown_StickBombActive > 0) {
+                    cooldown_StickBombActive--;
+                } else {
+                    e.remove();
+                    cooldown_StickBombActive = PRESET_StinkBombActive;
+                }
+                if (e.getNearbyEntities(3, 2, 3).contains(player)) {
+                    if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
+                        //TODO fix nausea
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1, false, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 4, true, true));
                     }
                 }
             }
@@ -310,6 +392,91 @@ public class User {
                     inv.setItem(4, ItemRegistry.ABILITY_NormalBear);
                     inv.setItem(9, ItemRegistry.ITEM_GummyEssence);
                     this.cooldown_NormalBear = PRESET_NormalBear;
+                }
+            }
+            //normal bear
+            if (inv.getHelmet().equals(ItemRegistry.SKULL_GummyBear)) {
+                if (timeUntil_BearAbilities > 0) {
+                    timeUntil_BearAbilities--;
+                } else {
+                    inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
+                    inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
+                    inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
+                    timeUntil_BearAbilities = 40;
+                }
+            }
+            //attack bear
+            if(inv.getHelmet().equals(ItemRegistry.SKULL_AttackBear)) {
+                if (timeUntil_BearAbilities > 0 && bearAbility == true) {
+                    timeUntil_BearAbilities--;
+                } else if (bearAbility == true){
+                    inv.setItem(5, ItemRegistry.ABILITY_Numb);
+                    this.timeUntil_BearAbilities = 40;
+                    bearAbility = false;
+                }
+                if (inv.contains(ItemRegistry.ITEM_Numbness)) {
+                    if (this.cooldown_NumbActive > 0) {
+                        this.cooldown_NumbActive--;
+                        if (this.cooldown_NumbActive % 5 == 0) {
+                            double dX = this.randomPosition(-0.4, 0.4);
+                            double dY = this.randomPosition(-0.7, 0.7);
+                            double dZ = this.randomPosition(-0.4, 0.4);
+                            double dA = this.randomPosition(-0.2, 0.2);
+                            world.spawnParticle(Particle.REDSTONE, local.getBlockX(), local.getBlockY(), local.getBlockZ(), 2, dX, dY, dZ, dA, new Particle.DustOptions(Color.RED, 20));
+                        }
+                    } else {
+                        player.damage(this.numbDamage);
+                        inv.clear(10);
+                        player.removePotionEffect(PotionEffectType.REGENERATION);
+                        player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 2, false, false));
+                        this.numbDamage = 0;
+                        this.cooldown_NumbActive = PRESET_NumbActive;
+                        this.cooldown_Numb = PRESET_Numb;
+                    }
+                }
+                if (!inv.contains(ItemRegistry.ABILITY_Numb) && !inv.contains(ItemRegistry.ITEM_Numbness)) {
+                    if (this.cooldown_Numb > 0) {
+                        this.cooldown_Numb--;
+                    } else {
+                        inv.setItem(5, ItemRegistry.ABILITY_Numb);
+                    }
+                }
+            }
+            //Defense bear
+            if(inv.getHelmet().equals(ItemRegistry.SKULL_DefenseBear)) {
+                if (timeUntil_BearAbilities > 0 && bearAbility == true) {
+                    timeUntil_BearAbilities--;
+                } else if (bearAbility == true){
+                    inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
+                    timeUntil_BearAbilities = 40;
+                    bearAbility = false;
+                }
+                if(!inv.contains(ItemRegistry.ABILITY_ChaosZone)) {
+                    if (this.cooldown_ChaosZone > 0) {
+                        this.cooldown_ChaosZone--;
+                    } else {
+                        inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
+                        this.cooldown_ChaosZone = PRESET_ChaosZone;
+                    }
+                }
+            }
+            //Speed Bear
+            if(inv.getHelmet().equals(ItemRegistry.SKULL_SpeedBear)) {
+                if(timeUntil_BearAbilities > 0 && bearAbility == true) {
+                    timeUntil_BearAbilities--;
+                } else if (bearAbility == true){
+                    inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
+                    timeUntil_BearAbilities = 40;
+                    bearAbility = false;
+                }
+                if (!inv.contains(ItemRegistry.ABILITY_StinkBomb)) {
+                    if (this.cooldown_StinkBomb > 0) {
+                        this.cooldown_StinkBomb--;
+                    } else {
+                        inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
+                        this.cooldown_StinkBomb = PRESET_StinkBomb;
+                    }
                 }
             }
         }
