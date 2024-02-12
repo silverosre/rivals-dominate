@@ -24,5 +24,15 @@ public enum Abilities {
     SPEED_BEAR,
     NUMB,
     STINK_BOMB,
-    CHAOS_ZONE,;
+    CHAOS_ZONE,
+    //Wizard
+    ZAP,
+    FIREBALL,
+    DOWNDRAFT,
+    FREEZE,
+    //Goblin
+    STEAL,
+    GIVE,
+    SNEAKY,
+    SWARM,
 }
