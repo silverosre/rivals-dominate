@@ -3,7 +3,7 @@ package net.silveros.game;
 import net.silveros.entity.RivalsTags;
 
 public enum RivalsMap {
-    GRASSLANDS(RivalsTags.MAP_GRASSLANDS, "Grasslands"),
+    TERRA(RivalsTags.MAP_TERRA, "Terra"),
     ARID(RivalsTags.MAP_ARID, "Arid"),;
 
     public String mapTag, displayName;

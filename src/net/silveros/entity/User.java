@@ -1,10 +1,13 @@
 package net.silveros.entity;
 
+import net.silveros.game.Gamemode;
 import net.silveros.game.RivalsCore;
+import net.silveros.game.SpawnLocations;
 import net.silveros.kits.ItemRegistry;
 import net.silveros.kits.Kit;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
+import net.silveros.utility.Vec3;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +17,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Team;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -60,7 +65,7 @@ public class User {
     public int cooldown_ChaosZone = PRESET_ChaosZone;
     public int cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
     public int cooldown_StinkBomb = PRESET_StinkBomb;
-    public int cooldown_StickBombActive = PRESET_StinkBombActive;
+    public int cooldown_StinkBombActive = PRESET_StinkBombActive;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
@@ -78,9 +83,11 @@ public class User {
     public double numbDamage = 0;
     public double dealtDamage = 0;
     public int chaosDamage = 20;
+
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
-    private boolean isDead = false;
+    public boolean isDead = false;
+
     //random number generator
     public double randomPosition (double min, double max) {
         return ((Math.random() * (max - min)) + min);
@@ -106,53 +113,18 @@ public class User {
         //Misc gameplay
         if (this.isDead) {
             if (this.respawnTimer > 0) {
+                if (!this.getTeam(RivalsPlugin.core.TEAM_SPECTATOR) && player.getGameMode() == GameMode.SPECTATOR) {
+                    Vec3 spawn = SpawnLocations.TERRA_SPECTATOR;
+                    player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
+                }
+
                 this.respawnTimer--;
             } else {
                 this.respawn();
             }
         }
 
-
         for (Entity e : world.getEntitiesByClass(Marker.class)) {
-            //Capture points
-            if (e.getScoreboardTags().contains(RivalsTags.CAPTURE_POINT)) {
-                if (e.getNearbyEntities(3, 1, 3).contains(player)) {
-                    Material block = world.getBlockAt(player.getLocation().subtract(0, 1, 0)).getType();
-                    if (RivalsCore.viablePointBlocks.contains(block)) {
-                        Location l = e.getLocation();
-
-                        for (int i=0; i<10; i++) {
-                            int modX = Util.rand.nextInt(5);
-                            int modZ = Util.rand.nextInt(5);
-                            int x = l.getBlockX() + modX - 2;
-                            int z = l.getBlockZ() + modZ - 2;
-
-                            if (RivalsCore.capturePointParticleBlocks[modX][modZ]) {
-                                world.spawnParticle(Particle.BLOCK_CRACK, x + 0.5, l.getY(), z + 0.5, 5, 0, 0, 0, 0, world.getBlockAt(x, l.getBlockY() - 1, z).getBlockData());
-                            }
-                        }
-                    }
-
-                    boolean pointA = e.getScoreboardTags().contains(RivalsTags.POINT_A);
-                    boolean pointB = e.getScoreboardTags().contains(RivalsTags.POINT_B);
-                    boolean pointC = e.getScoreboardTags().contains(RivalsTags.POINT_C);
-                    boolean pointD = e.getScoreboardTags().contains(RivalsTags.POINT_D);
-                    boolean pointE = e.getScoreboardTags().contains(RivalsTags.POINT_E);
-
-                    /*if (pointA) {
-                        player.sendMessage("On point A");
-                    } else if (pointB) {
-                        player.sendMessage("On point B");
-                    } else if (pointC) {
-                        player.sendMessage("On point C");
-                    } else if (pointD) {
-                        player.sendMessage("On point D");
-                    } else if (pointE) {
-                        player.sendMessage("On point E");
-                    }*/
-                }
-            }
-
             //Archer "Snare" ability
             if (e.getScoreboardTags().contains(RivalsTags.SNARE_ENTITY)) {
                 Location l = e.getLocation().subtract(0, 1, 0);
@@ -166,6 +138,7 @@ public class User {
                     }
                 }
             }
+
             //Chaos Zone Ability
             if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
                 Location l = e.getLocation();
@@ -198,8 +171,9 @@ public class User {
                     }
                 }
             }
+
             //Stink Bomb ability
-            if(e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
+            if (e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
                 Location l = e.getLocation();
                 //generates random locations and deltas for particle cloud
                 double x = l.getBlockX()+this.randomPosition(-2, 2);
@@ -211,11 +185,11 @@ public class User {
                 double dA = this.randomPosition(-0.4, 0.4);
 
                 world.spawnParticle(Particle.REDSTONE, x, y, z, 30, dX, dY, dZ, dA, new Particle.DustOptions(Color.YELLOW, 40));
-                if (cooldown_StickBombActive > 0) {
-                    cooldown_StickBombActive--;
+                if (this.cooldown_StinkBombActive > 0) {
+                    this.cooldown_StinkBombActive--;
                 } else {
                     e.remove();
-                    cooldown_StickBombActive = PRESET_StinkBombActive;
+                    this.cooldown_StinkBombActive = PRESET_StinkBombActive;
                 }
                 if (e.getNearbyEntities(3, 2, 3).contains(player)) {
                     if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
@@ -394,26 +368,29 @@ public class User {
                     this.cooldown_NormalBear = PRESET_NormalBear;
                 }
             }
-            //normal bear
+
+            //Normal Bear
             if (inv.getHelmet().equals(ItemRegistry.SKULL_GummyBear)) {
-                if (timeUntil_BearAbilities > 0) {
-                    timeUntil_BearAbilities--;
+                if (this.timeUntil_BearAbilities > 0) {
+                    this.timeUntil_BearAbilities--;
                 } else {
                     inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
                     inv.setItem(4, ItemRegistry.ABILITY_AttackBear);
                     inv.setItem(5, ItemRegistry.ABILITY_SpeedBear);
-                    timeUntil_BearAbilities = 40;
+                    this.timeUntil_BearAbilities = 40;
                 }
             }
-            //attack bear
-            if(inv.getHelmet().equals(ItemRegistry.SKULL_AttackBear)) {
-                if (timeUntil_BearAbilities > 0 && bearAbility == true) {
-                    timeUntil_BearAbilities--;
-                } else if (bearAbility == true){
+
+            //Attack Bear
+            if (inv.getHelmet().equals(ItemRegistry.SKULL_AttackBear)) {
+                if (this.timeUntil_BearAbilities > 0 && this.bearAbility) {
+                    this.timeUntil_BearAbilities--;
+                } else if (this.bearAbility){
                     inv.setItem(5, ItemRegistry.ABILITY_Numb);
                     this.timeUntil_BearAbilities = 40;
-                    bearAbility = false;
+                    this.bearAbility = false;
                 }
+
                 if (inv.contains(ItemRegistry.ITEM_Numbness)) {
                     if (this.cooldown_NumbActive > 0) {
                         this.cooldown_NumbActive--;
@@ -435,6 +412,7 @@ public class User {
                         this.cooldown_Numb = PRESET_Numb;
                     }
                 }
+
                 if (!inv.contains(ItemRegistry.ABILITY_Numb) && !inv.contains(ItemRegistry.ITEM_Numbness)) {
                     if (this.cooldown_Numb > 0) {
                         this.cooldown_Numb--;
@@ -443,14 +421,15 @@ public class User {
                     }
                 }
             }
-            //Defense bear
+
+            //Defense Bear
             if(inv.getHelmet().equals(ItemRegistry.SKULL_DefenseBear)) {
-                if (timeUntil_BearAbilities > 0 && bearAbility == true) {
-                    timeUntil_BearAbilities--;
-                } else if (bearAbility == true){
+                if (this.timeUntil_BearAbilities > 0 && this.bearAbility) {
+                    this.timeUntil_BearAbilities--;
+                } else if (this.bearAbility){
                     inv.setItem(5, ItemRegistry.ABILITY_ChaosZone);
                     timeUntil_BearAbilities = 40;
-                    bearAbility = false;
+                    this.bearAbility = false;
                 }
                 if(!inv.contains(ItemRegistry.ABILITY_ChaosZone)) {
                     if (this.cooldown_ChaosZone > 0) {
@@ -461,14 +440,15 @@ public class User {
                     }
                 }
             }
+
             //Speed Bear
-            if(inv.getHelmet().equals(ItemRegistry.SKULL_SpeedBear)) {
-                if(timeUntil_BearAbilities > 0 && bearAbility == true) {
-                    timeUntil_BearAbilities--;
-                } else if (bearAbility == true){
+            if (inv.getHelmet().equals(ItemRegistry.SKULL_SpeedBear)) {
+                if(this.timeUntil_BearAbilities > 0 && this.bearAbility) {
+                    this.timeUntil_BearAbilities--;
+                } else if (this.bearAbility){
                     inv.setItem(5, ItemRegistry.ABILITY_StinkBomb);
-                    timeUntil_BearAbilities = 40;
-                    bearAbility = false;
+                    this.timeUntil_BearAbilities = 40;
+                    this.bearAbility = false;
                 }
                 if (!inv.contains(ItemRegistry.ABILITY_StinkBomb)) {
                     if (this.cooldown_StinkBomb > 0) {
@@ -582,6 +562,7 @@ public class User {
     public void resetKit() {
         this.currentKit = -1;
         this.getInv().clear();
+        this.setTotalEnergy(0);
     }
 
     public void activateKit(boolean keepEnergy) {
@@ -628,6 +609,11 @@ public class User {
 
             this.setGameMode(GameMode.ADVENTURE);
             this.activateKit(false);
+
+            Vec3 spawn = this.getTeam(RivalsPlugin.core.TEAM_BLUE) ? SpawnLocations.TERRA_BLUE : SpawnLocations.TERRA_RED;
+            player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
+
+            this.isDead = false;
         }
     }
 
@@ -640,6 +626,7 @@ public class User {
 
             this.setGameMode(GameMode.SPECTATOR);
             this.respawnTimer = waitTime;
+
             this.isDead = true;
         }
     }

@@ -9,10 +9,6 @@ import net.silveros.utility.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Marker;
-import org.bukkit.scoreboard.Team;
-
-import java.util.Map;
 
 public class CommandSetupPoints implements CommandExecutor, Color {
     private RivalsPlugin plugin;
@@ -39,17 +35,17 @@ public class CommandSetupPoints implements CommandExecutor, Color {
                     }
                 } else if (s.equals("start")) {
                     if (!RivalsCore.gameInProgress) {
-                        RivalsPlugin.core.startDominateGame(RivalsMap.GRASSLANDS);
+                        RivalsPlugin.core.startDominateGame(RivalsMap.TERRA);
 
                         sender.sendMessage("Set up 5 new capture points.");
 
                         //Map<Points, Marker> pointsMap = RivalsPlugin.core.capturePoints;
 
-                        sender.sendMessage("Point A: " + CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_A).toString());
-                        sender.sendMessage("Point B: " + CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_B).toString());
-                        sender.sendMessage("Point C: " + CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_C).toString());
-                        sender.sendMessage("Point D: " + CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_D).toString());
-                        sender.sendMessage("Point E: " + CapturePointLocations.GRASSLANDS_pointLocations.get(Points.POINT_E).toString());
+                        sender.sendMessage("Point A: " + CapturePointLocations.TERRA_pointLocations.get(Points.POINT_A).toString());
+                        sender.sendMessage("Point B: " + CapturePointLocations.TERRA_pointLocations.get(Points.POINT_B).toString());
+                        sender.sendMessage("Point C: " + CapturePointLocations.TERRA_pointLocations.get(Points.POINT_C).toString());
+                        sender.sendMessage("Point D: " + CapturePointLocations.TERRA_pointLocations.get(Points.POINT_D).toString());
+                        sender.sendMessage("Point E: " + CapturePointLocations.TERRA_pointLocations.get(Points.POINT_E).toString());
                         return true;
                     } else {
                         err(sender, "Game is already in progress!");

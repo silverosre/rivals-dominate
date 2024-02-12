@@ -44,7 +44,7 @@ public class AbilityEvents implements Listener, Color {
         }
     }*/
 
-    @EventHandler
+    /*@EventHandler
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity attacker = event.getDamager();
@@ -75,7 +75,7 @@ public class AbilityEvents implements Listener, Color {
                 }
             }
         }
-    }
+    }*/
 
     @EventHandler
     public static void onPlayerInteract(PlayerInteractEvent event) {
