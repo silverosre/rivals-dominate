@@ -25,6 +25,8 @@ public class ItemRegistry implements Color {
         new ItemsDefenseBear().prepareItems();
         new ItemsAttackBear().prepareItems();
         new ItemsSpeedBear().prepareItems();
+        new ItemsWizard().prepareItems();
+        new ItemsGoblin().prepareItems();
 
         //Bunket
         addToMap(ABILITY_ShieldUp);
@@ -50,6 +52,16 @@ public class ItemRegistry implements Color {
         addToMap(ABILITY_Numb);
         addToMap(ABILITY_StinkBomb);
         addToMap(ABILITY_ChaosZone);
+        //Wizard
+        addToMap(ABILITY_Zap);
+        addToMap(ABILITY_Fireball);
+        addToMap(ABILITY_Downdraft);
+        addToMap(ABILITY_Freeze);
+        //Goblin
+        addToMap(ABILITY_Steal);
+        addToMap(ABILITY_Give);
+        addToMap(ABILITY_Sneaky);
+        addToMap(ABILITY_Swarm);
     }
 
     private static void addToMap(ItemAbility ability) {
@@ -146,4 +158,23 @@ public class ItemRegistry implements Color {
     public static ItemStack ARMOR_SpeedBearBoots;
     public static ItemStack ITEM_GummyEssence;
     public static ItemStack ITEM_Numbness;
+    //Wizard
+    public static ItemAbility ABILITY_Zap;
+    public static ItemAbility ABILITY_Fireball;
+    public static ItemAbility ABILITY_Downdraft;
+    public static ItemAbility ABILITY_Freeze;
+    public static ItemStack WEAPON_WizardStaff;
+    public static ItemStack SKULL_Wizard;
+    public static ItemStack ARMOR_WizardChestplate;
+    public static ItemStack ARMOR_WizardLeggings;
+    public static ItemStack ARMOR_WizardBoots;
+    //Goblin
+    public static ItemAbility ABILITY_Steal;
+    public static ItemAbility ABILITY_Give;
+    public static ItemAbility ABILITY_Sneaky;
+    public static ItemAbility ABILITY_Swarm;
+    public static ItemStack SKULL_Goblin;
+    public static ItemStack ARMOR_GoblinChestplate;
+    public static ItemStack ARMOR_GoblinLeggings;
+    public static ItemStack ARMOR_GoblinBoots;
 }
