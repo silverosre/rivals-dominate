@@ -13,6 +13,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.*;
 
 import java.awt.*;
@@ -146,6 +147,12 @@ public class RivalsCore implements Color {
 
     public void endDominateGame() {
         this.removeCapturePoints();
+
+        BossBar redBar = this.getTeamProgressBar(TEAM_RED);
+        BossBar blueBar = this.getTeamProgressBar(TEAM_BLUE);
+        redBar.setProgress(0);
+        blueBar.setProgress(0);
+        this.toggleDominateProgressBars(false);
 
         //TODO:
         //teleport all players back to lobby
@@ -434,6 +441,10 @@ public class RivalsCore implements Color {
     }
 
     public void tallyScore() {
+        if (!gameInProgress) {
+            return;
+        }
+
         BossBar redBar = this.getTeamProgressBar(TEAM_RED);
         BossBar blueBar = this.getTeamProgressBar(TEAM_BLUE);
 
@@ -545,7 +556,8 @@ public class RivalsCore implements Color {
                     boolean enemyOnPoint = false;
 
                     for (Player player : playersList) {
-                        if (e.getNearbyEntities(3, 1, 3).contains(player)) {
+                        List<Entity> nearbyPlayers = e.getNearbyEntities(3, 1, 3);
+                        if (nearbyPlayers.contains(player)) {
                             User user = Util.getUserFromId(player.getUniqueId());
 
                             for (Player other : world.getPlayers()) {
@@ -556,7 +568,9 @@ public class RivalsCore implements Color {
                                         if (otherUser.getTeam() == user.getTeam()) {
                                             teammates.add(otherUser);
                                         } else {
-                                            enemyOnPoint = true;
+                                            if (nearbyPlayers.contains(other)) {
+                                                enemyOnPoint = true;
+                                            }
                                         }
                                     }
                                 }
@@ -705,6 +719,7 @@ public class RivalsCore implements Color {
 
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
+        firework.setMetadata(RivalsTags.NO_DAMAGE, new FixedMetadataValue(Util.getPlugin(), true));
         firework.detonate();
     }
 }

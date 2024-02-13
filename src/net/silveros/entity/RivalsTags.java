@@ -2,6 +2,7 @@ package net.silveros.entity;
 
 public class RivalsTags {
     public static final String REMOVABLE = "rivals.removable";
+    public static final String NO_DAMAGE = "rivals.no_damage";
 
     public static final String FLARE_ENTITY = "rivals.archer_flare";
     public static final String SNARE_ENTITY = "rivals.archer_snare";

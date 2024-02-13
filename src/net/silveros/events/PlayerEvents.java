@@ -1,5 +1,6 @@
 package net.silveros.events;
 
+import net.silveros.entity.RivalsTags;
 import net.silveros.entity.User;
 import net.silveros.game.RivalsCore;
 import net.silveros.game.SpawnLocations;
@@ -10,9 +11,11 @@ import net.silveros.utility.Vec3;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
@@ -74,6 +77,16 @@ public class PlayerEvents implements Listener, Color {
 
         user.markAsDead(RivalsCore.RESPAWN_TIME);
         player.sendMessage("You will respawn in 10 seconds.");
+    }
+
+    @EventHandler
+    public static void onPlayerHit(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Firework) {
+            Firework fw = (Firework) event.getDamager();
+            if (fw.hasMetadata(RivalsTags.NO_DAMAGE)) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     /*@EventHandler

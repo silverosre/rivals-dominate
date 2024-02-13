@@ -83,8 +83,12 @@ public class Util {
         return profile;
     }
 
-    public static URL getUrlFromBase64(String base64) throws MalformedURLException {
-        return new URL(new String(Base64.getDecoder().decode(base64)));
+    public static URL getUrlFromBase64(String base64) {
+        try {
+            return new URL(new String(Base64.getDecoder().decode(base64)));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static double range(double radius) {
