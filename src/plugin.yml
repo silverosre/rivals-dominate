@@ -6,7 +6,12 @@ api-version: 1.14
 
 commands:
   kit:
-    description: Gives the specified kit to the player
+    description: Gives the specified kit to the player/command executor.
+    permission: rivals.kit
+    usage: /kit <kit>
+
+  kitp:
+    description: Gives the specified kit to the specified player.
     permission: rivals.kit
     usage: /kit <player> <kit>
 
