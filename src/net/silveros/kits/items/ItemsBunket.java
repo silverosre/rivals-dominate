@@ -6,6 +6,7 @@ import net.silveros.kits.ItemRegistry;
 import net.silveros.utility.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -90,6 +91,12 @@ public class ItemsBunket extends Items {
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_BunketChestplate = item;
@@ -100,6 +107,12 @@ public class ItemsBunket extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_BunketLeggings = item;
@@ -110,6 +123,12 @@ public class ItemsBunket extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_BunketBoots = item;

@@ -3,8 +3,10 @@ package net.silveros.kits.items;
 import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -97,9 +99,15 @@ public class ItemsHamood extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.LIME);
+        meta.setColor(Color.fromRGB(11796252));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HamoodChestplate = item;
@@ -109,8 +117,14 @@ public class ItemsHamood extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.MAROON);
+        meta.setColor(Color.fromRGB(13187864));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HamoodLeggings = item;
@@ -120,8 +134,14 @@ public class ItemsHamood extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.BLACK);
+        meta.setColor(Color.fromRGB(0));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
 

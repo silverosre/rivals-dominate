@@ -6,19 +6,20 @@ import net.silveros.kits.ItemRegistry;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-public class ItemsWizard extends Items{
+public class ItemsWizard extends Items {
     @Override
     protected void prepareFeatures() {
         generateWizardStaff();
         generateZap(2);
         generateFireball(5);
-        generateDowndraft(4);
         generateFreeze(1);
     }
+
     @Override
     protected void prepareArmor() {
         generateWizardChestplate();
@@ -26,6 +27,7 @@ public class ItemsWizard extends Items{
         generateWizardBoots();
         ItemRegistry.SKULL_Wizard = getSkull(Skulls.WIZARD, "Wizard Head");
     }
+
     private static void generateZap(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.ZAP);
         ItemMeta meta = item.getItemMeta();
@@ -40,6 +42,7 @@ public class ItemsWizard extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Zap = item;
     }
+
     private static void generateFireball(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.FIREBALL);
         ItemMeta meta = item.getItemMeta();
@@ -55,21 +58,7 @@ public class ItemsWizard extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Fireball = item;
     }
-    private static void generateDowndraft(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.DOWNDRAFT);
-        ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Downdraft " + itemCost(cost));
-        meta.setLore(addLore(
-                WHITE + ITALIC + "Shoots a blast of air",
-                WHITE + ITALIC + "below you, propelling you up",
-                WHITE + ITALIC + "and blowing nearby players away.",
-                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
-        ));
-
-        item.setItemMeta(meta);
-        ItemRegistry.ABILITY_Downdraft = item;
-    }
     private static void generateFreeze(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.FREEZE);
         ItemMeta meta = item.getItemMeta();
@@ -85,6 +74,7 @@ public class ItemsWizard extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Freeze = item;
     }
+
     private static void generateWizardStaff() {
         ItemStack item = new ItemStack(Material.BLAZE_ROD, 1);
         ItemMeta meta = item.getItemMeta();
@@ -96,33 +86,54 @@ public class ItemsWizard extends Items{
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_WizardStaff = item;
     }
+
     private static void generateWizardChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.BLUE);
+        meta.setColor(Color.fromRGB(3113429));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_FIRE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_WizardChestplate = item;
     }
+
     private static void generateWizardLeggings() {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.BLUE);
+        meta.setColor(Color.fromRGB(3113429));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_WizardLeggings = item;
     }
+
     private static void generateWizardBoots() {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.BLUE);
+        meta.setColor(Color.fromRGB(1908001));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_WizardBoots = item;

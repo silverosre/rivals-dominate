@@ -5,6 +5,7 @@ import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -61,6 +62,12 @@ public class ItemsAttackBear extends Items {
 
         meta.setColor(org.bukkit.Color.RED);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_AttackBearChestplate = item;
@@ -72,6 +79,12 @@ public class ItemsAttackBear extends Items {
 
         meta.setColor(org.bukkit.Color.RED);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_AttackBearLeggings = item;
@@ -83,10 +96,17 @@ public class ItemsAttackBear extends Items {
 
         meta.setColor(org.bukkit.Color.RED);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_AttackBearBoots = item;
     }
+
     private static void generateNumbness() {
         ItemStack item = new ItemStack(Material.MAGMA_CREAM, 1);
         ItemMeta meta = item.getItemMeta();

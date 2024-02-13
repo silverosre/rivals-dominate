@@ -3,8 +3,10 @@ package net.silveros.kits.items;
 import net.silveros.kits.Abilities;
 import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -22,7 +24,6 @@ public class ItemsArcher extends Items {
 
     @Override
     protected void prepareArmor() {
-        generateArcherBoots();
         generateArcherLeggings();
         generateArcherChestplate();
         ItemRegistry.SKULL_Archer = getSkull(Skulls.ARCHER, "Archer Head");
@@ -96,10 +97,16 @@ public class ItemsArcher extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.LIME); // i was going to fix this and then i saw the horrors -silver
+        meta.setColor(Color.fromRGB(9491738)); // i fixed the horrors -silver
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
         meta.setDisplayName(YELLOW + "Archer Chestplate");
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_ArcherChestplate = item;
@@ -109,23 +116,17 @@ public class ItemsArcher extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(org.bukkit.Color.LIME);
+        meta.setColor(Color.fromRGB(9491738));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.setDisplayName(YELLOW + "Archer Leggings");
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_ArcherLeggings = item;
-    }
-
-    private static void generateArcherBoots() {
-        ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
-        LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
-
-        meta.setColor(org.bukkit.Color.LIME);
-        meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-        meta.setDisplayName(YELLOW + "Archer Boots");
-
-        item.setItemMeta(meta);
-        ItemRegistry.ARMOR_ArcherBoots = item;
     }
 }

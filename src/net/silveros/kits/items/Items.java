@@ -6,6 +6,7 @@ import net.silveros.utility.Color;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
@@ -63,6 +64,7 @@ public abstract class Items implements Color {
         meta.setOwnerProfile(profile);
         meta.setDisplayName(YELLOW + itemName);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         return item;

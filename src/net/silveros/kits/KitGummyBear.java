@@ -3,8 +3,8 @@ package net.silveros.kits;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.PlayerInventory;
 
-public class KitGummyBear extends Kit{
-    public KitGummyBear(int id, String name){
+public class KitGummyBear extends Kit {
+    public KitGummyBear(int id, String name) {
         super(id, name);
         this.foodCount = 5;
     }
