@@ -64,7 +64,7 @@ public abstract class Items implements Color {
         meta.setOwnerProfile(profile);
         meta.setDisplayName(YELLOW + itemName);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         item.setItemMeta(meta);
         return item;

@@ -3,11 +3,14 @@ package net.silveros.entity;
 public class RivalsTags {
     public static final String REMOVABLE = "rivals.removable";
     public static final String NO_DAMAGE = "rivals.no_damage";
+    public static final String FIREWORK_EFFECT = "rivals.firework_effect";
 
     public static final String FLARE_ENTITY = "rivals.archer_flare";
     public static final String SNARE_ENTITY = "rivals.archer_snare";
     public static final String CHAOS_ZONE_ENTITY = "rivals.chaos_zone";
-    public static final String STINK_BOMB_ENTITY = "rivals.stick_bomb";
+    public static final String STINK_BOMB_ENTITY = "rivals.stink_bomb";
+    public static final String PHARAOHS_CURSE_ENTITY = "rivals.pharaohs_curse";
+    public static final String ZAP_ENTITY = "rivals.zap";
 
     public static final String ENERGY_BLOCK_ENTITY = "rivals.energy_block";
     public static final String ENERGY_BLOCK_COOLDOWN = "rivals.energy_block_cooldown";

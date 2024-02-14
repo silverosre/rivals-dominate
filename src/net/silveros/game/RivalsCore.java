@@ -2,6 +2,7 @@ package net.silveros.game;
 
 import net.silveros.entity.RivalsTags;
 import net.silveros.entity.User;
+import net.silveros.kits.Kit;
 import net.silveros.kits.KitArcher;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
@@ -12,8 +13,12 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
 
 import java.awt.*;
@@ -664,6 +669,8 @@ public class RivalsCore implements Color {
                     world.playSound(e.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.75f, 0.75f);
 
                     if (e.getTicksLived() > 60) {
+                        User user = Util.getUserFromId(e.getOwner());
+
                         for (int i = 0; i< KitArcher.FROMABOVE_ARROWS; i++) {
                             double x = Util.range(2);
                             double y = 10 + (0.25f * i);
@@ -675,10 +682,105 @@ public class RivalsCore implements Color {
                             arrow.setPierceLevel(4);
                             arrow.setShotFromCrossbow(true);
                             arrow.setDamage(8);
+                            arrow.setShooter(user.getPlayer());
                         }
 
                         e.remove();
                     }
+                }
+            }
+
+            //Hamood "Pharaohs Curse" ability
+            if (e.getScoreboardTags().contains(RivalsTags.PHARAOHS_CURSE_ENTITY)) {
+                world.spawnParticle(Particle.SMOKE_NORMAL, e.getLocation(), 3, 0, 0, 0, 0.1);
+                if (e.getTicksLived() > 40) {
+                    world.playSound(e.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 0.75f, 1);
+
+                    double d = 0.05;
+                    world.spawnParticle(Particle.SMOKE_NORMAL, e.getLocation(), 200, d, d, d, 0.1);
+
+                    for (Entity entity : e.getNearbyEntities(2, 2, 2)) {
+                        if (entity instanceof Player) {
+                            Player player = (Player)entity;
+                            User user = Util.getUserFromId(player.getUniqueId());
+
+                            if (!matchingTeams(user.getTeam(), e, player)) {
+                                if (player.getGameMode() != GameMode.SPECTATOR) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false, false));
+                                }
+                            }
+                        }
+                    }
+
+                    e.remove();
+                }
+            }
+
+            //Wizard "Zap" ability
+            if (e.getScoreboardTags().contains(RivalsTags.ZAP_ENTITY)) {
+                if (e.getTicksLived() > 40) {
+                    for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                        if (entity instanceof Player) {
+                            Player player = (Player)entity;
+                            User user = Util.getUserFromId(player.getUniqueId());
+
+                            if (!matchingTeams(user.getTeam(), e, player)) {
+                                if (player.getGameMode() != GameMode.SPECTATOR) {
+                                    player.damage(6);
+                                }
+                            }
+                        }
+                    }
+
+                    world.spawnParticle(Particle.REDSTONE, e.getLocation().add(0, 0.25, 0), 200, 1.25, 0, 1.25, 0.1, new Particle.DustOptions(org.bukkit.Color.YELLOW, 1));
+                    world.playSound(e.getLocation(), Sound.ENTITY_BEE_HURT, 1, 1);
+
+                    e.remove();
+                }
+            }
+        }
+
+        for (ArmorStand e : world.getEntitiesByClass(ArmorStand.class)) {
+            if (e.getScoreboardTags().contains("rivals.kit_stand")) {
+                ItemStack helmet = e.getEquipment().getHelmet();
+
+                if (helmet != null) {
+                    ItemMeta meta = helmet.getItemMeta();
+
+                    boolean kitInUse = false;
+                    boolean isBlue = e.getScoreboardTags().contains("rivals.team_blue");
+
+                    for (User user : RivalsPlugin.players) {
+                        for (Kit kit : Kit.KIT_LIST.values()) {
+                            if (kit.kitName.equalsIgnoreCase(meta.getDisplayName())) {
+                                if (user.currentKit == kit.kitID && ((isBlue && user.getTeam(TEAM_BLUE)) || (!isBlue && user.getTeam(TEAM_RED)))) {
+                                    kitInUse = true;
+                                }
+                            }
+                        }
+                    }
+
+                    for (Entity entity : e.getNearbyEntities(0.25, 1, 0.25)) {
+                        if (entity instanceof Player) {
+                            User user = Util.getUserFromId(entity.getUniqueId());
+
+                            if (user.getPlayer().getGameMode() != GameMode.SPECTATOR) {
+                                for (Kit kit : Kit.KIT_LIST.values()) {
+                                    if (kit.kitName.equalsIgnoreCase(meta.getDisplayName())) {
+                                        if (!kitInUse && user.currentKit != kit.kitID) {
+                                            user.setKit(kit);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (kitInUse) {
+                        world.spawnParticle(Particle.REDSTONE, e.getLocation().add(0, 0.25, 0), 10, 0.2, 0, 0.2, 0.1, new Particle.DustOptions(isBlue ? org.bukkit.Color.BLUE : org.bukkit.Color.RED, 1));
+                    }
+
+                    //Util.print("blue:" + isBlue + ", kit:" + meta.getDisplayName() + ", in use:" + kitInUse);
                 }
             }
         }
@@ -708,6 +810,8 @@ public class RivalsCore implements Color {
 
     public static void spawnFirework(Location location, org.bukkit.Color mainColor) {
         Firework firework = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+        firework.setMetadata("nodamage", new FixedMetadataValue(Util.getPlugin(), true));
+
         FireworkMeta fireworkMeta = firework.getFireworkMeta();
 
         FireworkEffect.Type burst = FireworkEffect.Type.BURST;
@@ -719,7 +823,8 @@ public class RivalsCore implements Color {
 
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
-        firework.setMetadata(RivalsTags.NO_DAMAGE, new FixedMetadataValue(Util.getPlugin(), true));
+        firework.addScoreboardTag(RivalsTags.FIREWORK_EFFECT);
+
         firework.detonate();
     }
 }

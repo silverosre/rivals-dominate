@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
@@ -82,8 +83,8 @@ public class PlayerEvents implements Listener, Color {
     @EventHandler
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Firework) {
-            Firework fw = (Firework) event.getDamager();
-            if (fw.hasMetadata(RivalsTags.NO_DAMAGE)) {
+            Firework fw = (Firework)event.getDamager();
+            if (fw.hasMetadata("nodamage")) {
                 event.setCancelled(true);
             }
         }

@@ -9,11 +9,7 @@ import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Marker;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -140,6 +136,8 @@ public class AbilityEvents implements Listener, Color {
                                     flare.setPickupDelay(Integer.MAX_VALUE);
                                     flare.addScoreboardTag(RivalsTags.FLARE_ENTITY);
                                     flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
+                                    flare.setInvulnerable(true);
+                                    flare.setOwner(player.getUniqueId());
 
                                     world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
                                     world.playSound(local, Sound.BLOCK_ANVIL_PLACE, 0.75f, 0.25f);
@@ -155,6 +153,18 @@ public class AbilityEvents implements Listener, Color {
                                     inv.setItem(0, ItemRegistry.WEAPON_DuneSlicer);
                                     world.playSound(local, Sound.ITEM_TOTEM_USE, 1, 1);
                                     inv.clear(4);
+                                    break;
+                                case PHARAOHS_CURSE:
+                                    Item curse = world.dropItemNaturally(local, new ItemStack(Material.SUSPICIOUS_SAND));
+                                    curse.setPickupDelay(Integer.MAX_VALUE);
+                                    curse.addScoreboardTag(RivalsTags.PHARAOHS_CURSE_ENTITY);
+                                    curse.setVelocity(local.getDirection().multiply(0.75));
+                                    curse.setInvulnerable(true);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), curse);
+
+                                    world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
+
+                                    inv.clear(3);
                                     break;
                                 case NORMAL_BEAR:
                                     inv.clear(4);
@@ -262,6 +272,45 @@ public class AbilityEvents implements Listener, Color {
                                     }
                                     player.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0, 0, 0, 0);
                                     world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
+                                    break;
+                                case ZAP:
+                                    Item zap = world.dropItemNaturally(local, new ItemStack(Material.REDSTONE_LAMP));
+                                    zap.setPickupDelay(Integer.MAX_VALUE);
+                                    zap.addScoreboardTag(RivalsTags.ZAP_ENTITY);
+                                    zap.setVelocity(local.getDirection().multiply(0.75));
+                                    zap.setInvulnerable(true);
+                                    RivalsCore.addEntryToTeam(user.getTeam(), zap);
+
+                                    world.playSound(local, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                                    inv.clear(2);
+                                    break;
+                                case FIREBALL:
+                                    Fireball fireball = (Fireball)world.spawnEntity(local.add(0, 1.25, 0), EntityType.FIREBALL);
+                                    fireball.setDirection(local.getDirection());
+                                    fireball.setYield(1.25f);
+                                    fireball.setShooter(player);
+                                    fireball.setVelocity(local.getDirection().multiply(0.25));
+
+                                    world.playSound(local, Sound.ENTITY_BLAZE_SHOOT, 0.75f, 1);
+                                    inv.clear(3);
+                                    break;
+                                case FREEZE:
+                                    Marker freeze = (Marker)world.spawnEntity(local, EntityType.MARKER);
+
+                                    for (Entity e : freeze.getNearbyEntities(2, 1, 2)) {
+                                        if (e instanceof Player) {
+                                            Player other = (Player)e;
+                                            if (!RivalsCore.matchingTeams(user.getTeam(), player, other)) {
+                                                other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 1, false, false));
+                                            }
+                                        }
+                                    }
+
+                                    world.spawnParticle(Particle.SNOWFLAKE, local, 200, 1.25, 0, 1.25, 0);
+                                    world.spawnParticle(Particle.REDSTONE, local, 200, 1.25, 0, 1.25, new Particle.DustOptions(org.bukkit.Color.fromRGB(0xE1FFFF), 1));
+
+                                    world.playSound(local, Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75f, 1);
+                                    inv.clear(4);
                                     break;
                             }
                         } else {

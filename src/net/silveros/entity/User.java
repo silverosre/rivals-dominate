@@ -35,6 +35,7 @@ public class User {
     private static final int PRESET_FromAbove = 55 * 20;
     private static final int PRESET_DuneSlice = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
+    private static final int PRESET_PharaohsCurse = 10 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
     private static final int PRESET_NumbActive = 10 * 20;
     private static final int PRESET_Numb = 30 * 20;
@@ -46,6 +47,9 @@ public class User {
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
+    private static final int PRESET_Zap = 5 * 20;
+    private static final int PRESET_Fireball = 5 * 20;
+    private static final int PRESET_Freeze = 20 * 20;
 
     //Ability cooldowns
 
@@ -58,6 +62,7 @@ public class User {
     //hamood
     public int cooldown_DuneSlice = PRESET_DuneSlice;
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
+    public int cooldown_PharaohsCurse = PRESET_PharaohsCurse;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
     public int cooldown_Numb = PRESET_Numb;
@@ -71,6 +76,10 @@ public class User {
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
     public int cooldown_HerobrinePower = PRESET_HerobrinePower;
     public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
+    //wizard
+    public int cooldown_Zap = PRESET_Zap;
+    public int cooldown_Fireball = PRESET_Fireball;
+    public int cooldown_Freeze = PRESET_Freeze;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 60 * 20;
@@ -105,9 +114,11 @@ public class User {
         PlayerInventory inv = this.getInv();
 
         //Update energy
-        ItemStack energyItem = inv.getItem(6);
-        if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
-            inv.setItem(6, ItemRegistry.getEnergy(this.totalEnergy));
+        if (RivalsCore.gameInProgress) {
+            ItemStack energyItem = inv.getItem(6);
+            if (energyItem == null && this.totalEnergy > 0 || energyItem != null && energyItem.getAmount() != this.totalEnergy) {
+                inv.setItem(6, ItemRegistry.getEnergy(this.totalEnergy));
+            }
         }
 
         //Misc gameplay
@@ -131,10 +142,12 @@ public class User {
                 world.spawnParticle(Particle.BLOCK_CRACK, e.getLocation(), 5, 0, 0, 0, 0.1, world.getBlockAt(l).getBlockData());
 
                 if (e.getNearbyEntities(1, 1, 1).contains(player)) {
-                    if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 2, false, false));
-                        world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
-                        e.remove();
+                    if (player.getGameMode() != GameMode.SPECTATOR) {
+                        if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 2, false, false));
+                            world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
+                            e.remove();
+                        }
                     }
                 }
             }
@@ -206,26 +219,28 @@ public class User {
 
                 if (world.getBlockAt(l).getType() == Material.DIAMOND_BLOCK) {
                     if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
-                        Score cooldown = RivalsPlugin.core.energyBlockCooldown.getScore(e.getUniqueId().toString());
-                        if (cooldown.getScore() <= 0) {
-                            this.addEnergy(1);
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            Score cooldown = RivalsPlugin.core.energyBlockCooldown.getScore(e.getUniqueId().toString());
+                            if (cooldown.getScore() <= 0) {
+                                this.addEnergy(1);
 
-                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                                world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
 
-                            cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
-                            RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
+                                cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
+                                RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
 
-                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
-                            text.addScoreboardTag(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY);
-                            text.setBillboard(Display.Billboard.VERTICAL);
-                            text.setDisplayWidth(1f);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                text.addScoreboardTag(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY);
+                                text.setBillboard(Display.Billboard.VERTICAL);
+                                text.setDisplayWidth(1f);
 
-                            Score cooldownText = RivalsPlugin.core.energyBlockCooldown.getScore(text.getUniqueId().toString());
-                            cooldownText.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
+                                Score cooldownText = RivalsPlugin.core.energyBlockCooldown.getScore(text.getUniqueId().toString());
+                                cooldownText.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
 
-                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                                world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                            }
                         }
                     }
                 }
@@ -237,26 +252,28 @@ public class User {
 
                 if (world.getBlockAt(l).getType() == Material.GOLD_BLOCK) {
                     if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
-                        Score cooldown = RivalsPlugin.core.restockBlockCooldown.getScore(e.getUniqueId().toString());
-                        if (cooldown.getScore() <= 0) {
-                            this.activateKit(true);
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            Score cooldown = RivalsPlugin.core.restockBlockCooldown.getScore(e.getUniqueId().toString());
+                            if (cooldown.getScore() <= 0) {
+                                this.activateKit(true);
 
-                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                                world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
 
-                            cooldown.setScore(RivalsCore.RESTOCK_TIMER);
-                            RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
+                                cooldown.setScore(RivalsCore.RESTOCK_TIMER);
+                                RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
 
-                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
-                            text.addScoreboardTag(RivalsTags.RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY);
-                            text.setBillboard(Display.Billboard.VERTICAL);
-                            text.setDisplayWidth(1f);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                text.addScoreboardTag(RivalsTags.RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY);
+                                text.setBillboard(Display.Billboard.VERTICAL);
+                                text.setDisplayWidth(1f);
 
-                            Score cooldownText = RivalsPlugin.core.restockBlockCooldown.getScore(text.getUniqueId().toString());
-                            cooldownText.setScore(RivalsCore.RESTOCK_TIMER);
+                                Score cooldownText = RivalsPlugin.core.restockBlockCooldown.getScore(text.getUniqueId().toString());
+                                cooldownText.setScore(RivalsCore.RESTOCK_TIMER);
 
-                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                                world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                            }
                         }
                     }
                 }
@@ -268,26 +285,28 @@ public class User {
 
                 if (world.getBlockAt(l).getType() == Material.EMERALD_BLOCK) {
                     if (e.getNearbyEntities(0.5, 1, 0.5).contains(player)) {
-                        Score cooldown = RivalsPlugin.core.scoreBlockCooldown.getScore(e.getUniqueId().toString());
-                        if (cooldown.getScore() <= 0) {
-                            RivalsPlugin.core.addScoreBlockPoints(this.getTeam());
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            Score cooldown = RivalsPlugin.core.scoreBlockCooldown.getScore(e.getUniqueId().toString());
+                            if (cooldown.getScore() <= 0) {
+                                RivalsPlugin.core.addScoreBlockPoints(this.getTeam());
 
-                            world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-                            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                                world.playSound(l, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
 
-                            cooldown.setScore(RivalsCore.SCORE_BLOCK_TIMER);
-                            RivalsCore.spawnFirework(e.getLocation(), Color.LIME);
+                                cooldown.setScore(RivalsCore.SCORE_BLOCK_TIMER);
+                                RivalsCore.spawnFirework(e.getLocation(), Color.LIME);
 
-                            TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
-                            text.addScoreboardTag(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY);
-                            text.setBillboard(Display.Billboard.VERTICAL);
-                            text.setDisplayWidth(1f);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                text.addScoreboardTag(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY);
+                                text.setBillboard(Display.Billboard.VERTICAL);
+                                text.setDisplayWidth(1f);
 
-                            Score cooldownText = RivalsPlugin.core.scoreBlockCooldown.getScore(text.getUniqueId().toString());
-                            cooldownText.setScore(RivalsCore.SCORE_BLOCK_TIMER);
+                                Score cooldownText = RivalsPlugin.core.scoreBlockCooldown.getScore(text.getUniqueId().toString());
+                                cooldownText.setScore(RivalsCore.SCORE_BLOCK_TIMER);
 
-                            world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                                world.setBlockData(l, Material.IRON_BLOCK.createBlockData());
+                            }
                         }
                     }
                 }
@@ -302,6 +321,35 @@ public class User {
                 } else {
                     inv.setItem(5, ItemRegistry.ABILITY_ShieldUp);
                     this.cooldown_ShieldUp = PRESET_ShieldUp;
+                }
+            }
+        }
+
+        if (this.currentKit == Kit.WIZARD.kitID) {
+            if (!inv.contains(ItemRegistry.ABILITY_Zap)) {
+                if (this.cooldown_Zap > 0) {
+                    this.cooldown_Zap--;
+                } else {
+                    inv.setItem(2, ItemRegistry.ABILITY_Zap);
+                    this.cooldown_Zap = PRESET_Zap;
+                }
+            }
+
+            if (!inv.contains(ItemRegistry.ABILITY_Fireball)) {
+                if (this.cooldown_Fireball > 0) {
+                    this.cooldown_Fireball--;
+                } else {
+                    inv.setItem(3, ItemRegistry.ABILITY_Fireball);
+                    this.cooldown_Fireball = PRESET_Fireball;
+                }
+            }
+
+            if (!inv.contains(ItemRegistry.ABILITY_Freeze)) {
+                if (this.cooldown_Freeze > 0) {
+                    this.cooldown_Freeze--;
+                } else {
+                    inv.setItem(4, ItemRegistry.ABILITY_Freeze);
+                    this.cooldown_Freeze = PRESET_Freeze;
                 }
             }
         }
@@ -354,6 +402,15 @@ public class User {
                 } else {
                     inv.setItem(0, ItemRegistry.WEAPON_HamoodSword);
                     this.cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
+                }
+            }
+
+            if (!inv.contains(ItemRegistry.ABILITY_PharaohsCurse)) {
+                if (this.cooldown_PharaohsCurse > 0) {
+                    this.cooldown_PharaohsCurse--;
+                } else {
+                    inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);
+                    this.cooldown_PharaohsCurse = PRESET_PharaohsCurse;
                 }
             }
         }
