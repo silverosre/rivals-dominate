@@ -1,6 +1,14 @@
 package net.silveros.kits;
 
+import net.silveros.entity.User;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class KitHerobrine extends Kit {
     public KitHerobrine(int id, String name) {
@@ -26,5 +34,43 @@ public class KitHerobrine extends Kit {
     @Override
     public int getStartingEnergy() {
         return 3;
+    }
+
+    public static void activateHerobrinePower(World world, Location local, Player player, PlayerInventory inv, User user) {
+        inv.clear(3);
+
+        inv.clear(0);
+        inv.clear(1);
+        inv.clear(7);
+        inv.setItem(0, ItemRegistry.WEAPON_HerobrinePowerAxe);
+        inv.setItem(1, ItemRegistry.WEAPON_HerobrinePowerBow);
+        inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+    }
+
+    public static void activateFogCloak(World world, Location local, Player player, PlayerInventory inv, User user) {
+        inv.clear(4);
+
+        inv.clear(1);
+        inv.clear(7);
+
+        //clear armor
+        inv.clear(36);
+        inv.clear(37);
+        inv.clear(38);
+        inv.clear(39);
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, PotionEffect.INFINITE_DURATION, 0, false, false));
+
+        player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local, 20, 0, 0, 0, 0);
+        world.playSound(local, Sound.AMBIENT_CAVE, 1, 1);
+    }
+
+    public static void activateUncloak(World world, Location local, Player player, PlayerInventory inv, User user) {
+        for (PotionEffect e : player.getActivePotionEffects()) {
+            player.removePotionEffect(e.getType());
+        }
+
+        player.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0, 0, 0, 0);
+        world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
     }
 }

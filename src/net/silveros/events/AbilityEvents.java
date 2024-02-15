@@ -1,11 +1,7 @@
 package net.silveros.events;
 
-import net.silveros.entity.RivalsTags;
 import net.silveros.entity.User;
-import net.silveros.game.RivalsCore;
-import net.silveros.kits.ItemAbility;
-import net.silveros.kits.ItemRegistry;
-import net.silveros.main.RivalsPlugin;
+import net.silveros.kits.*;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
 import org.bukkit.*;
@@ -13,16 +9,10 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
-import org.bukkit.util.Vector;
 
 public class AbilityEvents implements Listener, Color {
     /*@EventHandler
@@ -95,222 +85,59 @@ public class AbilityEvents implements Listener, Color {
 
                             switch (ability.ability) {
                                 case SHIELD_UP:
-                                    world.playSound(local, Sound.ENTITY_VILLAGER_WORK_TOOLSMITH, 1, 1);
-                                    inv.setItemInOffHand(ItemRegistry.WEAPON_BunketShield);
-                                    inv.clear(5);
+                                    KitBunket.activateShieldUp(world, local, player, inv, user);
                                     break;
                                 case EMERGENCY_REPAIRS:
                                     //TODO make repair work
-
-                                    //remove if you dont like my implementation --Roasty
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, 4, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20, 2, false, false));
-                                    inv.clear(3);
-                                    world.playSound(local, Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 1);
+                                    KitBunket.activateEmergencyRepairs(world, local, player, inv, user);
                                     break;
                                 case SELF_DESTRUCT:
-                                    player.setHealth(0);
-                                    world.createExplosion(local, 5f);
+                                    KitBunket.activateSelfDestruct(world, local, player, inv, user);
                                     break;
                                 case FLETCH:
-                                    if (player.getInventory().contains(Material.ARROW)) {
-                                        inv.addItem(new ItemStack(Material.ARROW, 2));
-                                        inv.clear(3);
-                                        world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
-                                    } else {
-                                        inv.setItem(7, new ItemStack(Material.ARROW, 2));
-                                        inv.clear(3);
-                                        world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
-                                    }
+                                    KitArcher.activateFletch(world, local, player, inv, user);
                                     break;
                                 case SNARE:
-                                    Marker snare = (Marker)world.spawnEntity(local, EntityType.MARKER);
-                                    snare.addScoreboardTag(RivalsTags.SNARE_ENTITY);
-                                    RivalsCore.addEntryToTeam(user.getTeam(), snare);
-
-                                    world.playSound(local, Sound.BLOCK_WET_GRASS_PLACE, 0.75f, 0.5f);
-                                    inv.clear(4);
+                                    KitArcher.activateSnare(world, local, player, inv, user);
                                     break;
                                 case FROM_ABOVE:
-                                    Item flare = world.dropItemNaturally(local, new ItemStack(user.getTeam(RivalsPlugin.core.TEAM_BLUE) ? Material.BLUE_CANDLE : Material.RED_CANDLE));
-                                    flare.setPickupDelay(Integer.MAX_VALUE);
-                                    flare.addScoreboardTag(RivalsTags.FLARE_ENTITY);
-                                    flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
-                                    flare.setInvulnerable(true);
-                                    flare.setOwner(player.getUniqueId());
-
-                                    world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
-                                    world.playSound(local, Sound.BLOCK_ANVIL_PLACE, 0.75f, 0.25f);
-
-                                    inv.clear(5);
+                                    KitArcher.activateFromAbove(world, local, player, inv, user);
                                     break;
                                 case SWIFT:
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
-                                    inv.clear(5);
+                                    KitHamood.activateSwift(world, local, player, inv, user);
                                     break;
                                 case DUNE_SLICE:
-                                    inv.setItem(0, ItemRegistry.WEAPON_DuneSlicer);
-                                    world.playSound(local, Sound.ITEM_TOTEM_USE, 1, 1);
-                                    inv.clear(4);
+                                    KitHamood.activateDuneSlicer(world, local, player, inv, user);
                                     break;
                                 case PHARAOHS_CURSE:
-                                    Item curse = world.dropItemNaturally(local, new ItemStack(Material.SUSPICIOUS_SAND));
-                                    curse.setPickupDelay(Integer.MAX_VALUE);
-                                    curse.addScoreboardTag(RivalsTags.PHARAOHS_CURSE_ENTITY);
-                                    curse.setVelocity(local.getDirection().multiply(0.75));
-                                    curse.setInvulnerable(true);
-                                    RivalsCore.addEntryToTeam(user.getTeam(), curse);
-
-                                    world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
-
-                                    inv.clear(3);
-                                    break;
-                                case NORMAL_BEAR:
-                                    inv.clear(4);
-                                    inv.clear(5);
-                                    inv.setChestplate(ItemRegistry.ARMOR_NormalBearChestplate);
-                                    inv.setLeggings(ItemRegistry.ARMOR_NormalBearLeggings);
-                                    inv.setBoots(ItemRegistry.ARMOR_NormalBearBoots);
-                                    inv.setHelmet(ItemRegistry.SKULL_GummyBear);
-                                    player.playSound(local, Sound.BLOCK_BEACON_DEACTIVATE, 1, 1);
-
-                                    for (PotionEffect e : player.getActivePotionEffects()) {
-                                        player.removePotionEffect(e.getType());
-                                    }
-                                    break;
-                                case DEFENSE_BEAR:
-                                    user.bearAbility = true;
-                                    inv.clear(3);
-                                    inv.clear(4);
-                                    inv.clear(5);
-                                    inv.clear(9);
-                                    inv.setChestplate(ItemRegistry.ARMOR_DefenseBearChestplate);
-                                    inv.setLeggings(ItemRegistry.ARMOR_DefenseBearLeggings);
-                                    inv.setBoots(ItemRegistry.ARMOR_DefenseBearBoots);
-                                    inv.setHelmet(ItemRegistry.SKULL_DefenseBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 1, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 2, false, false));
-                                    world.playSound(local, Sound.ENTITY_IRON_GOLEM_ATTACK, 1, 1);
-                                    break;
-                                case CHAOS_ZONE:
-                                    inv.clear(5);
-                                    Marker chaos = (Marker)world.spawnEntity(local, EntityType.MARKER);
-                                    chaos.addScoreboardTag(RivalsTags.CHAOS_ZONE_ENTITY);
-                                    RivalsCore.addEntryToTeam(user.getTeam(), chaos);
-                                    player.playSound(local, Sound.ENTITY_WITHER_DEATH, 1, 1);
-                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
-                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
-                                    world.spawnParticle(Particle.REDSTONE, local.getBlockX()+user.randomPosition(-1, 1), local.getBlockY()+1, local.getBlockZ()+user.randomPosition(-1, 1), 1, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.GRAY, 10));
-                                    break;
-                                case ATTACK_BEAR:
-                                    user.bearAbility = true;
-                                    inv.clear(3);
-                                    inv.clear(4);
-                                    inv.clear(5);
-                                    inv.clear(9);
-                                    inv.setChestplate(ItemRegistry.ARMOR_AttackBearChestplate);
-                                    inv.setLeggings(ItemRegistry.ARMOR_AttackBearLeggings);
-                                    inv.setBoots(ItemRegistry.ARMOR_AttackBearBoots);
-                                    inv.setHelmet(ItemRegistry.SKULL_AttackBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, PotionEffect.INFINITE_DURATION, 1, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 2, false, false));
-                                    world.playSound(local, Sound.ENTITY_VINDICATOR_HURT, 1, 1);
-                                    break;
-                                case NUMB:
-                                    inv.clear(5);
-                                    inv.setItem(10, ItemRegistry.ITEM_Numbness);
-                                    player.playSound(local, Sound.ITEM_TRIDENT_RIPTIDE_3, 1, 1);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 99, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 3, false, false));
-                                    break;
-                                case SPEED_BEAR:
-                                    user.bearAbility = true;
-                                    inv.clear(3);
-                                    inv.clear(4);
-                                    inv.clear(5);
-                                    inv.clear(9);
-                                    inv.setChestplate(ItemRegistry.ARMOR_SpeedBearChestplate);
-                                    inv.setLeggings(ItemRegistry.ARMOR_SpeedBearLeggings);
-                                    inv.setBoots(ItemRegistry.ARMOR_SpeedBearBoots);
-                                    inv.setHelmet(ItemRegistry.SKULL_SpeedBear);
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, PotionEffect.INFINITE_DURATION, 2, false, false));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 7, false, false));
-                                    world.playSound(local, Sound.ENTITY_ENDERMAN_STARE, 1, 1);
-                                    break;
-                                case STINK_BOMB:
-                                    inv.clear(5);
-                                    Marker stink = (Marker)world.spawnEntity(local, EntityType.MARKER);
-                                    stink.addScoreboardTag(RivalsTags.STINK_BOMB_ENTITY);
-                                    RivalsCore.addEntryToTeam(user.getTeam(), stink);
-                                    player.playSound(local, Sound.ENTITY_WITHER_SHOOT, 1, 1);
+                                    KitHamood.activatePharaohsCurse(world, local, player, inv, user);
                                     break;
                                 case HEROBRINE_POWER:
-                                    inv.clear(0);
-                                    inv.clear(1);
-                                    inv.clear(7);
-                                    inv.clear(3);
-                                    inv.setItem(0, ItemRegistry.WEAPON_HerobrinePowerAxe);
-                                    inv.setItem(1, ItemRegistry.WEAPON_HerobrinePowerBow);
-                                    inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
+                                    KitHerobrine.activateHerobrinePower(world, local, player, inv, user);
                                     break;
                                 case FOG_CLOAK:
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, PotionEffect.INFINITE_DURATION, 0, false, false));
-                                    inv.clear(1);
-                                    inv.clear(4);
-                                    inv.clear(7);
-                                    inv.clear(36);
-                                    inv.clear(37);
-                                    inv.clear(38);
-                                    inv.clear(39);
-                                    player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local, 20, 0, 0, 0, 0);
-                                    world.playSound(local, Sound.AMBIENT_CAVE, 1, 1);
+                                    KitHerobrine.activateFogCloak(world, local, player, inv, user);
                                     break;
                                 case UNCLOAK:
-                                    for (PotionEffect e : player.getActivePotionEffects()) {
-                                        player.removePotionEffect(e.getType());
-                                    }
-                                    player.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0, 0, 0, 0);
-                                    world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
+                                    KitHerobrine.activateUncloak(world, local, player, inv, user);
                                     break;
                                 case ZAP:
-                                    Item zap = world.dropItemNaturally(local, new ItemStack(Material.REDSTONE_LAMP));
-                                    zap.setPickupDelay(Integer.MAX_VALUE);
-                                    zap.addScoreboardTag(RivalsTags.ZAP_ENTITY);
-                                    zap.setVelocity(local.getDirection().multiply(0.75));
-                                    zap.setInvulnerable(true);
-                                    RivalsCore.addEntryToTeam(user.getTeam(), zap);
-
-                                    world.playSound(local, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
-                                    inv.clear(2);
+                                    KitWizard.activateZap(world, local, player, inv, user);
                                     break;
                                 case FIREBALL:
-                                    Fireball fireball = (Fireball)world.spawnEntity(local.add(0, 1.25, 0), EntityType.FIREBALL);
-                                    fireball.setDirection(local.getDirection());
-                                    fireball.setYield(1.25f);
-                                    fireball.setShooter(player);
-                                    fireball.setVelocity(local.getDirection().multiply(0.25));
-
-                                    world.playSound(local, Sound.ENTITY_BLAZE_SHOOT, 0.75f, 1);
-                                    inv.clear(3);
+                                    KitWizard.activateFireball(world, local, player, inv, user);
                                     break;
                                 case FREEZE:
-                                    Marker freeze = (Marker)world.spawnEntity(local, EntityType.MARKER);
-
-                                    for (Entity e : freeze.getNearbyEntities(2, 1, 2)) {
-                                        if (e instanceof Player) {
-                                            Player other = (Player)e;
-                                            if (!RivalsCore.matchingTeams(user.getTeam(), player, other)) {
-                                                other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 1, false, false));
-                                            }
-                                        }
-                                    }
-
-                                    world.spawnParticle(Particle.SNOWFLAKE, local, 200, 1.25, 0, 1.25, 0);
-                                    world.spawnParticle(Particle.REDSTONE, local, 200, 1.25, 0, 1.25, new Particle.DustOptions(org.bukkit.Color.fromRGB(0xE1FFFF), 1));
-
-                                    world.playSound(local, Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75f, 1);
-                                    inv.clear(4);
+                                    KitWizard.activateFreeze(world, local, player, inv, user);
+                                    break;
+                                case STEAL:
+                                    KitGoblin.activateSteal(world, local, player, inv, user);
+                                    break;
+                                case GIVE:
+                                    KitGoblin.activateGive(world, local, player, inv, user);
+                                    break;
+                                case SWARM:
+                                    KitGoblin.activateSwarm(world, local, player, inv, user);
                                     break;
                             }
                         } else {
@@ -325,10 +152,5 @@ public class AbilityEvents implements Listener, Color {
 
     private static boolean eitherAction(PlayerInteractEvent event) {
         return event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR;
-    }
-
-    private static boolean equals(ItemStack a, ItemStack b) {
-        ItemMeta meta = a.getItemMeta();
-        return meta != null && meta.equals(b.getItemMeta());
     }
 }

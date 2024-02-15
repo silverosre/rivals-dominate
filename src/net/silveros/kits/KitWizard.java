@@ -1,6 +1,14 @@
 package net.silveros.kits;
 
+import net.silveros.entity.RivalsTags;
+import net.silveros.entity.User;
+import net.silveros.game.RivalsCore;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class KitWizard extends Kit {
     public KitWizard(int id, String name) {
@@ -26,5 +34,47 @@ public class KitWizard extends Kit {
     @Override
     public int getStartingEnergy() {
         return 8;
+    }
+
+    public static void activateZap(World world, Location local, Player player, PlayerInventory inv, User user) {
+        Item zap = world.dropItemNaturally(local, new ItemStack(Material.REDSTONE_LAMP));
+        zap.setPickupDelay(Integer.MAX_VALUE);
+        zap.addScoreboardTag(RivalsTags.ZAP_ENTITY);
+        zap.setVelocity(local.getDirection().multiply(0.75));
+        zap.setInvulnerable(true);
+        RivalsCore.addEntryToTeam(user.getTeam(), zap);
+
+        world.playSound(local, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
+        inv.clear(2);
+    }
+
+    public static void activateFireball(World world, Location local, Player player, PlayerInventory inv, User user) {
+        Fireball fireball = (Fireball)world.spawnEntity(local.add(0, 1.25, 0), EntityType.FIREBALL);
+        fireball.setDirection(local.getDirection());
+        fireball.setYield(1.25f);
+        fireball.setShooter(player);
+        fireball.setVelocity(local.getDirection().multiply(0.25));
+
+        world.playSound(local, Sound.ENTITY_BLAZE_SHOOT, 0.75f, 1);
+        inv.clear(3);
+    }
+
+    public static void activateFreeze(World world, Location local, Player player, PlayerInventory inv, User user) {
+        Marker freeze = (Marker)world.spawnEntity(local, EntityType.MARKER);
+
+        for (Entity e : freeze.getNearbyEntities(2, 1, 2)) {
+            if (e instanceof Player) {
+                Player other = (Player)e;
+                if (!RivalsCore.matchingTeams(user.getTeam(), player, other)) {
+                    other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 1, false, false));
+                }
+            }
+        }
+
+        world.spawnParticle(Particle.SNOWFLAKE, local, 200, 1.25, 0, 1.25, 0);
+        world.spawnParticle(Particle.REDSTONE, local, 200, 1.25, 0, 1.25, new Particle.DustOptions(org.bukkit.Color.fromRGB(0xE1FFFF), 1));
+
+        world.playSound(local, Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75f, 1);
+        inv.clear(4);
     }
 }
