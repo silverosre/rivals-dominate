@@ -1,23 +1,19 @@
 package net.silveros.events;
 
-import net.silveros.entity.RivalsTags;
 import net.silveros.entity.User;
 import net.silveros.game.RivalsCore;
-import net.silveros.game.SpawnLocations;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
-import net.silveros.utility.Vec3;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -87,6 +83,36 @@ public class PlayerEvents implements Listener, Color {
             if (fw.hasMetadata("nodamage")) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    //prevent offhand from being used during game
+    @EventHandler
+    public static void onItemsSwapped(PlayerSwapHandItemsEvent event) {
+        if (RivalsCore.gameInProgress) {
+            event.setCancelled(true);
+        }
+    }
+
+    //prevent items in inventory from being moved during game
+    @EventHandler
+    public static void onItemsMoved(InventoryClickEvent event) {
+        if (RivalsCore.gameInProgress) {
+            Entity e = event.getWhoClicked();
+            if (e instanceof Player) {
+                Player player = (Player)e;
+
+                event.setCancelled(true);
+                player.updateInventory();
+            }
+        }
+    }
+
+    //prevent items from being dropped during game
+    @EventHandler
+    public static void onItemDropped(PlayerDropItemEvent event) {
+        if (RivalsCore.gameInProgress) {
+            event.setCancelled(true);
         }
     }
 
