@@ -30,6 +30,9 @@ public class KitBunket extends Kit {
     }
 
     @Override
+    public int getHealth(){return 26;}
+
+    @Override
     public int getStartingEnergy() {
         return 1;
     }

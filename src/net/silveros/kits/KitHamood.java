@@ -35,6 +35,9 @@ public class KitHamood extends Kit {
     }
 
     @Override
+    public int getHealth() {return 18;}
+
+    @Override
     public int getStartingEnergy() {
         return 2;
     }

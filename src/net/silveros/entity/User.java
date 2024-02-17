@@ -41,7 +41,6 @@ public class User {
     private static final int PRESET_Numb = 30 * 20;
     private static final int PRESET_ChaosZone = 30 * 20;
     private static final int PRESET_StinkBomb = 30 * 20;
-    private static final int PRESET_StinkBombActive = 10 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
@@ -68,7 +67,6 @@ public class User {
     public int cooldown_NumbActive = PRESET_NumbActive;
     public int cooldown_ChaosZone = PRESET_ChaosZone;
     public int cooldown_StinkBomb = PRESET_StinkBomb;
-    public int cooldown_StinkBombActive = PRESET_StinkBombActive;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
@@ -143,61 +141,6 @@ public class User {
                             world.playSound(l, Sound.BLOCK_BIG_DRIPLEAF_BREAK, 1, 0.75f);
                             e.remove();
                         }
-                    }
-                }
-            }
-
-            //Chaos Zone Ability
-            /*if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
-                Location l = e.getLocation();
-                double x = (radius * Math.sin(angle));
-                double z = (radius * Math.cos(angle));
-                angle += 0.1;
-
-                world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
-                world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
-                if (e.getNearbyEntities(2, 1, 2).contains(player)) {
-                    if(RivalsCore.matchingTeams(this.getTeam(), e, player)){
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 3, true, true));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 99, true, true));
-                    }
-                    if(!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 2, true, true));
-                        if (chaosDamage > 0) {
-                            chaosDamage--;
-                        } else {
-                            player.damage(2);
-                            chaosDamage = 20;
-                        }
-                    }
-                }
-            }*/
-
-            //Stink Bomb ability
-            if (e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
-                Location l = e.getLocation();
-                //generates random locations and deltas for particle cloud
-                double x = l.getBlockX()+this.randomPosition(-2, 2);
-                double y = l.getBlockY()+this.randomPosition(-1, 3);
-                double z = l.getBlockZ()+this.randomPosition(-2, 2);
-                double dX = this.randomPosition(-0.7, 0.7);
-                double dY = this.randomPosition(-0.7, 0.7);
-                double dZ = this.randomPosition(-0.7, 0.7);
-                double dA = this.randomPosition(-0.4, 0.4);
-
-                world.spawnParticle(Particle.REDSTONE, x, y, z, 30, dX, dY, dZ, dA, new Particle.DustOptions(Color.YELLOW, 40));
-                if (this.cooldown_StinkBombActive > 0) {
-                    this.cooldown_StinkBombActive--;
-                } else {
-                    e.remove();
-                    this.cooldown_StinkBombActive = PRESET_StinkBombActive;
-                }
-                if (e.getNearbyEntities(3, 2, 3).contains(player)) {
-                    if (!RivalsCore.matchingTeams(this.getTeam(), e, player)) {
-                        //TODO fix nausea
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1, false, false));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 4, true, true));
                     }
                 }
             }
@@ -615,6 +558,7 @@ public class User {
         if (this.currentKit != -1) {
             Kit kit = Kit.KIT_LIST.get(this.currentKit);
             kit.activateKit(this.getInv());
+            this.getPlayer().setMaxHealth(kit.getHealth());
 
             if (keepEnergy) {
                 if (this.getTotalEnergy() < kit.getStartingEnergy()) {
