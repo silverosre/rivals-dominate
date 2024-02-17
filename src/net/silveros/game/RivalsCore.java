@@ -69,6 +69,10 @@ public class RivalsCore implements Color {
     public static final int POINT_CAPTURE_LIMIT = 5 * 20;
     public static final int RESPAWN_TIME = 10 * 20;
 
+    //Misc
+    private static final float radius = 2f;
+    private static float angle = 0f;
+
     public RivalsCore() {
         this.manager = Bukkit.getScoreboardManager();
         this.board  = this.manager.getNewScoreboard();
@@ -617,6 +621,37 @@ public class RivalsCore implements Color {
                             }
                         }
                     }
+                }
+            }
+
+            //Gummy Bear "Chaos Zone" Ability
+            if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
+                Location l = e.getLocation();
+                double x = (radius * Math.sin(angle));
+                double z = (radius * Math.cos(angle));
+                angle += 0.1;
+
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.AQUA, 5));
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.AQUA, 5));
+                for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+
+                        if(player.getGameMode() != GameMode.SPECTATOR) {
+                            if (!matchingTeams(user.getTeam(), e, player)) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, true, true));
+                            }
+                            if (matchingTeams(user.getTeam(), e, player)) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 1, true, true));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 2, true, true));
+                            }
+                        }
+                    }
+                }
+                if (e.getTicksLived() > 200) {
+                    e.remove();
                 }
             }
 

@@ -139,6 +139,15 @@ public class AbilityEvents implements Listener, Color {
                                 case SWARM:
                                     KitGoblin.activateSwarm(world, local, player, inv, user);
                                     break;
+                                case NORMAL_BEAR:
+                                    KitGummyBear.activateNormalBear(world, local, player, inv, user);
+                                    break;
+                                case DEFENSE_BEAR:
+                                    KitGummyBear.activateDefenseBear(world, local, player, inv, user);
+                                    break;
+                                case CHAOS_ZONE:
+                                    KitGummyBear.activateChaosZone(world, local, player, inv, user);
+                                    break;
                             }
                         } else {
                             player.playSound(player, Sound.ENTITY_VILLAGER_NO, 0.75f, 1);

@@ -83,6 +83,7 @@ public class ItemsHerobrine extends Items {
 
         meta.setDisplayName(YELLOW + "Herobrine Axe");
         //meta.setLore(addLore(GRAY + ITALIC + "The memories call out to you..."));
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrineAxe = item;
@@ -94,6 +95,7 @@ public class ItemsHerobrine extends Items {
 
         meta.setDisplayName(YELLOW + "Herobrine Bow");
         //meta.setLore(addLore(GRAY + ITALIC + "Stand in the distance..."));
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrineBow = item;
@@ -104,6 +106,7 @@ public class ItemsHerobrine extends Items {
 
         meta.setDisplayName(LIGHT_PURPLE + "Herobrine Power Axe");
         meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrinePowerAxe = item;
@@ -114,6 +117,7 @@ public class ItemsHerobrine extends Items {
 
         meta.setDisplayName(LIGHT_PURPLE + "Herobrine Power Bow");
         meta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrinePowerBow = item;

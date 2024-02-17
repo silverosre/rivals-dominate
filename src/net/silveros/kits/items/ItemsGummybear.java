@@ -45,6 +45,7 @@ public class ItemsGummybear extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(YELLOW + "Gummy Club");
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_GummyClub = item;

@@ -40,7 +40,6 @@ public class User {
     private static final int PRESET_NumbActive = 10 * 20;
     private static final int PRESET_Numb = 30 * 20;
     private static final int PRESET_ChaosZone = 30 * 20;
-    private static final int PRESET_ChaosZoneActive = 10 * 20;
     private static final int PRESET_StinkBomb = 30 * 20;
     private static final int PRESET_StinkBombActive = 10 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
@@ -68,7 +67,6 @@ public class User {
     public int cooldown_Numb = PRESET_Numb;
     public int cooldown_NumbActive = PRESET_NumbActive;
     public int cooldown_ChaosZone = PRESET_ChaosZone;
-    public int cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
     public int cooldown_StinkBomb = PRESET_StinkBomb;
     public int cooldown_StinkBombActive = PRESET_StinkBombActive;
     //herobrine
@@ -86,12 +84,9 @@ public class User {
     public int timeUntil_BearAbilities = 40;
 
     //Misc
+    public boolean usedSwift = false;
     public boolean bearAbility = false;
-    private float radius = 2f;
-    private float angle = 0f;
     public double numbDamage = 0;
-    public double dealtDamage = 0;
-    public int chaosDamage = 20;
 
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
@@ -153,7 +148,7 @@ public class User {
             }
 
             //Chaos Zone Ability
-            if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
+            /*if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
                 Location l = e.getLocation();
                 double x = (radius * Math.sin(angle));
                 double z = (radius * Math.cos(angle));
@@ -161,12 +156,6 @@ public class User {
 
                 world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
                 world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0,0,0, new Particle.DustOptions(Color.AQUA, 5));
-                if (cooldown_ChaosZoneActive > 0) {
-                    cooldown_ChaosZoneActive--;
-                } else {
-                    e.remove();
-                    cooldown_ChaosZoneActive = PRESET_ChaosZoneActive;
-                }
                 if (e.getNearbyEntities(2, 1, 2).contains(player)) {
                     if(RivalsCore.matchingTeams(this.getTeam(), e, player)){
                         player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 3, true, true));
@@ -183,7 +172,7 @@ public class User {
                         }
                     }
                 }
-            }
+            }*/
 
             //Stink Bomb ability
             if (e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
@@ -381,7 +370,7 @@ public class User {
         }
 
         if (this.currentKit == Kit.HAMOOD.kitID) {
-            if (!inv.contains(ItemRegistry.ABILITY_Swift)) {
+            if (!inv.contains(ItemRegistry.ABILITY_Swift) && this.usedSwift) {
                 if (this.timeUntil_Swift > 0) {
                     this.timeUntil_Swift--;
                 } else {
