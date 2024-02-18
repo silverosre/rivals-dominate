@@ -76,13 +76,15 @@ public class User {
     public int cooldown_Zap = PRESET_Zap;
     public int cooldown_Fireball = PRESET_Fireball;
     public int cooldown_Freeze = PRESET_Freeze;
+    //goblin
+    public int cooldown_Steal = 20;
+    public int cooldown_Give = 40;
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 60 * 20;
+    public int timeUntil_Swift = 45 * 20;
     public int timeUntil_BearAbilities = 40;
 
     //Misc
-    public boolean usedSwift = false;
     public boolean bearAbility = false;
     public double numbDamage = 0;
 
@@ -313,11 +315,12 @@ public class User {
         }
 
         if (this.currentKit == Kit.HAMOOD.kitID) {
-            if (!inv.contains(ItemRegistry.ABILITY_Swift) && this.usedSwift) {
+            if (!inv.contains(ItemRegistry.ABILITY_Swift)) {
                 if (this.timeUntil_Swift > 0) {
                     this.timeUntil_Swift--;
                 } else {
                     inv.setItem(5, ItemRegistry.ABILITY_Swift);
+                    this.timeUntil_Swift = 45 * 20;
                 }
             }
 
@@ -501,6 +504,23 @@ public class User {
                     this.cooldown_FogCloakMin = PRESET_FogCloakMin;
                     this.fogCloakCheck = true;
                 }
+            }
+        }
+        if(this.currentKit == Kit.GOBLIN.kitID) {
+            if (this.cooldown_Steal > 0) {
+                this.cooldown_Steal--;
+            } else {
+                this.getInv().setItem(2, ItemRegistry.ABILITY_Steal);
+                this.cooldown_Steal = 20;
+            }
+            if (this.cooldown_Give > 0) {
+                this.cooldown_Give--;
+            } else {
+                this.getInv().setItem(3, ItemRegistry.ABILITY_Give);
+                this.cooldown_Give = 40;
+            }
+            if (inv.contains(ItemRegistry.SKULL_Goblin)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
             }
         }
     }

@@ -33,7 +33,7 @@ public class KitGoblin extends Kit implements Color {
     }
 
     @Override
-    public int getHealth(){return 8;}
+    public int getHealth(){return 10;}
 
     @Override
     public int getStartingEnergy() {
@@ -50,7 +50,7 @@ public class KitGoblin extends Kit implements Color {
                     if (otherUser.currentKit == Kit.GOBLIN.kitID) {
                         continue;
                     }
-
+                    inv.clear(2);
                     if (otherUser.getTotalEnergy() >= 1) {
                         otherUser.removeEnergy(1);
                         user.addEnergy(1);
@@ -76,11 +76,12 @@ public class KitGoblin extends Kit implements Color {
                 Player other = (Player)e;
                 User otherUser = Util.getUserFromId(other.getUniqueId());
 
+
                 if (RivalsCore.matchingTeams(user.getTeam(), other, player)) {
                     if (otherUser.currentKit == Kit.GOBLIN.kitID) {
                         continue;
                     }
-
+                    inv.clear(3);
                     otherUser.addEnergy(1);
 
                     world.playSound(local, Sound.ENTITY_WITCH_CELEBRATE, 0.75f, 1.75f);
