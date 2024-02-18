@@ -33,6 +33,9 @@ public class KitGoblin extends Kit implements Color {
     }
 
     @Override
+    public int getHealth(){return 8;}
+
+    @Override
     public int getStartingEnergy() {
         return 0;
     }

@@ -79,6 +79,7 @@ public class ItemsHamood extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(YELLOW + "Hamood Sword");
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HamoodSword = item;
@@ -90,6 +91,7 @@ public class ItemsHamood extends Items {
 
         meta.setDisplayName(LIGHT_PURPLE + "Dune Slicer");
         meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_DuneSlicer = item;

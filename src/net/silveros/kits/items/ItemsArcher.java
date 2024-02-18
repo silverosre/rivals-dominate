@@ -78,6 +78,7 @@ public class ItemsArcher extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(YELLOW + "Archer Bow");
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_ArcherBow = item;
@@ -88,6 +89,7 @@ public class ItemsArcher extends Items {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(YELLOW + "Wooden Knife");
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_WoodenKnife = item;
