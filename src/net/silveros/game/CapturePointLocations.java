@@ -8,6 +8,7 @@ import java.util.Map;
 public class CapturePointLocations {
     public static Map<Points, Vec3> TERRA_pointLocations = new HashMap<>();
     public static Map<Points, Vec3> SANDSTORM_pointLocations = new HashMap<>();
+    public static Map<Points, Vec3> RETRO_pointLocations = new HashMap<>();
 
     public static void init() {
         addLocation(RivalsMap.TERRA, Points.POINT_A, new Vec3(-19, 1, -251));
@@ -21,6 +22,12 @@ public class CapturePointLocations {
         addLocation(RivalsMap.SANDSTORM, Points.POINT_C, new Vec3(254, 1, -389));
         addLocation(RivalsMap.SANDSTORM, Points.POINT_D, new Vec3(214, 6, -488));
         addLocation(RivalsMap.SANDSTORM, Points.POINT_E, new Vec3(162, 12, -461));
+
+        addLocation(RivalsMap.RETRO, Points.POINT_A, new Vec3(546, 2, -80));
+        addLocation(RivalsMap.RETRO, Points.POINT_B, new Vec3(524, 16, -107));
+        addLocation(RivalsMap.RETRO, Points.POINT_C, new Vec3(576, 16, -45));
+        addLocation(RivalsMap.RETRO, Points.POINT_D, new Vec3(599, 2, -133));
+        addLocation(RivalsMap.RETRO, Points.POINT_E, new Vec3(523, 10, -33));
     }
 
     public static void addLocation(RivalsMap map, Points point, Vec3 vec) {
@@ -28,12 +35,16 @@ public class CapturePointLocations {
             TERRA_pointLocations.put(point, vec);
         } else if (map == RivalsMap.SANDSTORM) {
             SANDSTORM_pointLocations.put(point, vec);
+        } else if (map == RivalsMap.RETRO) {
+            RETRO_pointLocations.put(point, vec);
         }
     }
 
     public static Map<Points, Vec3> getPointLocations(RivalsMap map) {
         if (map == RivalsMap.SANDSTORM) {
             return SANDSTORM_pointLocations;
+        } else if (map == RivalsMap.RETRO) {
+            return RETRO_pointLocations;
         }
 
         return TERRA_pointLocations;

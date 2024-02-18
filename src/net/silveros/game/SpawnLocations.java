@@ -11,9 +11,15 @@ public class SpawnLocations {
     public static final Vec3 SANDSTORM_BLUE = new Vec3(156, 2, -376);
     public static final Vec3 SANDSTORM_SPECTATOR = new Vec3(207, 18, -438);
 
+    public static final Vec3 RETRO_RED = new Vec3(546, 11, -4);
+    public static final Vec3 RETRO_BLUE = new Vec3(546, 11, -156);
+    public static final Vec3 RETRO_SPECTATOR = new Vec3(546, 18, -80);
+
     public static Vec3 getBlueSpawn(RivalsMap map) {
         if (map == RivalsMap.SANDSTORM) {
             return SANDSTORM_BLUE;
+        } else if (map == RivalsMap.RETRO) {
+            return RETRO_BLUE;
         }
 
         return TERRA_BLUE;
@@ -22,6 +28,8 @@ public class SpawnLocations {
     public static Vec3 getRedSpawn(RivalsMap map) {
         if (map == RivalsMap.SANDSTORM) {
             return SANDSTORM_RED;
+        } else if (map == RivalsMap.RETRO) {
+            return RETRO_RED;
         }
 
         return TERRA_RED;
@@ -30,6 +38,8 @@ public class SpawnLocations {
     public static Vec3 getSpectatorSpawn(RivalsMap map) {
         if (map == RivalsMap.SANDSTORM) {
             return SANDSTORM_SPECTATOR;
+        } else if (map == RivalsMap.RETRO) {
+            return RETRO_SPECTATOR;
         }
 
         return TERRA_SPECTATOR;
