@@ -42,5 +42,7 @@ public abstract class Kit {
         inv.setItem(8, new ItemStack(Material.APPLE, this.foodCount));
     }
 
+    public abstract int getHealth();
+
     public abstract int getStartingEnergy();
 }

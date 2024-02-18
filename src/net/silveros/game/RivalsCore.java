@@ -69,6 +69,13 @@ public class RivalsCore implements Color {
     public static final int POINT_CAPTURE_LIMIT = 5 * 20;
     public static final int RESPAWN_TIME = 10 * 20;
 
+    //Misc
+    private static final float radius = 2f;
+    private static float angle = 0f;
+    public double randomPosition (double min, double max) {
+        return ((Math.random() * (max - min)) + min);
+    }
+
     public RivalsCore() {
         this.manager = Bukkit.getScoreboardManager();
         this.board  = this.manager.getNewScoreboard();
@@ -611,6 +618,67 @@ public class RivalsCore implements Color {
                             }
                         }
                     }
+                }
+            }
+
+            //Gummy Bear "Chaos Zone" Ability
+            if (e.getScoreboardTags().contains(RivalsTags.CHAOS_ZONE_ENTITY)) {
+                Location l = e.getLocation();
+                double x = (radius * Math.sin(angle));
+                double z = (radius * Math.cos(angle));
+                angle += 0.1;
+
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()+x, l.getBlockY(), l.getBlockZ()+z, 0, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.AQUA, 5));
+                world.spawnParticle(Particle.REDSTONE, l.getBlockX()-x, l.getBlockY(), l.getBlockZ()-z, 0, 0.001, 0,0,0, new Particle.DustOptions(org.bukkit.Color.AQUA, 5));
+                for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+
+                        if(player.getGameMode() != GameMode.SPECTATOR) {
+                            if (!matchingTeams(user.getTeam(), e, player)) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, true, true));
+                            }
+                            if (matchingTeams(user.getTeam(), e, player)) {
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 1, true, true));
+                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 2, true, true));
+                            }
+                        }
+                    }
+                }
+                if (e.getTicksLived() > 200) {
+                    e.remove();
+                }
+            }
+            //Gummy Bear "Stink Bomb" ability
+            if (e.getScoreboardTags().contains(RivalsTags.STINK_BOMB_ENTITY)) {
+                Location l = e.getLocation();
+                double x = l.getBlockX()+this.randomPosition(-2, 2);
+                double y = l.getBlockY()+this.randomPosition(-1, 3);
+                double z = l.getBlockZ()+this.randomPosition(-2, 2);
+                double dX = this.randomPosition(-0.7, 0.7);
+                double dY = this.randomPosition(-0.7, 0.7);
+                double dZ = this.randomPosition(-0.7, 0.7);
+                double dA = this.randomPosition(-0.4, 0.4);
+                world.spawnParticle(Particle.REDSTONE, x, y, z, 10, dX, dY, dZ, dA, new Particle.DustOptions(org.bukkit.Color.YELLOW, 20));
+                for (Entity entity : e.getNearbyEntities(3, 2, 3)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            if(matchingTeams(user.getTeam(), e, player)) {
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 0, true, true));
+                            }
+                            if(!matchingTeams(user.getTeam(), e, player)) {
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 1, true, true));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 5, true, true));
+                            }
+                        }
+                    }
+                }
+                if (e.getTicksLived() > 200) {
+                    e.remove();
                 }
             }
 

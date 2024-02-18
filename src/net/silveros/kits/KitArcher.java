@@ -40,6 +40,9 @@ public class KitArcher extends Kit {
     }
 
     @Override
+    public int getHealth() {return 16;}
+
+    @Override
     public int getStartingEnergy() {
         return 3;
     }

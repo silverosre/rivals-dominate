@@ -32,6 +32,9 @@ public class KitHerobrine extends Kit {
     }
 
     @Override
+    public int getHealth() {return 20;}
+
+    @Override
     public int getStartingEnergy() {
         return 3;
     }

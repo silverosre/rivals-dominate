@@ -32,6 +32,9 @@ public class KitWizard extends Kit {
     }
 
     @Override
+    public int getHealth() {return 16;}
+
+    @Override
     public int getStartingEnergy() {
         return 8;
     }

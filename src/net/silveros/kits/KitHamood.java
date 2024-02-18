@@ -35,6 +35,9 @@ public class KitHamood extends Kit {
     }
 
     @Override
+    public int getHealth() {return 18;}
+
+    @Override
     public int getStartingEnergy() {
         return 2;
     }
@@ -43,6 +46,7 @@ public class KitHamood extends Kit {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
         inv.clear(5);
+        user.usedSwift = true;
     }
 
     public static void activateDuneSlicer(World world, Location local, Player player, PlayerInventory inv, User user) {
