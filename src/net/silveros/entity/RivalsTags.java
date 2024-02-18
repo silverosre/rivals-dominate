@@ -34,5 +34,5 @@ public class RivalsTags {
     public static final String BLUE_SPAWN = "rivals.blue_spawn";
 
     public static final String MAP_TERRA = "rivals.map_terra";
-    public static final String MAP_ARID = "rivals.map_arid";
+    public static final String MAP_SANDSTORM = "rivals.map_arid";
 }

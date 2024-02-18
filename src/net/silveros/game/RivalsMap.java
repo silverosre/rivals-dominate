@@ -4,7 +4,7 @@ import net.silveros.entity.RivalsTags;
 
 public enum RivalsMap {
     TERRA(RivalsTags.MAP_TERRA, "Terra"),
-    ARID(RivalsTags.MAP_ARID, "Arid"),;
+    SANDSTORM(RivalsTags.MAP_SANDSTORM, "Sandstorm"),;
 
     public String mapTag, displayName;
 

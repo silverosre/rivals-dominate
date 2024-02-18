@@ -109,29 +109,25 @@ public class RivalsCore implements Color {
         World world = RivalsPlugin.getWorld();
 
         if (world != null) {
-            /*for (Points point : pointsMap.keySet()) {
-                Vec3 vec = pointsMap.get(point);
-                Location location = new Location(world, vec.posX, vec.posY, vec.posZ);
-                this.placeCapturePoint(world, location, point);
-            }*/
+            Map<Points, Vec3> points = CapturePointLocations.getPointLocations(this.currentMap);
 
-            Vec3 vecA = CapturePointLocations.TERRA_pointLocations.get(Points.POINT_A);
+            Vec3 vecA = points.get(Points.POINT_A);
             Location pointA = new Location(world, vecA.posX, vecA.posY, vecA.posZ);
             this.placeCapturePoint(world, pointA, Points.POINT_A);
 
-            Vec3 vecB = CapturePointLocations.TERRA_pointLocations.get(Points.POINT_B);
+            Vec3 vecB = points.get(Points.POINT_B);
             Location pointB = new Location(world, vecB.posX, vecB.posY, vecB.posZ);
             this.placeCapturePoint(world, pointB, Points.POINT_B);
 
-            Vec3 vecC = CapturePointLocations.TERRA_pointLocations.get(Points.POINT_C);
+            Vec3 vecC = points.get(Points.POINT_C);
             Location pointC = new Location(world, vecC.posX, vecC.posY, vecC.posZ);
             this.placeCapturePoint(world, pointC, Points.POINT_C);
 
-            Vec3 vecD = CapturePointLocations.TERRA_pointLocations.get(Points.POINT_D);
+            Vec3 vecD = points.get(Points.POINT_D);
             Location pointD = new Location(world, vecD.posX, vecD.posY, vecD.posZ);
             this.placeCapturePoint(world, pointD, Points.POINT_D);
 
-            Vec3 vecE = CapturePointLocations.TERRA_pointLocations.get(Points.POINT_E);
+            Vec3 vecE = points.get(Points.POINT_E);
             Location pointE = new Location(world, vecE.posX, vecE.posY, vecE.posZ);
             this.placeCapturePoint(world, pointE, Points.POINT_E);
 
@@ -153,10 +149,8 @@ public class RivalsCore implements Color {
     public void endDominateGame() {
         this.removeCapturePoints();
 
-        BossBar redBar = this.getTeamProgressBar(TEAM_RED);
-        BossBar blueBar = this.getTeamProgressBar(TEAM_BLUE);
-        redBar.setProgress(0);
-        blueBar.setProgress(0);
+        this.redPointsBar.setProgress(0);
+        this.bluePointsBar.setProgress(0);
         this.toggleDominateProgressBars(false);
 
         //TODO:

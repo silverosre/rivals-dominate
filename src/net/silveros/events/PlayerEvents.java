@@ -78,11 +78,8 @@ public class PlayerEvents implements Listener, Color {
 
     @EventHandler
     public static void onPlayerHit(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Firework) {
-            Firework fw = (Firework)event.getDamager();
-            if (fw.hasMetadata("nodamage")) {
-                event.setCancelled(true);
-            }
+        if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player) {
+            event.setCancelled(true);
         }
     }
 

@@ -125,7 +125,7 @@ public class User {
         if (this.isDead) {
             if (this.respawnTimer > 0) {
                 if (!this.getTeam(RivalsPlugin.core.TEAM_SPECTATOR) && player.getGameMode() == GameMode.SPECTATOR) {
-                    Vec3 spawn = SpawnLocations.TERRA_SPECTATOR;
+                    Vec3 spawn = SpawnLocations.getSpectatorSpawn(RivalsPlugin.core.currentMap);
                     player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
                 }
 
@@ -526,6 +526,7 @@ public class User {
                     inv.setItem(3, ItemRegistry.ABILITY_HerobrinePower);
                     this.cooldown_HerobrinePower = PRESET_HerobrinePower;
                 }
+
                 if (this.cooldown_HerobrinePowerActive > 0) {
                     this.cooldown_HerobrinePowerActive--;
                 } else {
@@ -667,7 +668,7 @@ public class User {
             this.setGameMode(GameMode.ADVENTURE);
             this.activateKit(false);
 
-            Vec3 spawn = this.getTeam(RivalsPlugin.core.TEAM_BLUE) ? SpawnLocations.TERRA_BLUE : SpawnLocations.TERRA_RED;
+            Vec3 spawn = this.getTeam(RivalsPlugin.core.TEAM_BLUE) ? SpawnLocations.getBlueSpawn(RivalsPlugin.core.currentMap) : SpawnLocations.getRedSpawn(RivalsPlugin.core.currentMap);
             player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
 
             this.isDead = false;
