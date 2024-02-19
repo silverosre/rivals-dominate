@@ -22,10 +22,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class RivalsCore implements Color {
     public ScoreboardManager manager;
@@ -44,6 +42,8 @@ public class RivalsCore implements Color {
 
     public static Gamemode gamemode = Gamemode.DOMINATE;
     public static boolean gameInProgress = false;
+
+    public static Set<Firework> fireworks;
 
     public static boolean[][] capturePointParticleBlocks = {
             {false, true, true, true, false},
@@ -83,6 +83,8 @@ public class RivalsCore implements Color {
         this.initTeams();
         this.addViablePointBlocks();
         CapturePointLocations.init();
+
+        fireworks = new HashSet<>();
 
         this.energyBlockCooldown = this.board.registerNewObjective(RivalsTags.ENERGY_BLOCK_COOLDOWN, Criteria.DUMMY, "EnergyBlockCooldown");
         this.restockBlockCooldown = this.board.registerNewObjective(RivalsTags.RESTOCK_BLOCK_COOLDOWN, Criteria.DUMMY, "RestockBlockCooldown");

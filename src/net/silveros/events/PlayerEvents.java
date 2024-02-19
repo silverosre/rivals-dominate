@@ -12,11 +12,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerEvents implements Listener, Color {
     @EventHandler
@@ -76,11 +79,30 @@ public class PlayerEvents implements Listener, Color {
         player.sendMessage("You will respawn in 10 seconds.");
     }
 
-    @EventHandler
-    public static void onPlayerHit(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Firework && event.getEntity() instanceof Player) {
-            event.setCancelled(true);
+    @EventHandler(ignoreCancelled = true)
+    public void onDamage(EntityDamageEvent event) {
+        for(Entity entity : event.getEntity().getNearbyEntities(5, 5, 5)) {
+            if (!(entity instanceof Firework)) {
+                continue;
+            }
+
+            if (RivalsCore.fireworks.contains(entity)) {
+                event.setCancelled(true);
+                return;
+            }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onExplosion(FireworkExplodeEvent event) {
+        final Firework firework = event.getEntity();
+        RivalsCore.fireworks.add(firework);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                RivalsCore.fireworks.remove(firework);
+            }
+        }.runTaskLater(Util.getPlugin(), 5);
     }
 
     //prevent offhand from being used during game
