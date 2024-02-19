@@ -67,7 +67,7 @@ public class ItemsHamood extends Items {
         meta.setLore(addLore(
                 WHITE + ITALIC + "Gain insane speed and improved",
                 WHITE + ITALIC + "swimming abilities for a short time.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                DARK_AQUA + "Costs " + cost + " energy: 45 second cooldown"
         ));
 
         item.setItemMeta(meta);
