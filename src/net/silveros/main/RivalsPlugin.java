@@ -27,7 +27,7 @@ public class RivalsPlugin extends JavaPlugin implements Color {
     @Override
     public void onEnable() {
         Util.initialize(this);
-        Util.print(GREEN + "Enabling test plugin...");
+        Util.print(GREEN + "Enabling plugin...");
 
         //item and kit initialization
         ItemRegistry.init();
@@ -71,7 +71,7 @@ public class RivalsPlugin extends JavaPlugin implements Color {
 
     @Override
     public void onDisable() {
-        Util.print(RED + "Disabling test plugin...");
+        Util.print(RED + "Disabling plugin...");
     }
 
     public static void addPlayer(Player player) {

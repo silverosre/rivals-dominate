@@ -85,10 +85,11 @@ public class ItemsArcher extends Items {
     }
 
     private static void generateArcherSword() {
-        ItemStack item = new ItemStack(Material.WOODEN_SWORD, 1);
+        ItemStack item = new ItemStack(Material.STICK, 1);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(YELLOW + "Wooden Knife");
+        meta.setDisplayName(YELLOW + "Small Dagger");
+        meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
         meta.setUnbreakable(true);
 
         item.setItemMeta(meta);

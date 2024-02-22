@@ -32,6 +32,8 @@ public class RivalsCore implements Color {
     public Team TEAM_RED, TEAM_BLUE, TEAM_SPECTATOR;
     public Objective energyBlockCooldown, restockBlockCooldown, scoreBlockCooldown;
 
+    public Objective displayBoard;
+
     public BossBar redPointsBar, bluePointsBar;
     public RivalsMap currentMap = RivalsMap.TERRA;
 
@@ -68,6 +70,7 @@ public class RivalsCore implements Color {
     public static final int SCORE_BLOCK_TIMER = 90 * 20;
     public static final int POINT_CAPTURE_LIMIT = 5 * 20;
     public static final int RESPAWN_TIME = 10 * 20;
+    private static final int MAX_ARROW_LIFE = 5 * 20;
 
     //Misc
     private static final float radius = 2f;
@@ -92,6 +95,10 @@ public class RivalsCore implements Color {
 
         this.capturePointScore = this.board.registerNewObjective(RivalsTags.CAPTURE_POINT_SCORE, Criteria.DUMMY, "CapturePointScore");
 
+        this.displayBoard = this.board.registerNewObjective(RivalsTags.DISPLAY_BOARD, Criteria.DUMMY, RED + BOLD + "RIVALS: " + RESET + BLUE + "Dominate");
+        this.displayBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.setupSideBar(false);
+
         this.redPointsBar = Bukkit.createBossBar(WHITE + "Red Team's Points", BarColor.RED, BarStyle.SOLID);
         this.bluePointsBar = Bukkit.createBossBar(WHITE + "Blue Team's Points", BarColor.BLUE, BarStyle.SOLID);
 
@@ -107,8 +114,12 @@ public class RivalsCore implements Color {
         this.redPointsBar.setProgress(0);
         this.bluePointsBar.setProgress(0);
 
+        this.setupSideBar(true);
+
         for (User user : RivalsPlugin.players) {
             this.addPlayerToBossbars(user.getPlayer());
+
+            user.getPlayer().setScoreboard(this.board);
         }
 
         gameInProgress = true;
@@ -155,25 +166,29 @@ public class RivalsCore implements Color {
         }
     }
 
-    public void endDominateGame() {
+    public void endDominateGame(Team team) {
         this.removeCapturePoints();
 
         this.redPointsBar.setProgress(0);
         this.bluePointsBar.setProgress(0);
         this.toggleDominateProgressBars(false);
 
-        //TODO:
-        //teleport all players back to lobby
-        //finish game
-
         World world = RivalsPlugin.getWorld();
         Location spawn = new Location(world, LOBBY_SPAWN.posX, LOBBY_SPAWN.posY, LOBBY_SPAWN.posZ);
 
+        Scoreboard newBoard = Bukkit.getScoreboardManager().getNewScoreboard();
         for (Player player : world.getPlayers()) {
             player.teleport(spawn);
+            player.setScoreboard(newBoard);// spigot jank
 
             User user = Util.getUserFromId(player.getUniqueId());
             user.resetKit();
+
+            player.playSound(player, Sound.ENTITY_WITHER_DEATH, 0.75f, 1);
+            player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR, 1.5f, 1);
+            player.sendTitle((team.equals(this.TEAM_BLUE) ? BLUE + "BLUE" : RED + "RED") + " won the game!", "", 5, 50, 5);
+
+            player.playSound(player, user.getTeam(team) ? Sound.BLOCK_BEACON_ACTIVATE : Sound.BLOCK_BEACON_DEACTIVATE, 1, 1);
         }
 
         gameInProgress = false;
@@ -221,7 +236,7 @@ public class RivalsCore implements Color {
         if (sum > 1) {
             sum = 1;
 
-            this.endDominateGame();
+            this.endDominateGame(team);
         }
 
         bar.setProgress(sum);
@@ -361,6 +376,8 @@ public class RivalsCore implements Color {
                 this.setBlocksForPoint(entity.getWorld(), entity.getLocation(), this.getPointState(point));
             }
         }
+
+        this.setupSideBar(true);
     }
 
     private void checkForDomination(World world, PointState state) {
@@ -385,9 +402,11 @@ public class RivalsCore implements Color {
 
         for (User user : teammates) {
             Player player = user.getPlayer();
-            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-            world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
-            user.addEnergy(1);
+            if (player != null) {
+                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+                world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                user.addEnergy(1);
+            }
         }
     }
 
@@ -475,7 +494,7 @@ public class RivalsCore implements Color {
                 if (sum > 1) {
                     sum = 1;
 
-                    this.endDominateGame();
+                    this.endDominateGame(this.TEAM_RED);
                 }
 
                 redBar.setProgress(sum);
@@ -496,7 +515,7 @@ public class RivalsCore implements Color {
                 if (sum > 1) {
                     sum = 1;
 
-                    this.endDominateGame();
+                    this.endDominateGame(this.TEAM_BLUE);
                 }
 
                 blueBar.setProgress(sum);
@@ -549,6 +568,46 @@ public class RivalsCore implements Color {
         }
 
         for (Marker e : world.getEntitiesByClass(Marker.class)) {
+            //Team setters
+            if (e.getScoreboardTags().contains(RivalsTags.SET_TEAM_RED)) {
+                for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            user.setTeam(this.TEAM_RED);
+                        }
+                    }
+                }
+            }
+
+            if (e.getScoreboardTags().contains(RivalsTags.SET_TEAM_BLUE)) {
+                for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            user.setTeam(this.TEAM_BLUE);
+                        }
+                    }
+                }
+            }
+
+            if (e.getScoreboardTags().contains(RivalsTags.SET_TEAM_SPECTATOR)) {
+                for (Entity entity : e.getNearbyEntities(2, 1, 2)) {
+                    if (entity instanceof Player) {
+                        Player player = (Player)entity;
+                        User user = Util.getUserFromId(player.getUniqueId());
+
+                        if (player.getGameMode() != GameMode.SPECTATOR) {
+                            user.setTeam(this.TEAM_SPECTATOR);
+                        }
+                    }
+                }
+            }
+
             //Capture points
             if (e.getScoreboardTags().contains(RivalsTags.CAPTURE_POINT)) {
                 List<Player> playersList = new ArrayList<>();
@@ -639,12 +698,12 @@ public class RivalsCore implements Color {
 
                         if(player.getGameMode() != GameMode.SPECTATOR) {
                             if (!matchingTeams(user.getTeam(), e, player)) {
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, true, true));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1, true, true));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5, 0, true, true));
                             }
                             if (matchingTeams(user.getTeam(), e, player)) {
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 1, true, true));
-                                    player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 2, true, true));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 1, true, true));
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5, 2, true, true));
                             }
                         }
                     }
@@ -725,6 +784,15 @@ public class RivalsCore implements Color {
             }
         }
 
+        //arrow decay
+        for (Arrow e : world.getEntitiesByClass(Arrow.class)) {
+            if (e.isInBlock()) {
+                if (e.getTicksLived() > MAX_ARROW_LIFE) {
+                    e.remove();
+                }
+            }
+        }
+
         for (Item e : world.getEntitiesByClass(Item.class)) {
             //Archer "From Above" ability
             if (e.getScoreboardTags().contains(RivalsTags.FLARE_ENTITY)) {
@@ -746,7 +814,11 @@ public class RivalsCore implements Color {
                             arrow.setPierceLevel(4);
                             arrow.setShotFromCrossbow(true);
                             arrow.setDamage(8);
-                            arrow.setShooter(user.getPlayer());
+                            arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+
+                            if (user != null) {
+                                arrow.setShooter(user.getPlayer());
+                            }
                         }
 
                         e.remove();
@@ -805,7 +877,8 @@ public class RivalsCore implements Color {
         }
 
         for (ArmorStand e : world.getEntitiesByClass(ArmorStand.class)) {
-            if (e.getScoreboardTags().contains("rivals.kit_stand")) {
+            //Kit selectors
+            if (e.getScoreboardTags().contains(RivalsTags.KIT_STAND)) {
                 ItemStack helmet = e.getEquipment().getHelmet();
 
                 if (helmet != null) {
@@ -817,7 +890,7 @@ public class RivalsCore implements Color {
                     for (User user : RivalsPlugin.players) {
                         for (Kit kit : Kit.KIT_LIST.values()) {
                             if (kit.kitName.equalsIgnoreCase(meta.getDisplayName())) {
-                                if (user.currentKit == kit.kitID && ((isBlue && user.getTeam(TEAM_BLUE)) || (!isBlue && user.getTeam(TEAM_RED)))) {
+                                if (user.currentKit == kit.kitID && ((isBlue && user.getTeam(this.TEAM_BLUE)) || (!isBlue && user.getTeam(this.TEAM_RED)))) {
                                     kitInUse = true;
                                 }
                             }
@@ -890,5 +963,29 @@ public class RivalsCore implements Color {
         firework.addScoreboardTag(RivalsTags.FIREWORK_EFFECT);
 
         firework.detonate();
+    }
+
+    private void setupSideBar(boolean registered) {
+        if (registered) {
+            this.displayBoard.unregister();
+
+            this.displayBoard = this.board.registerNewObjective(RivalsTags.DISPLAY_BOARD, Criteria.DUMMY, RED + BOLD + "RIVALS: " + RESET + BLUE + "Dominate");
+            this.displayBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
+
+        Score s0 = this.displayBoard.getScore(GOLD + "Map" + DARK_AQUA + ": " + GREEN + this.currentMap.displayName);
+        s0.setScore(7);
+        Score s1 = this.displayBoard.getScore("");
+        s1.setScore(6);
+        Score s2 = this.displayBoard.getScore(GRAY + "[" + pointAState.color.toString() + "Point A" + GRAY + "]");
+        s2.setScore(5);
+        Score s3 = this.displayBoard.getScore(GRAY + "[" + pointBState.color.toString() + "Point B" + GRAY + "]");
+        s3.setScore(4);
+        Score s4 = this.displayBoard.getScore(GRAY + "[" + pointCState.color.toString() + "Point C" + GRAY + "]");
+        s4.setScore(3);
+        Score s5 = this.displayBoard.getScore(GRAY + "[" + pointDState.color.toString() + "Point D" + GRAY + "]");
+        s5.setScore(2);
+        Score s6 = this.displayBoard.getScore(GRAY + "[" + pointEState.color.toString() + "Point E" + GRAY + "]");
+        s6.setScore(1);
     }
 }

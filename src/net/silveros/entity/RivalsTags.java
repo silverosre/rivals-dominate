@@ -30,8 +30,12 @@ public class RivalsTags {
     public static final String POINT_C = "rivals.point_c";
     public static final String POINT_D = "rivals.point_d";
     public static final String POINT_E = "rivals.point_e";
-    public static final String RED_SPAWN = "rivals.red_spawn";
-    public static final String BLUE_SPAWN = "rivals.blue_spawn";
+    public static final String DISPLAY_BOARD = "rivals.display_board";
+
+    public static final String KIT_STAND = "rivals.kit_stand";
+    public static final String SET_TEAM_RED = "rivals.set_team_red";
+    public static final String SET_TEAM_BLUE = "rivals.set_team_blue";
+    public static final String SET_TEAM_SPECTATOR = "rivals.set_team_spectator";
 
     public static final String MAP_TERRA = "rivals.map_terra";
     public static final String MAP_SANDSTORM = "rivals.map_sandstorm";

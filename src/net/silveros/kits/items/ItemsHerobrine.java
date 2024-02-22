@@ -63,6 +63,7 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_FogCloak = item;
     }
+
     private static void generateUncloak(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.UNCLOAK);
         ItemMeta meta = item.getItemMeta();
@@ -100,6 +101,7 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrineBow = item;
     }
+
     private static void generateHerobrinePowerAxe() {
         ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta meta = item.getItemMeta();
@@ -111,7 +113,8 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrinePowerAxe = item;
     }
-    private static void generateHerobrinePowerBow(){
+
+    private static void generateHerobrinePowerBow() {
         ItemStack item = new ItemStack(Material.BOW, 1);
         ItemMeta meta = item.getItemMeta();
 
@@ -122,7 +125,8 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrinePowerBow = item;
     }
-    private static void generateHerobrineChestplate(){
+
+    private static void generateHerobrineChestplate() {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
 
@@ -132,16 +136,18 @@ public class ItemsHerobrine extends Items {
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HerobrineChestplate = item;
     }
-    private static void generateHerobrineLeggings(){
+
+    private static void generateHerobrineLeggings() {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
 
-        meta.setColor(Color.TEAL);
+        meta.setColor(Color.fromRGB(6437809));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HerobrineLeggings = item;
     }
+
     private static void generateHerobrineBoots() {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();

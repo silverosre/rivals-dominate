@@ -24,8 +24,8 @@ public class KitArcher extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_WoodenKnife);
         inv.setItem(1, ItemRegistry.WEAPON_ArcherBow);
@@ -40,7 +40,9 @@ public class KitArcher extends Kit {
     }
 
     @Override
-    public int getHealth() {return 16;}
+    public int getHealth() {
+        return 16;
+    }
 
     @Override
     public int getStartingEnergy() {

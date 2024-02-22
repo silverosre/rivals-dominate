@@ -27,7 +27,7 @@ public class Util {
     }
 
     public static void print(String s) {
-        server().getConsoleSender().sendMessage(s);
+        server().getConsoleSender().sendMessage("[Rivals Plugin] " + s);
     }
 
     public static void registerEvent(Listener eventListener) {

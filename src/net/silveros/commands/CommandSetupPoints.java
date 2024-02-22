@@ -26,9 +26,11 @@ public class CommandSetupPoints implements CommandExecutor, Color {
             if (args.length >= 1) {
                 String s = args[0];
 
+                RivalsCore core = RivalsPlugin.core;
+
                 if (s.equals("reset")) {
                     if (RivalsCore.gameInProgress) {
-                        RivalsPlugin.core.endDominateGame();
+                        core.endDominateGame(core.TEAM_RED);
 
                         sender.sendMessage("Reset and removed all current capture points.");
                         return true;
@@ -47,11 +49,11 @@ public class CommandSetupPoints implements CommandExecutor, Color {
 
                     if (selectedMap != null) {
                         if (!RivalsCore.gameInProgress) {
-                            RivalsPlugin.core.startDominateGame(selectedMap);
+                            core.startDominateGame(selectedMap);
 
                             sender.sendMessage("Set up 5 new capture points.");
 
-                            Map<Points, Vec3> points = CapturePointLocations.getPointLocations(RivalsPlugin.core.currentMap);
+                            Map<Points, Vec3> points = CapturePointLocations.getPointLocations(core.currentMap);
                             sender.sendMessage("Point A: " + points.get(Points.POINT_A).toString());
                             sender.sendMessage("Point B: " + points.get(Points.POINT_B).toString());
                             sender.sendMessage("Point C: " + points.get(Points.POINT_C).toString());

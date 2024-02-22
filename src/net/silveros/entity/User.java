@@ -23,7 +23,6 @@ import java.util.UUID;
 
 public class User {
     public int team = 0;
-    public boolean fogCloakCheck = false;
 
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
@@ -42,12 +41,15 @@ public class User {
     private static final int PRESET_ChaosZone = 30 * 20;
     private static final int PRESET_StinkBomb = 30 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
+    private static final int PRESET_Uncloak = 2 * 20;
     private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
     private static final int PRESET_Zap = 5 * 20;
     private static final int PRESET_Fireball = 5 * 20;
     private static final int PRESET_Freeze = 20 * 20;
+    private static final int PRESET_Steal = 1 * 20;
+    private static final int PRESET_Give = 2 * 20;
 
     //Ability cooldowns
 
@@ -69,6 +71,7 @@ public class User {
     public int cooldown_StinkBomb = PRESET_StinkBomb;
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
+    public int cooldown_Uncloak = PRESET_Uncloak;
     public int cooldown_FogCloakMin = PRESET_FogCloakMin;
     public int cooldown_HerobrinePower = PRESET_HerobrinePower;
     public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
@@ -77,8 +80,8 @@ public class User {
     public int cooldown_Fireball = PRESET_Fireball;
     public int cooldown_Freeze = PRESET_Freeze;
     //goblin
-    public int cooldown_Steal = 20;
-    public int cooldown_Give = 40;
+    public int cooldown_Steal = PRESET_Steal;
+    public int cooldown_Give = PRESET_Give;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 45 * 20;
@@ -87,6 +90,7 @@ public class User {
     //Misc
     public boolean bearAbility = false;
     public double numbDamage = 0;
+    private boolean usingFogCloak = false;
 
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
@@ -471,7 +475,29 @@ public class User {
                 }
             }
 
-            if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
+            if (this.getFogCloak()) {
+                if (this.cooldown_Uncloak > 0) {
+                    this.cooldown_Uncloak--;
+                } else {
+                    inv.setItem(4, ItemRegistry.ABILITY_Uncloak);
+                    this.cooldown_Uncloak = PRESET_Uncloak;
+                }
+            } else {
+                if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
+                    inv.clear(4);
+                }
+
+                if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
+                    if (this.cooldown_FogCloak > 0) {
+                        this.cooldown_FogCloak--;
+                    } else {
+                        inv.setItem(4, ItemRegistry.ABILITY_FogCloak);
+                        this.cooldown_FogCloak = PRESET_FogCloak;
+                    }
+                }
+            }
+
+            /*if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
                 if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     if (this.cooldown_FogCloak > 0) {
                         this.cooldown_FogCloak--;
@@ -504,23 +530,22 @@ public class User {
                     this.cooldown_FogCloakMin = PRESET_FogCloakMin;
                     this.fogCloakCheck = true;
                 }
-            }
+            }*/
         }
-        if(this.currentKit == Kit.GOBLIN.kitID) {
+
+        if (this.currentKit == Kit.GOBLIN.kitID) {
             if (this.cooldown_Steal > 0) {
                 this.cooldown_Steal--;
             } else {
                 this.getInv().setItem(2, ItemRegistry.ABILITY_Steal);
-                this.cooldown_Steal = 20;
+                this.cooldown_Steal = PRESET_Steal;
             }
+
             if (this.cooldown_Give > 0) {
                 this.cooldown_Give--;
             } else {
                 this.getInv().setItem(3, ItemRegistry.ABILITY_Give);
-                this.cooldown_Give = 40;
-            }
-            if (inv.contains(ItemRegistry.SKULL_Goblin)) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
+                this.cooldown_Give = PRESET_Give;
             }
         }
     }
@@ -573,13 +598,18 @@ public class User {
         this.currentKit = -1;
         this.getInv().clear();
         this.setTotalEnergy(0);
+
+        Player player = this.getPlayer();
+        player.resetMaxHealth();
+        player.setHealth(20);
     }
 
     public void activateKit(boolean keepEnergy) {
         if (this.currentKit != -1) {
+            Player player = this.getPlayer();
+
             Kit kit = Kit.KIT_LIST.get(this.currentKit);
-            kit.activateKit(this.getInv());
-            this.getPlayer().setMaxHealth(kit.getHealth());
+            kit.activateKit(player, this.getInv());
 
             if (keepEnergy) {
                 if (this.getTotalEnergy() < kit.getStartingEnergy()) {
@@ -654,5 +684,17 @@ public class User {
     /**Can return null!*/
     public PlayerInventory getInv() {
         return this.getPlayer().getInventory();
+    }
+
+    public boolean getFogCloak() {
+        if (this.currentKit == Kit.HEROBRINE.kitID) {
+            return this.usingFogCloak;
+        }
+
+        return false;
+    }
+
+    public void setFogCloakState(boolean state) {
+        this.usingFogCloak = state;
     }
 }

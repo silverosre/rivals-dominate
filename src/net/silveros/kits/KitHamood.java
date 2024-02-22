@@ -21,8 +21,8 @@ public class KitHamood extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_HamoodSword);
         inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);
@@ -35,7 +35,9 @@ public class KitHamood extends Kit {
     }
 
     @Override
-    public int getHealth() {return 18;}
+    public int getHealth() {
+        return 18;
+    }
 
     @Override
     public int getStartingEnergy() {

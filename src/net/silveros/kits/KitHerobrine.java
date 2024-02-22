@@ -16,8 +16,8 @@ public class KitHerobrine extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
         inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
@@ -32,7 +32,9 @@ public class KitHerobrine extends Kit {
     }
 
     @Override
-    public int getHealth() {return 20;}
+    public int getHealth() {
+        return 20;
+    }
 
     @Override
     public int getStartingEnergy() {
@@ -64,8 +66,10 @@ public class KitHerobrine extends Kit {
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, PotionEffect.INFINITE_DURATION, 0, false, false));
 
-        player.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local, 20, 0, 0, 0, 0);
+        world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local.add(0, 0.25, 0), 40, 0.25, 1, 0.25, 0.1);
         world.playSound(local, Sound.AMBIENT_CAVE, 1, 1);
+
+        user.setFogCloakState(true);
     }
 
     public static void activateUncloak(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -73,7 +77,7 @@ public class KitHerobrine extends Kit {
             player.removePotionEffect(e.getType());
         }
 
-        player.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0, 0, 0, 0);
+        world.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0.25, 1, 0.25, 0);
         world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
     }
 }

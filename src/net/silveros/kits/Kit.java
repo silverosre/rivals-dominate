@@ -1,8 +1,10 @@
 package net.silveros.kits;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,14 @@ public abstract class Kit {
         this.kitName = name;
     }
 
-    public void activateKit(PlayerInventory inv) {
+    public void activateKit(Player player, PlayerInventory inv) {
+        player.setMaxHealth(this.getHealth());
+        player.setHealth(this.getHealth());
+
+        for (PotionEffect e : player.getActivePotionEffects()) {
+            player.removePotionEffect(e.getType());
+        }
+
         inv.clear();
         inv.setItem(8, new ItemStack(Material.APPLE, this.foodCount));
     }

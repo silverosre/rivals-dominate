@@ -16,8 +16,8 @@ public class KitBunket extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItemInOffHand(ItemRegistry.WEAPON_BunketShield);
         inv.setItem(3, ItemRegistry.ABILITY_EmergencyRepairs);
@@ -27,10 +27,15 @@ public class KitBunket extends Kit {
         inv.setLeggings(ItemRegistry.ARMOR_BunketLeggings);
         inv.setBoots(ItemRegistry.ARMOR_BunketBoots);
         inv.setHelmet(ItemRegistry.SKULL_Bunket);
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 1, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 0, false, false));
     }
 
     @Override
-    public int getHealth(){return 26;}
+    public int getHealth() {
+        return 30;
+    }
 
     @Override
     public int getStartingEnergy() {

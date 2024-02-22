@@ -25,8 +25,8 @@ public class KitGummyBear extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_GummyClub);
         inv.setItem(3, ItemRegistry.ABILITY_DefenseBear);
@@ -51,6 +51,7 @@ public class KitGummyBear extends Kit {
         player.playSound(local, Sound.BLOCK_BEACON_DEACTIVATE, 1, 1);
         user.bearAbility = true;
     }
+
     public static void activateDefenseBear(World world, Location local, Player player, PlayerInventory inv, User user){
         inv.clear(3);
         inv.clear(4);
@@ -68,6 +69,7 @@ public class KitGummyBear extends Kit {
         player.playSound(local, Sound.BLOCK_SUSPICIOUS_SAND_BREAK, 1, 1);
         user.bearAbility = true;
     }
+
     public static void activateChaosZone(World world, Location local, Player player, PlayerInventory inv, User user){
         double x = local.getBlockX();
         double y = local.getBlockY();
@@ -131,7 +133,9 @@ public class KitGummyBear extends Kit {
     }
 
     @Override
-    public int getHealth(){return 18;}
+    public int getHealth() {
+        return 18;
+    }
 
     @Override
     public int getStartingEnergy() {

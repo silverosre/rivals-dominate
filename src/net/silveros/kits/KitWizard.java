@@ -17,8 +17,8 @@ public class KitWizard extends Kit {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_WizardStaff);
         inv.setItem(2, ItemRegistry.ABILITY_Zap);
@@ -32,7 +32,9 @@ public class KitWizard extends Kit {
     }
 
     @Override
-    public int getHealth() {return 16;}
+    public int getHealth() {
+        return 16;
+    }
 
     @Override
     public int getStartingEnergy() {

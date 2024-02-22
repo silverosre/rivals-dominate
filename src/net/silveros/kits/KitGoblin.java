@@ -19,21 +19,25 @@ public class KitGoblin extends Kit implements Color {
     }
 
     @Override
-    public void activateKit(PlayerInventory inv) {
-        super.activateKit(inv);
+    public void activateKit(Player player, PlayerInventory inv) {
+        super.activateKit(player, inv);
 
-        inv.setItem(2, ItemRegistry.ABILITY_Steal);
-        inv.setItem(3, ItemRegistry.ABILITY_Give);
-        inv.setItem(4, ItemRegistry.ABILITY_Swarm);
+        inv.setItem(3, ItemRegistry.ABILITY_Steal);
+        inv.setItem(4, ItemRegistry.ABILITY_Give);
+        inv.setItem(5, ItemRegistry.ABILITY_Swarm);
 
         inv.setChestplate(ItemRegistry.ARMOR_GoblinChestplate);
         inv.setLeggings(ItemRegistry.ARMOR_GoblinLeggings);
         inv.setBoots(ItemRegistry.ARMOR_GoblinBoots);
         inv.setHelmet(ItemRegistry.SKULL_Goblin);
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
     }
 
     @Override
-    public int getHealth(){return 10;}
+    public int getHealth() {
+        return 10;
+    }
 
     @Override
     public int getStartingEnergy() {
@@ -56,7 +60,6 @@ public class KitGoblin extends Kit implements Color {
                         user.addEnergy(1);
 
                         world.playSound(local, Sound.ENTITY_WITCH_CELEBRATE, 0.75f, 1.75f);
-                        world.playSound(local, Sound.ENTITY_WITHER_SPAWN, 0.75f, 1);
 
                         world.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
                         world.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
@@ -85,7 +88,6 @@ public class KitGoblin extends Kit implements Color {
                     otherUser.addEnergy(1);
 
                     world.playSound(local, Sound.ENTITY_WITCH_CELEBRATE, 0.75f, 1.75f);
-                    world.playSound(local, Sound.ENTITY_WITHER_SPAWN, 0.75f, 1);
 
                     world.playSound(other, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
                     world.playSound(other, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
