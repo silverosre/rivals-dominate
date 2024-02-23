@@ -5,11 +5,17 @@ import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import java.util.UUID;
 
 public class ItemsHerobrine extends Items {
     @Override
@@ -86,6 +92,11 @@ public class ItemsHerobrine extends Items {
         //meta.setLore(addLore(GRAY + ITALIC + "The memories call out to you..."));
         meta.setUnbreakable(true);
 
+        AttributeModifier atkdmg = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, atkdmg);
+        AttributeModifier atkspd = new AttributeModifier(UUID.randomUUID(), "generic.attack_speed", -0.7, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, atkspd);
+
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrineAxe = item;
     }
@@ -110,6 +121,11 @@ public class ItemsHerobrine extends Items {
         meta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
         meta.setUnbreakable(true);
 
+        AttributeModifier atkdmg = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage", 5.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, atkdmg);
+        AttributeModifier atkspd = new AttributeModifier(UUID.randomUUID(), "generic.attack_speed", -0.5, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HAND);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, atkspd);
+
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_HerobrinePowerAxe = item;
     }
@@ -132,6 +148,15 @@ public class ItemsHerobrine extends Items {
 
         meta.setColor(Color.AQUA);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "generic.armor", 7.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HerobrineChestplate = item;
@@ -143,6 +168,12 @@ public class ItemsHerobrine extends Items {
 
         meta.setColor(Color.fromRGB(6437809));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HerobrineLeggings = item;
@@ -154,6 +185,12 @@ public class ItemsHerobrine extends Items {
 
         meta.setColor(Color.GRAY);
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        meta.setUnbreakable(true);
+
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        //meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_HerobrineBoots = item;

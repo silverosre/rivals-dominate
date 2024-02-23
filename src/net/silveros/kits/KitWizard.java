@@ -11,6 +11,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class KitWizard extends Kit {
+    public static final byte SLOT_ZAP = 2;
+    public static final byte SLOT_FIREBALL = 3;
+    public static final byte SLOT_FREEZE = 4;
+
     public KitWizard(int id, String name) {
         super(id, name);
         this.foodCount = 5;
@@ -21,9 +25,9 @@ public class KitWizard extends Kit {
         super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_WizardStaff);
-        inv.setItem(2, ItemRegistry.ABILITY_Zap);
-        inv.setItem(3, ItemRegistry.ABILITY_Fireball);
-        inv.setItem(4, ItemRegistry.ABILITY_Freeze);
+        inv.setItem(SLOT_ZAP, ItemRegistry.ABILITY_Zap);
+        inv.setItem(SLOT_FIREBALL, ItemRegistry.ABILITY_Fireball);
+        inv.setItem(SLOT_FREEZE, ItemRegistry.ABILITY_Freeze);
 
         inv.setHelmet(ItemRegistry.SKULL_Wizard);
         inv.setChestplate(ItemRegistry.ARMOR_WizardChestplate);
@@ -50,7 +54,7 @@ public class KitWizard extends Kit {
         RivalsCore.addEntryToTeam(user.getTeam(), zap);
 
         world.playSound(local, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
-        inv.clear(2);
+        inv.clear(SLOT_ZAP);
     }
 
     public static void activateFireball(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -61,7 +65,7 @@ public class KitWizard extends Kit {
         fireball.setVelocity(local.getDirection().multiply(0.25));
 
         world.playSound(local, Sound.ENTITY_BLAZE_SHOOT, 0.75f, 1);
-        inv.clear(3);
+        inv.clear(SLOT_FIREBALL);
     }
 
     public static void activateFreeze(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -80,6 +84,6 @@ public class KitWizard extends Kit {
         world.spawnParticle(Particle.REDSTONE, local, 200, 1.25, 0, 1.25, new Particle.DustOptions(org.bukkit.Color.fromRGB(0xE1FFFF), 1));
 
         world.playSound(local, Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75f, 1);
-        inv.clear(4);
+        inv.clear(SLOT_FREEZE);
     }
 }

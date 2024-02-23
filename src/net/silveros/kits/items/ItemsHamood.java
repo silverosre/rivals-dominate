@@ -55,7 +55,7 @@ public class ItemsHamood extends Items {
         ));
 
         item.setItemMeta(meta);
-        ItemRegistry.ABILITY_DuneSlice = item;
+        ItemRegistry.ABILITY_DuneSlicer = item;
     }
 
     private static void generateSwift(int cost) {

@@ -1,10 +1,8 @@
 package net.silveros.entity;
 
-import net.silveros.game.Gamemode;
 import net.silveros.game.RivalsCore;
 import net.silveros.game.SpawnLocations;
-import net.silveros.kits.ItemRegistry;
-import net.silveros.kits.Kit;
+import net.silveros.kits.*;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Util;
 import net.silveros.utility.Vec3;
@@ -17,8 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -32,7 +28,7 @@ public class User {
     private static final int PRESET_Fletch = 2 * 20;
     private static final int PRESET_Snare = 2 * 20;
     private static final int PRESET_FromAbove = 55 * 20;
-    private static final int PRESET_DuneSlice = 30 * 20;
+    private static final int PRESET_DuneSlicer = 30 * 20;
     private static final int PRESET_DuneSlicerActive = 5 * 20;
     private static final int PRESET_PharaohsCurse = 10 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
@@ -60,7 +56,7 @@ public class User {
     public int cooldown_Snare = PRESET_Snare;
     public int cooldown_FromAbove = PRESET_FromAbove;
     //hamood
-    public int cooldown_DuneSlice = PRESET_DuneSlice;
+    public int cooldown_DuneSlicer = PRESET_DuneSlicer;
     public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
     public int cooldown_PharaohsCurse = PRESET_PharaohsCurse;
     //gummybear
@@ -268,7 +264,7 @@ public class User {
                 if (this.cooldown_Zap > 0) {
                     this.cooldown_Zap--;
                 } else {
-                    inv.setItem(2, ItemRegistry.ABILITY_Zap);
+                    inv.setItem(KitWizard.SLOT_ZAP, ItemRegistry.ABILITY_Zap);
                     this.cooldown_Zap = PRESET_Zap;
                 }
             }
@@ -277,7 +273,7 @@ public class User {
                 if (this.cooldown_Fireball > 0) {
                     this.cooldown_Fireball--;
                 } else {
-                    inv.setItem(3, ItemRegistry.ABILITY_Fireball);
+                    inv.setItem(KitWizard.SLOT_FIREBALL, ItemRegistry.ABILITY_Fireball);
                     this.cooldown_Fireball = PRESET_Fireball;
                 }
             }
@@ -286,7 +282,7 @@ public class User {
                 if (this.cooldown_Freeze > 0) {
                     this.cooldown_Freeze--;
                 } else {
-                    inv.setItem(4, ItemRegistry.ABILITY_Freeze);
+                    inv.setItem(KitWizard.SLOT_FREEZE, ItemRegistry.ABILITY_Freeze);
                     this.cooldown_Freeze = PRESET_Freeze;
                 }
             }
@@ -297,7 +293,7 @@ public class User {
                 if (this.cooldown_Fletch > 0) {
                     this.cooldown_Fletch--;
                 } else {
-                    inv.setItem(3, ItemRegistry.ABILITY_Fletch);
+                    inv.setItem(KitArcher.SLOT_FLETCH, ItemRegistry.ABILITY_Fletch);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_WORK_FLETCHER, 10, 1);
                     this.cooldown_Fletch = PRESET_Fletch;
                 }
@@ -305,14 +301,14 @@ public class User {
                 if (this.cooldown_Snare > 0) {
                     this.cooldown_Snare--;
                 } else {
-                    inv.setItem(4, ItemRegistry.ABILITY_Snare);
+                    inv.setItem(KitArcher.SLOT_SNARE, ItemRegistry.ABILITY_Snare);
                     this.cooldown_Snare = PRESET_Snare;
                 }
             } else if (!inv.contains(ItemRegistry.ABILITY_FromAbove)) {
                 if (this.cooldown_FromAbove > 0) {
                     this.cooldown_FromAbove--;
                 } else {
-                    inv.setItem(5, ItemRegistry.ABILITY_FromAbove);
+                    inv.setItem(KitArcher.SLOT_FROM_ABOVE, ItemRegistry.ABILITY_FromAbove);
                     this.cooldown_FromAbove = PRESET_FromAbove;
                 }
             }
@@ -323,17 +319,17 @@ public class User {
                 if (this.timeUntil_Swift > 0) {
                     this.timeUntil_Swift--;
                 } else {
-                    inv.setItem(5, ItemRegistry.ABILITY_Swift);
+                    inv.setItem(KitHamood.SLOT_SWIFT, ItemRegistry.ABILITY_Swift);
                     this.timeUntil_Swift = 45 * 20;
                 }
             }
 
-            if (!inv.contains(ItemRegistry.ABILITY_DuneSlice)) {
-                if (this.cooldown_DuneSlice > 0) {
-                    this.cooldown_DuneSlice--;
+            if (!inv.contains(ItemRegistry.ABILITY_DuneSlicer)) {
+                if (this.cooldown_DuneSlicer > 0) {
+                    this.cooldown_DuneSlicer--;
                 } else {
-                    inv.setItem(4, ItemRegistry.ABILITY_DuneSlice);
-                    this.cooldown_DuneSlice = PRESET_DuneSlice;
+                    inv.setItem(KitHamood.SLOT_DUNE_SLICER, ItemRegistry.ABILITY_DuneSlicer);
+                    this.cooldown_DuneSlicer = PRESET_DuneSlicer;
                 }
 
                 if (this.cooldown_DuneSlicerActive > 0) {
@@ -348,7 +344,7 @@ public class User {
                 if (this.cooldown_PharaohsCurse > 0) {
                     this.cooldown_PharaohsCurse--;
                 } else {
-                    inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);
+                    inv.setItem(KitHamood.SLOT_PHARAOHS_CURSE, ItemRegistry.ABILITY_PharaohsCurse);
                     this.cooldown_PharaohsCurse = PRESET_PharaohsCurse;
                 }
             }
@@ -462,7 +458,7 @@ public class User {
                 if (this.cooldown_HerobrinePower > 0) {
                     this.cooldown_HerobrinePower--;
                 } else {
-                    inv.setItem(3, ItemRegistry.ABILITY_HerobrinePower);
+                    inv.setItem(KitHerobrine.SLOT_HEROBRINE_POWER, ItemRegistry.ABILITY_HerobrinePower);
                     this.cooldown_HerobrinePower = PRESET_HerobrinePower;
                 }
 
@@ -479,19 +475,19 @@ public class User {
                 if (this.cooldown_Uncloak > 0) {
                     this.cooldown_Uncloak--;
                 } else {
-                    inv.setItem(4, ItemRegistry.ABILITY_Uncloak);
+                    inv.setItem(KitHerobrine.SLOT_FOG_CLOAK, ItemRegistry.ABILITY_Uncloak);
                     this.cooldown_Uncloak = PRESET_Uncloak;
                 }
             } else {
                 if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
-                    inv.clear(4);
+                    inv.clear(KitHerobrine.SLOT_FOG_CLOAK);
                 }
 
                 if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
                     if (this.cooldown_FogCloak > 0) {
                         this.cooldown_FogCloak--;
                     } else {
-                        inv.setItem(4, ItemRegistry.ABILITY_FogCloak);
+                        inv.setItem(KitHerobrine.SLOT_FOG_CLOAK, ItemRegistry.ABILITY_FogCloak);
                         this.cooldown_FogCloak = PRESET_FogCloak;
                     }
                 }
@@ -537,14 +533,14 @@ public class User {
             if (this.cooldown_Steal > 0) {
                 this.cooldown_Steal--;
             } else {
-                this.getInv().setItem(2, ItemRegistry.ABILITY_Steal);
+                this.getInv().setItem(KitGoblin.SLOT_STEAL, ItemRegistry.ABILITY_Steal);
                 this.cooldown_Steal = PRESET_Steal;
             }
 
             if (this.cooldown_Give > 0) {
                 this.cooldown_Give--;
             } else {
-                this.getInv().setItem(3, ItemRegistry.ABILITY_Give);
+                this.getInv().setItem(KitGoblin.SLOT_GIVE, ItemRegistry.ABILITY_Give);
                 this.cooldown_Give = PRESET_Give;
             }
         }

@@ -5,11 +5,16 @@ import net.silveros.kits.ItemAbility;
 import net.silveros.kits.ItemRegistry;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import java.util.UUID;
 
 public class ItemsGoblin extends Items {
     @Override
@@ -79,6 +84,11 @@ public class ItemsGoblin extends Items {
         meta.setColor(Color.fromRGB(10338406));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.setUnbreakable(true);
+
+        AttributeModifier mvespd = new AttributeModifier(UUID.randomUUID(), "generic.movement_speed", 0.8, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.CHEST);
+        meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, mvespd);
+        AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "generic.armor", 3.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
 
         meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

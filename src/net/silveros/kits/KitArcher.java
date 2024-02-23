@@ -17,7 +17,11 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
 public class KitArcher extends Kit {
+    private static final int ARROWS_FLETCHED = 2;
     public static final int FROMABOVE_ARROWS = 12;
+    public static final byte SLOT_FLETCH = 3;
+    public static final byte SLOT_SNARE = 4;
+    public static final byte SLOT_FROM_ABOVE = 5;
 
     public KitArcher(int id, String name) {
         super(id, name);
@@ -29,9 +33,9 @@ public class KitArcher extends Kit {
 
         inv.setItem(0, ItemRegistry.WEAPON_WoodenKnife);
         inv.setItem(1, ItemRegistry.WEAPON_ArcherBow);
-        inv.setItem(3, ItemRegistry.ABILITY_Fletch);
-        inv.setItem(4, ItemRegistry.ABILITY_Snare);
-        inv.setItem(5, ItemRegistry.ABILITY_FromAbove);
+        inv.setItem(SLOT_FLETCH, ItemRegistry.ABILITY_Fletch);
+        inv.setItem(SLOT_SNARE, ItemRegistry.ABILITY_Snare);
+        inv.setItem(SLOT_FROM_ABOVE, ItemRegistry.ABILITY_FromAbove);
         inv.setItem(7, ItemRegistry.WEAPON_ArcherArrows);
 
         inv.setHelmet(ItemRegistry.SKULL_Archer);
@@ -51,14 +55,13 @@ public class KitArcher extends Kit {
 
     public static void activateFletch(World world, Location local, Player player, PlayerInventory inv, User user) {
         if (player.getInventory().contains(Material.ARROW)) {
-            inv.addItem(new ItemStack(Material.ARROW, 2));
-            inv.clear(3);
-            world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+            inv.addItem(new ItemStack(Material.ARROW, ARROWS_FLETCHED));
         } else {
-            inv.setItem(7, new ItemStack(Material.ARROW, 2));
-            inv.clear(3);
-            world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
+            inv.setItem(7, new ItemStack(Material.ARROW, ARROWS_FLETCHED));
         }
+
+        inv.clear(SLOT_FLETCH);
+        world.playSound(local, Sound.ENTITY_VILLAGER_WORK_FLETCHER, 1, 1);
     }
 
     public static void activateSnare(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -67,7 +70,7 @@ public class KitArcher extends Kit {
         RivalsCore.addEntryToTeam(user.getTeam(), snare);
 
         world.playSound(local, Sound.BLOCK_WET_GRASS_PLACE, 0.75f, 0.5f);
-        inv.clear(4);
+        inv.clear(SLOT_SNARE);
     }
 
     public static void activateFromAbove(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -81,6 +84,6 @@ public class KitArcher extends Kit {
         world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
         world.playSound(local, Sound.BLOCK_ANVIL_PLACE, 0.75f, 0.25f);
 
-        inv.clear(5);
+        inv.clear(SLOT_FROM_ABOVE);
     }
 }

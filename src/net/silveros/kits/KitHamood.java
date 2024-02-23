@@ -15,6 +15,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class KitHamood extends Kit {
+    public static final byte SLOT_PHARAOHS_CURSE = 3;
+    public static final byte SLOT_DUNE_SLICER = 4;
+    public static final byte SLOT_SWIFT = 5;
+
     public KitHamood(int id, String name) {
         super(id, name);
         this.foodCount = 7;
@@ -25,9 +29,9 @@ public class KitHamood extends Kit {
         super.activateKit(player, inv);
 
         inv.setItem(0, ItemRegistry.WEAPON_HamoodSword);
-        inv.setItem(3, ItemRegistry.ABILITY_PharaohsCurse);
-        inv.setItem(4, ItemRegistry.ABILITY_DuneSlice);
-        //inv.setItem(5, ItemRegistry.ABILITY_Swift);
+        inv.setItem(SLOT_PHARAOHS_CURSE, ItemRegistry.ABILITY_PharaohsCurse);
+        inv.setItem(SLOT_DUNE_SLICER, ItemRegistry.ABILITY_DuneSlicer);
+        //inv.setItem(SLOT_SWIFT, ItemRegistry.ABILITY_Swift);
         inv.setChestplate(ItemRegistry.ARMOR_HamoodChestplate);
         inv.setLeggings(ItemRegistry.ARMOR_HamoodLeggings);
         inv.setBoots(ItemRegistry.ARMOR_HamoodBoots);
@@ -47,13 +51,13 @@ public class KitHamood extends Kit {
     public static void activateSwift(World world, Location local, Player player, PlayerInventory inv, User user) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 49, false, false));
         player.addPotionEffect(new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 60, 1, false, false));
-        inv.clear(5);
+        inv.clear(SLOT_SWIFT);
     }
 
     public static void activateDuneSlicer(World world, Location local, Player player, PlayerInventory inv, User user) {
         inv.setItem(0, ItemRegistry.WEAPON_DuneSlicer);
         world.playSound(local, Sound.ITEM_TOTEM_USE, 1, 1);
-        inv.clear(4);
+        inv.clear(SLOT_DUNE_SLICER);
     }
 
     public static void activatePharaohsCurse(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -66,6 +70,6 @@ public class KitHamood extends Kit {
 
         world.playSound(local, Sound.ENTITY_TNT_PRIMED, 1, 1);
 
-        inv.clear(3);
+        inv.clear(SLOT_PHARAOHS_CURSE);
     }
 }

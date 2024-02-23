@@ -88,7 +88,6 @@ public class AbilityEvents implements Listener, Color {
                                     KitBunket.activateShieldUp(world, local, player, inv, user);
                                     break;
                                 case EMERGENCY_REPAIRS:
-                                    //TODO make repair work
                                     KitBunket.activateEmergencyRepairs(world, local, player, inv, user);
                                     break;
                                 case SELF_DESTRUCT:

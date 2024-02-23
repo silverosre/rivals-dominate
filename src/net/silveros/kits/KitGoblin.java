@@ -14,6 +14,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class KitGoblin extends Kit implements Color {
+    public static final byte SLOT_STEAL = 3;
+    public static final byte SLOT_GIVE = 4;
+    public static final byte SLOT_SWARM = 5;
+
     public KitGoblin(int id, String name) {
         super(id, name);
     }
@@ -22,16 +26,16 @@ public class KitGoblin extends Kit implements Color {
     public void activateKit(Player player, PlayerInventory inv) {
         super.activateKit(player, inv);
 
-        inv.setItem(3, ItemRegistry.ABILITY_Steal);
-        inv.setItem(4, ItemRegistry.ABILITY_Give);
-        inv.setItem(5, ItemRegistry.ABILITY_Swarm);
+        inv.setItem(SLOT_STEAL, ItemRegistry.ABILITY_Steal);
+        inv.setItem(SLOT_GIVE, ItemRegistry.ABILITY_Give);
+        inv.setItem(SLOT_SWARM, ItemRegistry.ABILITY_Swarm);
 
         inv.setChestplate(ItemRegistry.ARMOR_GoblinChestplate);
         inv.setLeggings(ItemRegistry.ARMOR_GoblinLeggings);
         inv.setBoots(ItemRegistry.ARMOR_GoblinBoots);
         inv.setHelmet(ItemRegistry.SKULL_Goblin);
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
+        //player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
     }
 
     @Override
@@ -54,7 +58,7 @@ public class KitGoblin extends Kit implements Color {
                     if (otherUser.currentKit == Kit.GOBLIN.kitID) {
                         continue;
                     }
-                    inv.clear(2);
+                    inv.clear(SLOT_STEAL);
                     if (otherUser.getTotalEnergy() >= 1) {
                         otherUser.removeEnergy(1);
                         user.addEnergy(1);
@@ -84,7 +88,7 @@ public class KitGoblin extends Kit implements Color {
                     if (otherUser.currentKit == Kit.GOBLIN.kitID) {
                         continue;
                     }
-                    inv.clear(3);
+                    inv.clear(SLOT_GIVE);
                     otherUser.addEnergy(1);
 
                     world.playSound(local, Sound.ENTITY_WITCH_CELEBRATE, 0.75f, 1.75f);
@@ -111,6 +115,8 @@ public class KitGoblin extends Kit implements Color {
                     if (otherUser.currentKit == Kit.GOBLIN.kitID) {
                         continue;
                     }
+
+                    inv.clear(SLOT_SWARM);
 
                     other.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 0, false, false));
                     other.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 200, 0, false, false));

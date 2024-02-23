@@ -3,7 +3,6 @@ package net.silveros.kits;
 import net.silveros.kits.items.*;
 import net.silveros.utility.Color;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -37,7 +36,7 @@ public class ItemRegistry implements Color {
         addToMap(ABILITY_Fletch);
         addToMap(ABILITY_FromAbove);
         //Hamood
-        addToMap(ABILITY_DuneSlice);
+        addToMap(ABILITY_DuneSlicer);
         addToMap(ABILITY_PharaohsCurse);
         addToMap(ABILITY_Swift);
         //Herobrine
@@ -105,7 +104,7 @@ public class ItemRegistry implements Color {
 
     //Hamood
     public static ItemAbility ABILITY_PharaohsCurse;
-    public static ItemAbility ABILITY_DuneSlice;
+    public static ItemAbility ABILITY_DuneSlicer;
     public static ItemAbility ABILITY_Swift;
     public static ItemStack WEAPON_HamoodSword;
     public static ItemStack WEAPON_DuneSlicer;
