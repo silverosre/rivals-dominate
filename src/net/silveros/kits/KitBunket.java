@@ -39,7 +39,7 @@ public class KitBunket extends Kit {
 
     @Override
     public int getStartingEnergy() {
-        return 1;
+        return 0;
     }
 
     public static void activateShieldUp(World world, Location local, Player player, PlayerInventory inv, User user) {
@@ -58,6 +58,6 @@ public class KitBunket extends Kit {
 
     public static void activateSelfDestruct(World world, Location local, Player player, PlayerInventory inv, User user) {
         player.setHealth(0);
-        world.createExplosion(local, 5f);
+        world.createExplosion(local, 4f);
     }
 }
