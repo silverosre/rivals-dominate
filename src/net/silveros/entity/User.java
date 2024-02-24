@@ -18,8 +18,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.UUID;
 
 public class User {
-    public int team = 0;
-
     public UUID playerId;
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
@@ -87,6 +85,8 @@ public class User {
     public boolean bearAbility = false;
     public double numbDamage = 0;
     private boolean usingFogCloak = false;
+    private int cloakTime = 0;
+    private static final int MAX_CLOAK_TIME = 20 * 20;
 
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
@@ -472,6 +472,12 @@ public class User {
             }
 
             if (this.getFogCloak()) {
+                this.cloakTime++;
+
+                if (this.cloakTime >= MAX_CLOAK_TIME) {
+                    this.setFogCloakState(false);
+                }
+
                 if (this.cooldown_Uncloak > 0) {
                     this.cooldown_Uncloak--;
                 } else {
@@ -479,6 +485,10 @@ public class User {
                     this.cooldown_Uncloak = PRESET_Uncloak;
                 }
             } else {
+                if (this.cloakTime > 0) {
+                    KitHerobrine.activateUncloak(world, local, player, inv, this);
+                }
+
                 if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
                     inv.clear(KitHerobrine.SLOT_FOG_CLOAK);
                 }
@@ -492,41 +502,6 @@ public class User {
                     }
                 }
             }
-
-            /*if (!inv.contains(ItemRegistry.ABILITY_FogCloak)) {
-                if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                    if (this.cooldown_FogCloak > 0) {
-                        this.cooldown_FogCloak--;
-                    } else {
-                        inv.setItem(4, ItemRegistry.ABILITY_FogCloak);
-                        this.cooldown_FogCloak = PRESET_FogCloak;
-                        this.fogCloakCheck = false;
-                    }
-
-                    if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
-                        //checks to see if fog cloak was taken away
-                        inv.clear(4);
-                        inv.setHelmet(ItemRegistry.SKULL_Herobrine);
-                        inv.setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
-                        inv.setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
-                        inv.setBoots(ItemRegistry.ARMOR_HerobrineBoots);
-                        inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
-                        inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
-                        player.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
-                        player.spawnParticle(Particle.SMOKE_LARGE, local, 20);
-                    }
-                }
-            }
-
-            if (!this.getInv().contains(ItemRegistry.ABILITY_Uncloak) && !this.getInv().contains(ItemRegistry.ABILITY_FogCloak) && !this.fogCloakCheck) {
-                if (this.cooldown_FogCloakMin > 0) {
-                    this.cooldown_FogCloakMin--;
-                } else {
-                    this.getInv().setItem(4, ItemRegistry.ABILITY_Uncloak);
-                    this.cooldown_FogCloakMin = PRESET_FogCloakMin;
-                    this.fogCloakCheck = true;
-                }
-            }*/
         }
 
         if (this.currentKit == Kit.GOBLIN.kitID) {
@@ -691,6 +666,10 @@ public class User {
     }
 
     public void setFogCloakState(boolean state) {
+        if (!state) {
+            this.cloakTime = 0;
+        }
+
         this.usingFogCloak = state;
     }
 }

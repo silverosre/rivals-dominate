@@ -49,17 +49,14 @@ public class KitHerobrine extends Kit {
 
         inv.clear(0);
         inv.clear(1);
-        inv.clear(7);
         inv.setItem(0, ItemRegistry.WEAPON_HerobrinePowerAxe);
         inv.setItem(1, ItemRegistry.WEAPON_HerobrinePowerBow);
-        inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
     }
 
     public static void activateFogCloak(World world, Location local, Player player, PlayerInventory inv, User user) {
         inv.clear(SLOT_FOG_CLOAK);
 
         inv.clear(1);
-        inv.clear(7);
 
         //clear armor
         inv.clear(36);
@@ -69,18 +66,27 @@ public class KitHerobrine extends Kit {
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, PotionEffect.INFINITE_DURATION, 0, false, false));
 
-        world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local.add(0, 0.25, 0), 40, 0.25, 1, 0.25, 0.1);
+        world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, local.add(0, 0.25, 0), 40, 0.25, 1, 0.25, 0);
         world.playSound(local, Sound.AMBIENT_CAVE, 1, 1);
 
         user.setFogCloakState(true);
     }
 
     public static void activateUncloak(World world, Location local, Player player, PlayerInventory inv, User user) {
+        user.setFogCloakState(false);
+
         for (PotionEffect e : player.getActivePotionEffects()) {
             player.removePotionEffect(e.getType());
         }
 
-        world.spawnParticle(Particle.SMOKE_LARGE, local, 30, 0.25, 1, 0.25, 0);
+        inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
+
+        inv.setHelmet(ItemRegistry.SKULL_Herobrine);
+        inv.setChestplate(ItemRegistry.ARMOR_HerobrineChestplate);
+        inv.setLeggings(ItemRegistry.ARMOR_HerobrineLeggings);
+        inv.setBoots(ItemRegistry.ARMOR_HerobrineBoots);
+
+        world.spawnParticle(Particle.SMOKE_LARGE, local, 40, 0.25, 1, 0.25, 0);
         world.playSound(local, Sound.ENTITY_ENDERMAN_SCREAM, 1, 1);
     }
 }
