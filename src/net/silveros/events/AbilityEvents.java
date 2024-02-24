@@ -103,13 +103,13 @@ public class AbilityEvents implements Listener, Color {
                                     KitArcher.activateFromAbove(world, local, player, inv, user);
                                     break;
                                 case SWIFT:
-                                    KitHamood.activateSwift(world, local, player, inv, user);
+                                    KitRogue.activateSwift(world, local, player, inv, user);
                                     break;
-                                case DUNE_SLICE:
-                                    KitHamood.activateDuneSlicer(world, local, player, inv, user);
+                                case INCANTATION:
+                                    KitRogue.activateIncantation(world, local, player, inv, user);
                                     break;
-                                case PHARAOHS_CURSE:
-                                    KitHamood.activatePharaohsCurse(world, local, player, inv, user);
+                                case CURSE:
+                                    KitRogue.activateCurse(world, local, player, inv, user);
                                     break;
                                 case HEROBRINE_POWER:
                                     KitHerobrine.activateHerobrinePower(world, local, player, inv, user);

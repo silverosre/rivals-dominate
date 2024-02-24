@@ -18,7 +18,7 @@ public class ItemRegistry implements Color {
 
         new ItemsBunket().prepareItems();
         new ItemsArcher().prepareItems();
-        new ItemsHamood().prepareItems();
+        new ItemsRogue().prepareItems();
         new ItemsHerobrine().prepareItems();
         new ItemsGummybear().prepareItems();
         new ItemsDefenseBear().prepareItems();
@@ -35,9 +35,9 @@ public class ItemRegistry implements Color {
         addToMap(ABILITY_Snare);
         addToMap(ABILITY_Fletch);
         addToMap(ABILITY_FromAbove);
-        //Hamood
-        addToMap(ABILITY_DuneSlicer);
-        addToMap(ABILITY_PharaohsCurse);
+        //Rogue
+        addToMap(ABILITY_Incantation);
+        addToMap(ABILITY_Curse);
         addToMap(ABILITY_Swift);
         //Herobrine
         addToMap(ABILITY_HerobrinePower);
@@ -101,17 +101,16 @@ public class ItemRegistry implements Color {
     public static ItemStack ARMOR_ArcherChestplate;
     public static ItemStack ARMOR_ArcherLeggings;
     public static ItemStack SKULL_Archer;
-
-    //Hamood
-    public static ItemAbility ABILITY_PharaohsCurse;
-    public static ItemAbility ABILITY_DuneSlicer;
+    //Rogue
+    public static ItemAbility ABILITY_Curse;
+    public static ItemAbility ABILITY_Incantation;
     public static ItemAbility ABILITY_Swift;
-    public static ItemStack WEAPON_HamoodSword;
-    public static ItemStack WEAPON_DuneSlicer;
-    public static ItemStack ARMOR_HamoodChestplate;
-    public static ItemStack ARMOR_HamoodLeggings;
-    public static ItemStack ARMOR_HamoodBoots;
-    public static ItemStack SKULL_Hamood;
+    public static ItemStack WEAPON_RogueSword;
+    public static ItemStack WEAPON_DarkSister;
+    public static ItemStack ARMOR_RogueChestplate;
+    public static ItemStack ARMOR_RogueLeggings;
+    public static ItemStack ARMOR_RogueBoots;
+    public static ItemStack SKULL_Rogue;
 
     //Herobrine
     public static ItemAbility ABILITY_HerobrinePower;

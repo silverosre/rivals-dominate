@@ -26,9 +26,9 @@ public class User {
     private static final int PRESET_Fletch = 2 * 20;
     private static final int PRESET_Snare = 2 * 20;
     private static final int PRESET_FromAbove = 55 * 20;
-    private static final int PRESET_DuneSlicer = 30 * 20;
-    private static final int PRESET_DuneSlicerActive = 5 * 20;
-    private static final int PRESET_PharaohsCurse = 10 * 20;
+    private static final int PRESET_Incantation = 30 * 20;
+    private static final int PRESET_IncantationActive = 5 * 20;
+    private static final int PRESET_Curse = 10 * 20;
     private static final int PRESET_NormalBear = 5 * 20;
     private static final int PRESET_NumbActive = 10 * 20;
     private static final int PRESET_Numb = 30 * 20;
@@ -53,10 +53,10 @@ public class User {
     public int cooldown_Fletch = PRESET_Fletch;
     public int cooldown_Snare = PRESET_Snare;
     public int cooldown_FromAbove = PRESET_FromAbove;
-    //hamood
-    public int cooldown_DuneSlicer = PRESET_DuneSlicer;
-    public int cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
-    public int cooldown_PharaohsCurse = PRESET_PharaohsCurse;
+    //rogue
+    public int cooldown_Incantation = PRESET_Incantation;
+    public int cooldown_IncantationActive = PRESET_IncantationActive;
+    public int cooldown_Curse = PRESET_Curse;
     //gummybear
     public int cooldown_NormalBear = PRESET_NormalBear;
     public int cooldown_Numb = PRESET_Numb;
@@ -314,38 +314,38 @@ public class User {
             }
         }
 
-        if (this.currentKit == Kit.HAMOOD.kitID) {
+        if (this.currentKit == Kit.ROGUE.kitID) {
             if (!inv.contains(ItemRegistry.ABILITY_Swift)) {
                 if (this.timeUntil_Swift > 0) {
                     this.timeUntil_Swift--;
                 } else {
-                    inv.setItem(KitHamood.SLOT_SWIFT, ItemRegistry.ABILITY_Swift);
+                    inv.setItem(KitRogue.SLOT_SWIFT, ItemRegistry.ABILITY_Swift);
                     this.timeUntil_Swift = 45 * 20;
                 }
             }
 
-            if (!inv.contains(ItemRegistry.ABILITY_DuneSlicer)) {
-                if (this.cooldown_DuneSlicer > 0) {
-                    this.cooldown_DuneSlicer--;
+            if (!inv.contains(ItemRegistry.ABILITY_Incantation)) {
+                if (this.cooldown_Incantation > 0) {
+                    this.cooldown_Incantation--;
                 } else {
-                    inv.setItem(KitHamood.SLOT_DUNE_SLICER, ItemRegistry.ABILITY_DuneSlicer);
-                    this.cooldown_DuneSlicer = PRESET_DuneSlicer;
+                    inv.setItem(KitRogue.SLOT_INCANTATION, ItemRegistry.ABILITY_Incantation);
+                    this.cooldown_Incantation = PRESET_Incantation;
                 }
 
-                if (this.cooldown_DuneSlicerActive > 0) {
-                    this.cooldown_DuneSlicerActive--;
+                if (this.cooldown_IncantationActive > 0) {
+                    this.cooldown_IncantationActive--;
                 } else {
-                    inv.setItem(0, ItemRegistry.WEAPON_HamoodSword);
-                    this.cooldown_DuneSlicerActive = PRESET_DuneSlicerActive;
+                    inv.setItem(0, ItemRegistry.WEAPON_RogueSword);
+                    this.cooldown_IncantationActive = PRESET_IncantationActive;
                 }
             }
 
-            if (!inv.contains(ItemRegistry.ABILITY_PharaohsCurse)) {
-                if (this.cooldown_PharaohsCurse > 0) {
-                    this.cooldown_PharaohsCurse--;
+            if (!inv.contains(ItemRegistry.ABILITY_Curse)) {
+                if (this.cooldown_Curse > 0) {
+                    this.cooldown_Curse--;
                 } else {
-                    inv.setItem(KitHamood.SLOT_PHARAOHS_CURSE, ItemRegistry.ABILITY_PharaohsCurse);
-                    this.cooldown_PharaohsCurse = PRESET_PharaohsCurse;
+                    inv.setItem(KitRogue.SLOT_CURSE, ItemRegistry.ABILITY_Curse);
+                    this.cooldown_Curse = PRESET_Curse;
                 }
             }
         }
@@ -619,11 +619,17 @@ public class User {
             //FIXME:
             // need to add code for respawning at base location
 
-            this.setGameMode(GameMode.ADVENTURE);
-            this.activateKit(false);
-
-            Vec3 spawn = this.getTeam(RivalsPlugin.core.TEAM_BLUE) ? SpawnLocations.getBlueSpawn(RivalsPlugin.core.currentMap) : SpawnLocations.getRedSpawn(RivalsPlugin.core.currentMap);
-            player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
+            //potential fix, check if player isnt a spectator, then assume rest of players either on spectator or without a team are on spectator
+            if (!this.getTeam().equals(RivalsPlugin.core.TEAM_SPECTATOR)) {
+                this.setGameMode(GameMode.ADVENTURE);
+                this.activateKit(false);
+                Vec3 spawn = this.getTeam(RivalsPlugin.core.TEAM_BLUE) ? SpawnLocations.getBlueSpawn(RivalsPlugin.core.currentMap) : SpawnLocations.getRedSpawn(RivalsPlugin.core.currentMap);
+                player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
+            } else {
+                this.setGameMode(GameMode.SPECTATOR);
+                Vec3 spawn = SpawnLocations.getSpectatorSpawn(RivalsPlugin.core.currentMap);
+                player.teleport(new Location(player.getWorld(), spawn.posX, spawn.posY, spawn.posZ));
+            }
 
             this.isDead = false;
         }
