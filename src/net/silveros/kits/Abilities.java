@@ -12,6 +12,9 @@ public enum Abilities {
     //Hamood
     DUNE_SLICE,
     PHARAOHS_CURSE,
+    //Rogue
+    INCANTATION,
+    CURSE,
     SWIFT,
     //Herobrine
     HEROBRINE_POWER,

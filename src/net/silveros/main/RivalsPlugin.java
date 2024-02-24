@@ -27,7 +27,11 @@ public class RivalsPlugin extends JavaPlugin implements Color {
     @Override
     public void onEnable() {
         Util.initialize(this);
-        Util.print(GREEN + "Enabling plugin...");
+        Util.print(GREEN + "Initializing...");
+        Util.print(BLACK + "-------------------------");
+        Util.print(BLACK + "|" + GREEN + " Rivals Dominate       " + BLACK + "|");
+        Util.print(BLACK + "|" + GREEN + " Successfully Started! " + BLACK + "|");
+        Util.print(BLACK + "-------------------------");
 
         //item and kit initialization
         ItemRegistry.init();
@@ -43,6 +47,7 @@ public class RivalsPlugin extends JavaPlugin implements Color {
         Util.registerCommand("energy", new CommandEnergy(this));
         Util.registerCommand("score", new CommandScore(this));
         Util.registerCommand("setuppoints", new CommandSetupPoints(this));
+        Util.registerCommand("start", new CommandStart(this));
 
         //misc & tick
         this.startTicking();
@@ -71,7 +76,7 @@ public class RivalsPlugin extends JavaPlugin implements Color {
 
     @Override
     public void onDisable() {
-        Util.print(RED + "Disabling plugin...");
+        Util.print(RED + "Disabling Rivals Dominate Plugin...");
     }
 
     public static void addPlayer(Player player) {

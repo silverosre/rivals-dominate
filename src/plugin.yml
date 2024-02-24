@@ -1,5 +1,5 @@
 name: RivalsPlugin
-version: 1.0
+version: 0.2
 author: Silveros
 main: net.silveros.main.RivalsPlugin
 api-version: 1.14
@@ -34,5 +34,10 @@ commands:
     description: Test command for setting up or resetting capture points.
     permission: rivals.setuppoints
     usage: /setuppoints <start/reset>
+
+  start:
+    description: Begins a new game.
+    permission: rivals.start
+    usage: /start <map (optional)>
 
 permissions: {}

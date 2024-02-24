@@ -9,7 +9,7 @@ public class RivalsTags {
     public static final String SNARE_ENTITY = "rivals.archer_snare";
     public static final String CHAOS_ZONE_ENTITY = "rivals.chaos_zone";
     public static final String STINK_BOMB_ENTITY = "rivals.stink_bomb";
-    public static final String PHARAOHS_CURSE_ENTITY = "rivals.pharaohs_curse";
+    public static final String CURSE_ENTITY = "rivals.curse";
     public static final String ZAP_ENTITY = "rivals.zap";
 
     public static final String ENERGY_BLOCK_ENTITY = "rivals.energy_block";

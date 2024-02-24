@@ -14,6 +14,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -73,6 +74,9 @@ public class RivalsCore implements Color {
     private static final int MAX_ARROW_LIFE = 5 * 20;
 
     //Misc
+    public boolean gameInit = false;
+    private static int GAME_COUNTDOWN = 20 * 20;
+    private static int DISPLAY_COUNTDOWN = 5;
     private static final float radius = 2f;
     private static float angle = 0f;
     public double randomPosition (double min, double max) {
@@ -528,6 +532,56 @@ public class RivalsCore implements Color {
     public void onTick(World world) {
         this.tallyScore();
 
+        //Game Initialization and Map randomizer
+        if (gameInit) {
+            List<String> mapList = Arrays.asList("Terra", "Sandstorm", "Retro");
+            Random r = new Random();
+            int randomItem = r.nextInt(mapList.size());
+            String randomMap = mapList.get(randomItem);
+            RivalsMap selectedMap = null;
+
+            //was gonna do titles for this but it was givin me issues trying to cast to a player from the core --roasty
+            if (GAME_COUNTDOWN > 0) {
+                if (GAME_COUNTDOWN == 20 * 20) {
+                    Bukkit.broadcastMessage(LIGHT_PURPLE + BOLD + "A Game is starting in 20 seconds!");
+                    Bukkit.broadcastMessage(DARK_GREEN + BOLD + "Selected Map: " + WHITE + randomMap);
+                }
+                GAME_COUNTDOWN--;
+                if (GAME_COUNTDOWN == 15 * 20) {
+                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "A Game is starting in: 15 seconds!");
+                }
+                if (GAME_COUNTDOWN == 10 * 20) {
+                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "A Game is starting in: 10 seconds!");
+                }
+                if (GAME_COUNTDOWN < 100) {
+                    if (GAME_COUNTDOWN % 20 == 0) {
+                        Bukkit.broadcastMessage(DARK_GREEN + "Countdown: " + WHITE + DISPLAY_COUNTDOWN);
+                        DISPLAY_COUNTDOWN--;
+                    }
+                }
+            } else {
+                GAME_COUNTDOWN = 20 * 20;
+                DISPLAY_COUNTDOWN = 5;
+                if (!gameInProgress) {
+                    for (RivalsMap map : RivalsMap.values()) {
+                        if (randomMap.equalsIgnoreCase(map.displayName)) {
+                            selectedMap = map;
+                        }
+                    }
+                    startDominateGame(selectedMap);
+                    for (Player p : world.getPlayers()) {
+                        PlayerInventory inv = p.getInventory();
+                        inv.clear();
+                        p.setHealth(0);
+                    }
+                    gameInit = false;
+                } else {
+                    Bukkit.broadcastMessage(RED + "There is a game currently running! Startup cancelled.");
+                    gameInit = false;
+                }
+            }
+        }
+
         //Energy block & restock cooldown text displays
         for (TextDisplay e : world.getEntitiesByClass(TextDisplay.class)) {
             if (e.getScoreboardTags().contains(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY)) {
@@ -826,8 +880,8 @@ public class RivalsCore implements Color {
                 }
             }
 
-            //Hamood "Pharaohs Curse" ability
-            if (e.getScoreboardTags().contains(RivalsTags.PHARAOHS_CURSE_ENTITY)) {
+            //Rogue "Curse" Ability
+            if (e.getScoreboardTags().contains(RivalsTags.CURSE_ENTITY)) {
                 world.spawnParticle(Particle.SMOKE_NORMAL, e.getLocation(), 3, 0, 0, 0, 0.1);
                 if (e.getTicksLived() > 40) {
                     world.playSound(e.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 0.75f, 1);

@@ -13,7 +13,7 @@ public abstract class Kit {
     public static Map<Integer, Kit> KIT_LIST = new HashMap<>();
     public static Kit BUNKET;
     public static Kit ARCHER;
-    public static Kit HAMOOD;
+    public static Kit ROGUE;
     public static Kit HEROBRINE;
     public static Kit GUMMY_BEAR;
     public static Kit WIZARD;
@@ -26,7 +26,7 @@ public abstract class Kit {
     public static void init() {
         BUNKET = new KitBunket(0, "bunket");
         ARCHER = new KitArcher(1, "archer");
-        HAMOOD = new KitHamood(2, "hamood");
+        ROGUE = new KitRogue(2, "rogue");
         HEROBRINE = new KitHerobrine(3, "herobrine");
         GUMMY_BEAR = new KitGummyBear(4, "gummy");
         WIZARD = new KitWizard(5, "wizard");
