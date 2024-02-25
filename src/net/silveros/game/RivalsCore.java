@@ -533,26 +533,28 @@ public class RivalsCore implements Color {
         this.tallyScore();
 
         //Game Initialization and Map randomizer
-        if (gameInit) {
-            List<String> mapList = Arrays.asList("Terra", "Sandstorm", "Retro");
-            Random r = new Random();
-            int randomItem = r.nextInt(mapList.size());
-            String randomMap = mapList.get(randomItem);
+        if (this.gameInit) {
+            int l = RivalsMap.values().length;
+            RivalsMap randomMap = RivalsMap.values()[Util.rand.nextInt(l)];
             RivalsMap selectedMap = null;
 
             //was gonna do titles for this but it was givin me issues trying to cast to a player from the core --roasty
             if (GAME_COUNTDOWN > 0) {
-                if (GAME_COUNTDOWN == 20 * 20) {
-                    Bukkit.broadcastMessage(LIGHT_PURPLE + BOLD + "A Game is starting in 20 seconds!");
-                    Bukkit.broadcastMessage(DARK_GREEN + BOLD + "Selected Map: " + WHITE + randomMap);
-                }
                 GAME_COUNTDOWN--;
+
+                if (GAME_COUNTDOWN == 20 * 20) {
+                    Bukkit.broadcastMessage(LIGHT_PURPLE + BOLD + "Game starting in 20 seconds!");
+                    Bukkit.broadcastMessage(DARK_GREEN + BOLD + "Selected map: " + WHITE + randomMap);
+                }
+
                 if (GAME_COUNTDOWN == 15 * 20) {
-                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "A Game is starting in: 15 seconds!");
+                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "Game starting in: 15 seconds!");
                 }
+
                 if (GAME_COUNTDOWN == 10 * 20) {
-                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "A Game is starting in: 10 seconds!");
+                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "Game starting in: 10 seconds!");
                 }
+
                 if (GAME_COUNTDOWN < 100) {
                     if (GAME_COUNTDOWN % 20 == 0) {
                         Bukkit.broadcastMessage(DARK_GREEN + "Countdown: " + WHITE + DISPLAY_COUNTDOWN);
@@ -564,21 +566,24 @@ public class RivalsCore implements Color {
                 DISPLAY_COUNTDOWN = 5;
                 if (!gameInProgress) {
                     for (RivalsMap map : RivalsMap.values()) {
-                        if (randomMap.equalsIgnoreCase(map.displayName)) {
+                        if (randomMap == map) {
                             selectedMap = map;
                         }
                     }
-                    startDominateGame(selectedMap);
+
+                    this.startDominateGame(selectedMap);
+
                     for (Player p : world.getPlayers()) {
-                        PlayerInventory inv = p.getInventory();
-                        inv.clear();
+                        User user = Util.getUserFromId(p.getUniqueId());
+                        user.resetKit();
+
                         p.setHealth(0);
                     }
-                    gameInit = false;
                 } else {
                     Bukkit.broadcastMessage(RED + "There is a game currently running! Startup cancelled.");
-                    gameInit = false;
                 }
+
+                this.gameInit = false;
             }
         }
 
