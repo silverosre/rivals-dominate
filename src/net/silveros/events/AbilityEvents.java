@@ -130,13 +130,13 @@ public class AbilityEvents implements Listener, Color {
                                     KitWizard.activateFreeze(world, local, player, inv, user);
                                     break;
                                 case STEAL:
-                                    KitGoblin.activateSteal(world, local, player, inv, user);
+                                    KitBandit.activateSteal(world, local, player, inv, user);
                                     break;
                                 case GIVE:
-                                    KitGoblin.activateGive(world, local, player, inv, user);
+                                    KitBandit.activateGive(world, local, player, inv, user);
                                     break;
-                                case SWARM:
-                                    KitGoblin.activateSwarm(world, local, player, inv, user);
+                                case RELOAD:
+                                    KitBandit.activateReload(world, local, player, inv, user);
                                     break;
                                 case NORMAL_BEAR:
                                     KitGummyBear.activateNormalBear(world, local, player, inv, user);

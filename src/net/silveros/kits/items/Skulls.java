@@ -13,4 +13,5 @@ public class Skulls {
     public static final String SPEED_BEAR = "f1c2b42a5576a405b348bbd22a69db4c547e0caf8d394f0b4eb618754a9a23d1";
     public static final String WIZARD = "a589e0cdc20a49be1d1df88a41448febe69ac5985857391280868691d8bcf5e1";
     public static final String GOBLIN = "c26a1eb269c5dc6fe8aaa39eea0e8f8d79faf5772e2e9dee6dcd9d62e0169c13";
+    public static final String BANDIT = "3330baa44f8602b0a77e3cf4deae1a970a0a2f1a9df7970b3782ba8298a90d1b";
 }

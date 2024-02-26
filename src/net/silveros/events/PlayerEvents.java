@@ -2,26 +2,32 @@ package net.silveros.events;
 
 import net.silveros.entity.User;
 import net.silveros.game.RivalsCore;
+import net.silveros.kits.ItemRegistry;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FireworkExplodeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerEvents implements Listener, Color {
+    private List<Integer> bullets = new ArrayList<>();
     @EventHandler
     public static void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -132,6 +138,29 @@ public class PlayerEvents implements Listener, Color {
     public static void onItemDropped(PlayerDropItemEvent event) {
         if (RivalsCore.gameInProgress) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        ItemStack item = event.getItem();
+        Player player = event.getPlayer();
+        User user = Util.getUserFromId(player.getUniqueId());
+        if (event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+            if (item != null) {
+                if (user != null) {
+                    if (!user.usedSixshooter) {
+                        if (user.bulletCount > 0) {
+                            if (item.equals(ItemRegistry.WEAPON_Sixshooter)) {
+                                user.usedSixshooter = true;
+                            }
+                        } else {
+                            player.sendMessage(RED + "No bullets!");
+                            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                        }
+                    }
+                }
+            }
         }
     }
 

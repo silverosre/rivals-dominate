@@ -73,9 +73,11 @@ public class User {
     public int cooldown_Zap = PRESET_Zap;
     public int cooldown_Fireball = PRESET_Fireball;
     public int cooldown_Freeze = PRESET_Freeze;
-    //goblin
+    //bandit
     public int cooldown_Steal = PRESET_Steal;
     public int cooldown_Give = PRESET_Give;
+    public boolean usedSixshooter = false;
+    public int bulletCount = 3;
 
     //Time until abilities can be used
     public int timeUntil_Swift = 45 * 20;
@@ -503,19 +505,26 @@ public class User {
                 }
             }
         }
-
-        if (this.currentKit == Kit.GOBLIN.kitID) {
+        //bandit
+        if (this.currentKit == Kit.BANDIT.kitID) {
+            if (usedSixshooter) {
+                if(bulletCount > 0) {
+                    bulletCount--;
+                }
+                player.setLevel(bulletCount);
+                usedSixshooter = false;
+            }
             if (this.cooldown_Steal > 0) {
                 this.cooldown_Steal--;
             } else {
-                this.getInv().setItem(KitGoblin.SLOT_STEAL, ItemRegistry.ABILITY_Steal);
+                this.getInv().setItem(KitBandit.SLOT_STEAL, ItemRegistry.ABILITY_Steal);
                 this.cooldown_Steal = PRESET_Steal;
             }
 
             if (this.cooldown_Give > 0) {
                 this.cooldown_Give--;
             } else {
-                this.getInv().setItem(KitGoblin.SLOT_GIVE, ItemRegistry.ABILITY_Give);
+                this.getInv().setItem(KitBandit.SLOT_GIVE, ItemRegistry.ABILITY_Give);
                 this.cooldown_Give = PRESET_Give;
             }
         }
