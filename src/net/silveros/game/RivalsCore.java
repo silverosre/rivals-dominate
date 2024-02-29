@@ -544,7 +544,7 @@ public class RivalsCore implements Color {
 
                 if (GAME_COUNTDOWN == 20 * 20) {
                     Bukkit.broadcastMessage(LIGHT_PURPLE + BOLD + "Game starting in 20 seconds!");
-                    Bukkit.broadcastMessage(DARK_GREEN + BOLD + "Selected map: " + WHITE + randomMap);
+                    Bukkit.broadcastMessage(GREEN + BOLD + "Selected map: " + WHITE + randomMap);
                 }
 
                 if (GAME_COUNTDOWN == 15 * 20) {
@@ -557,7 +557,7 @@ public class RivalsCore implements Color {
 
                 if (GAME_COUNTDOWN < 100) {
                     if (GAME_COUNTDOWN % 20 == 0) {
-                        Bukkit.broadcastMessage(DARK_GREEN + "Countdown: " + WHITE + DISPLAY_COUNTDOWN);
+                        Bukkit.broadcastMessage(GREEN + "Countdown: " + WHITE + DISPLAY_COUNTDOWN);
                         DISPLAY_COUNTDOWN--;
                     }
                 }
