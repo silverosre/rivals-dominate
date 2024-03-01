@@ -91,7 +91,7 @@ public class ItemsWizard extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.fromRGB(3113429));
+        meta.setColor(Color.fromRGB(9462206));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.addEnchant(Enchantment.PROTECTION_FIRE, 1, true);
         meta.setUnbreakable(true);
@@ -109,7 +109,7 @@ public class ItemsWizard extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.fromRGB(3113429));
+        meta.setColor(Color.fromRGB(9462206));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.setUnbreakable(true);
 
@@ -126,7 +126,7 @@ public class ItemsWizard extends Items {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
 
-        meta.setColor(Color.fromRGB(1908001));
+        meta.setColor(Color.fromRGB(4598378));
         meta.addEnchant(Enchantment.BINDING_CURSE, 1, true);
         meta.setUnbreakable(true);
 

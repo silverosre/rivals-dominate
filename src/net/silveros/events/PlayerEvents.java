@@ -118,6 +118,7 @@ public class PlayerEvents implements Listener, Color {
         }
     }
 
+    //sketchy code i stole
     @EventHandler(ignoreCancelled = true)
     public void onExplosion(FireworkExplodeEvent event) {
         final Firework firework = event.getEntity();

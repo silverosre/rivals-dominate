@@ -11,6 +11,6 @@ public class Skulls {
     public static final String DEFENSE_BEAR = "bcd1157690eb82d010e3a0a52624da566c95098692af8b97351005c143d784eb";
     public static final String ATTACK_BEAR = "8d8ed9543974d9307a172da115c0cd57126bddb5fd92766c0145355e8950f3de";
     public static final String SPEED_BEAR = "f1c2b42a5576a405b348bbd22a69db4c547e0caf8d394f0b4eb618754a9a23d1";
-    public static final String WIZARD = "a589e0cdc20a49be1d1df88a41448febe69ac5985857391280868691d8bcf5e1";
+    public static final String WIZARD = "2aae1288450ddd1164c4ebfb2ef9b015e174cb17716feaf493b4e3f188bc9569";
     public static final String GOBLIN = "c26a1eb269c5dc6fe8aaa39eea0e8f8d79faf5772e2e9dee6dcd9d62e0169c13";
 }
