@@ -21,6 +21,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
+import org.bukkit.util.Transformation;
 
 import java.awt.*;
 import java.util.*;
@@ -38,7 +39,8 @@ public class RivalsCore implements Color {
     public BossBar redPointsBar, bluePointsBar;
     public RivalsMap currentMap = RivalsMap.TERRA;
 
-    public static Vec3 LOBBY_SPAWN = new Vec3(0, 0, 0);
+    public static Vec3 LOBBY_SPAWN = new Vec3(101, -40, 136);
+    private static final float LOBBY_SPAWN_YAW = 180;
 
     public static int redTeamScoreDelay = 0;
     public static int blueTeamScoreDelay = 0;
@@ -74,6 +76,7 @@ public class RivalsCore implements Color {
     private static final int MAX_ARROW_LIFE = 5 * 20;
 
     //Misc
+    private static final int DEFAULT_TIME = 6000;
     public boolean gameInit = false;
     private static int GAME_COUNTDOWN = 20 * 20;
     private static int DISPLAY_COUNTDOWN = 5;
@@ -100,7 +103,7 @@ public class RivalsCore implements Color {
         this.capturePointScore = this.board.registerNewObjective(RivalsTags.CAPTURE_POINT_SCORE, Criteria.DUMMY, "CapturePointScore");
 
         this.displayBoard = this.board.registerNewObjective(RivalsTags.DISPLAY_BOARD, Criteria.DUMMY, RED + BOLD + "RIVALS: " + RESET + BLUE + "Dominate");
-        this.displayBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
+        //this.displayBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.setupSideBar(false);
 
         this.redPointsBar = Bukkit.createBossBar(WHITE + "Red Team's Points", BarColor.RED, BarStyle.SOLID);
@@ -167,6 +170,7 @@ public class RivalsCore implements Color {
             this.setBlocksForPoint(world, pointE, PointState.UNDEFINED);
 
             redTeamScoreDelay = blueTeamScoreDelay = 0;
+            world.setTime(map.time);
         }
     }
 
@@ -179,6 +183,7 @@ public class RivalsCore implements Color {
 
         World world = RivalsPlugin.getWorld();
         Location spawn = new Location(world, LOBBY_SPAWN.posX, LOBBY_SPAWN.posY, LOBBY_SPAWN.posZ);
+        spawn.setYaw(LOBBY_SPAWN_YAW);
 
         Scoreboard newBoard = Bukkit.getScoreboardManager().getNewScoreboard();
         for (Player player : world.getPlayers()) {
@@ -194,6 +199,9 @@ public class RivalsCore implements Color {
 
             player.playSound(player, user.getTeam(team) ? Sound.BLOCK_BEACON_ACTIVATE : Sound.BLOCK_BEACON_DEACTIVATE, 1, 1);
         }
+
+        //reset time
+        world.setTime(DEFAULT_TIME);
 
         gameInProgress = false;
     }
@@ -540,19 +548,17 @@ public class RivalsCore implements Color {
 
             //was gonna do titles for this but it was givin me issues trying to cast to a player from the core --roasty
             if (GAME_COUNTDOWN > 0) {
-                GAME_COUNTDOWN--;
-
                 if (GAME_COUNTDOWN == 20 * 20) {
-                    Bukkit.broadcastMessage(LIGHT_PURPLE + BOLD + "Game starting in 20 seconds!");
-                    Bukkit.broadcastMessage(GREEN + BOLD + "Selected map: " + WHITE + randomMap);
+                    Bukkit.broadcastMessage(GREEN + BOLD + "Game starting in 20 seconds!");
+                    Bukkit.broadcastMessage(GREEN + BOLD + "Selected map: " + WHITE + randomMap.displayName);
                 }
 
                 if (GAME_COUNTDOWN == 15 * 20) {
-                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "Game starting in: 15 seconds!");
+                    Bukkit.broadcastMessage(GREEN + "Game starting in 15 seconds!");
                 }
 
                 if (GAME_COUNTDOWN == 10 * 20) {
-                    Bukkit.broadcastMessage(DARK_PURPLE + ITALIC + "Game starting in: 10 seconds!");
+                    Bukkit.broadcastMessage(GREEN + "Game starting in 10 seconds!");
                 }
 
                 if (GAME_COUNTDOWN < 100) {
@@ -561,6 +567,8 @@ public class RivalsCore implements Color {
                         DISPLAY_COUNTDOWN--;
                     }
                 }
+
+                GAME_COUNTDOWN--;
             } else {
                 GAME_COUNTDOWN = 20 * 20;
                 DISPLAY_COUNTDOWN = 5;
@@ -626,6 +634,37 @@ public class RivalsCore implements Color {
             }
         }
 
+        for (ItemDisplay e : world.getEntitiesByClass(ItemDisplay.class)) {
+            byte count = 10;
+            double xd = 0.25;
+            double yd = 0.05;
+            float subs = 1.325f;
+
+            if (e.getScoreboardTags().contains(RivalsTags.ENERGY_BLOCK_ITEM_DISPLAY)) {
+                e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
+                int ticks = e.getTicksLived() * 4;
+
+                e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
+                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.AQUA, 1));
+            }
+
+            if (e.getScoreboardTags().contains(RivalsTags.RESTOCK_BLOCK_ITEM_DISPLAY)) {
+                e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
+                int ticks = e.getTicksLived() * 4;
+
+                e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
+                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.YELLOW, 1));
+            }
+
+            if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_ITEM_DISPLAY)) {
+                e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
+                int ticks = e.getTicksLived() * 4;
+
+                e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
+                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.LIME, 1));
+            }
+        }
+
         for (Marker e : world.getEntitiesByClass(Marker.class)) {
             //Team setters
             if (e.getScoreboardTags().contains(RivalsTags.SET_TEAM_RED)) {
@@ -635,7 +674,11 @@ public class RivalsCore implements Color {
                         User user = Util.getUserFromId(player.getUniqueId());
 
                         if (player.getGameMode() != GameMode.SPECTATOR) {
-                            user.setTeam(this.TEAM_RED);
+                            if (!user.getTeam(this.TEAM_RED)) {
+                                user.setTeam(this.TEAM_RED);
+                                player.sendMessage(GREEN + "You have joined " + RED + BOLD + "Red Team" + RESET + "!");
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                            }
                         }
                     }
                 }
@@ -648,7 +691,11 @@ public class RivalsCore implements Color {
                         User user = Util.getUserFromId(player.getUniqueId());
 
                         if (player.getGameMode() != GameMode.SPECTATOR) {
-                            user.setTeam(this.TEAM_BLUE);
+                            if (!user.getTeam(this.TEAM_BLUE)) {
+                                user.setTeam(this.TEAM_BLUE);
+                                player.sendMessage(GREEN + "You have joined " + BLUE + BOLD + "Blue Team" + RESET + "!");
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                            }
                         }
                     }
                 }
@@ -661,7 +708,11 @@ public class RivalsCore implements Color {
                         User user = Util.getUserFromId(player.getUniqueId());
 
                         if (player.getGameMode() != GameMode.SPECTATOR) {
-                            user.setTeam(this.TEAM_SPECTATOR);
+                            if (!user.getTeam(this.TEAM_SPECTATOR)) {
+                                user.setTeam(this.TEAM_SPECTATOR);
+                                player.sendMessage(GREEN + "You have joined " + WHITE + BOLD + "Spectators" + RESET + "!");
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 2);
+                            }
                         }
                     }
                 }
@@ -691,10 +742,10 @@ public class RivalsCore implements Color {
                                     User otherUser = Util.getUserFromId(other.getUniqueId());
 
                                     if (otherUser.playerId != user.playerId) {
-                                        if (otherUser.getTeam() == user.getTeam()) {
-                                            teammates.add(otherUser);
-                                        } else {
-                                            if (nearbyPlayers.contains(other)) {
+                                        if (nearbyPlayers.contains(other)) {
+                                            if (otherUser.getTeam() == user.getTeam()) {
+                                                teammates.add(otherUser);
+                                            } else {
                                                 enemyOnPoint = true;
                                             }
                                         }

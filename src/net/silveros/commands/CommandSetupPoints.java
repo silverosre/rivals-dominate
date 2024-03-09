@@ -42,7 +42,7 @@ public class CommandSetupPoints implements CommandExecutor, Color {
                     RivalsMap selectedMap = null;
 
                     for (RivalsMap map : RivalsMap.values()) {
-                        if (args[1].equalsIgnoreCase(map.displayName)) {
+                        if (args[1].equalsIgnoreCase(map.name())) {
                             selectedMap = map;
                         }
                     }

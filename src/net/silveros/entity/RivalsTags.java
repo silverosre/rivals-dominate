@@ -23,6 +23,10 @@ public class RivalsTags {
     public static final String RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.restock_cooldown_text";
     public static final String SCORE_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.score_block_cooldown_text";
 
+    public static final String ENERGY_BLOCK_ITEM_DISPLAY = "rivals.energy_block_item";
+    public static final String RESTOCK_BLOCK_ITEM_DISPLAY = "rivals.restock_block_item";
+    public static final String SCORE_BLOCK_ITEM_DISPLAY = "rivals.score_block_item";
+
     public static final String CAPTURE_POINT = "rivals.capture_point";
     public static final String CAPTURE_POINT_SCORE = "rivals.capture_point_score";
     public static final String POINT_A = "rivals.point_a";
@@ -40,4 +44,5 @@ public class RivalsTags {
     public static final String MAP_TERRA = "rivals.map_terra";
     public static final String MAP_SANDSTORM = "rivals.map_sandstorm";
     public static final String MAP_RETRO = "rivals.map_retro";
+    public static final String MAP_GOOD_INTENTIONS = "rivals.map_good_intentions";
 }

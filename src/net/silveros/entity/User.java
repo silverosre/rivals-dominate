@@ -36,7 +36,6 @@ public class User {
     private static final int PRESET_StinkBomb = 30 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_Uncloak = 2 * 20;
-    private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
     private static final int PRESET_Zap = 5 * 20;
@@ -66,7 +65,6 @@ public class User {
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_Uncloak = PRESET_Uncloak;
-    public int cooldown_FogCloakMin = PRESET_FogCloakMin;
     public int cooldown_HerobrinePower = PRESET_HerobrinePower;
     public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
     //wizard
@@ -248,6 +246,10 @@ public class User {
         }
 
         //Kit cooldowns
+        this.tickKitAbilities(world, player, inv, local);
+    }
+
+    private void tickKitAbilities(World world, Player player, PlayerInventory inv, Location local) {
         if (this.currentKit == Kit.BUNKET.kitID) {
             if (!inv.contains(ItemRegistry.ABILITY_ShieldUp)) {
                 if (this.cooldown_ShieldUp > 0) {
@@ -475,7 +477,7 @@ public class User {
                 this.cloakTime++;
 
                 if (this.cloakTime >= MAX_CLOAK_TIME) {
-                    this.setFogCloakState(false);
+                    this.setFogCloakState(true);
                 }
 
                 if (this.cooldown_Uncloak > 0) {
@@ -487,6 +489,7 @@ public class User {
             } else {
                 if (this.cloakTime > 0) {
                     KitHerobrine.activateUncloak(world, local, player, inv, this);
+                    this.cloakTime = 0;
                 }
 
                 if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {

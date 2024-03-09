@@ -9,25 +9,32 @@ public class CapturePointLocations {
     public static Map<Points, Vec3> TERRA_pointLocations = new HashMap<>();
     public static Map<Points, Vec3> SANDSTORM_pointLocations = new HashMap<>();
     public static Map<Points, Vec3> RETRO_pointLocations = new HashMap<>();
+    public static Map<Points, Vec3> GOOD_INTENTIONS_pointLocations = new HashMap<>();
 
     public static void init() {
-        addLocation(RivalsMap.TERRA, Points.POINT_A, new Vec3(-19, 1, -251));
-        addLocation(RivalsMap.TERRA, Points.POINT_B, new Vec3(-60, -1, -207));
-        addLocation(RivalsMap.TERRA, Points.POINT_C, new Vec3(-61, 4, -293));
-        addLocation(RivalsMap.TERRA, Points.POINT_D, new Vec3(29, 3, -298));
-        addLocation(RivalsMap.TERRA, Points.POINT_E, new Vec3(28, 3, -206));
+        addLocation(RivalsMap.TERRA, Points.POINT_A, new Vec3(-344, 10, -353));
+        addLocation(RivalsMap.TERRA, Points.POINT_B, new Vec3(-385, 8, -309));
+        addLocation(RivalsMap.TERRA, Points.POINT_C, new Vec3(-386, 13, -395));
+        addLocation(RivalsMap.TERRA, Points.POINT_D, new Vec3(-296, 12, -400));
+        addLocation(RivalsMap.TERRA, Points.POINT_E, new Vec3(-297, 12, -308));
 
-        addLocation(RivalsMap.SANDSTORM, Points.POINT_A, new Vec3(207, 3, -438));
-        addLocation(RivalsMap.SANDSTORM, Points.POINT_B, new Vec3(193, 2, -388));
-        addLocation(RivalsMap.SANDSTORM, Points.POINT_C, new Vec3(254, 1, -389));
-        addLocation(RivalsMap.SANDSTORM, Points.POINT_D, new Vec3(214, 6, -488));
-        addLocation(RivalsMap.SANDSTORM, Points.POINT_E, new Vec3(162, 12, -461));
+        addLocation(RivalsMap.SANDSTORM, Points.POINT_A, new Vec3(-403, 32, -795));
+        addLocation(RivalsMap.SANDSTORM, Points.POINT_B, new Vec3(-417, 31, -745));
+        addLocation(RivalsMap.SANDSTORM, Points.POINT_C, new Vec3(-356, 30, -746));
+        addLocation(RivalsMap.SANDSTORM, Points.POINT_D, new Vec3(-396, 34, -845));
+        addLocation(RivalsMap.SANDSTORM, Points.POINT_E, new Vec3(-448, 40, -818));
 
-        addLocation(RivalsMap.RETRO, Points.POINT_A, new Vec3(546, 2, -80));
-        addLocation(RivalsMap.RETRO, Points.POINT_B, new Vec3(524, 16, -107));
-        addLocation(RivalsMap.RETRO, Points.POINT_C, new Vec3(576, 16, -45));
-        addLocation(RivalsMap.RETRO, Points.POINT_D, new Vec3(599, 2, -133));
-        addLocation(RivalsMap.RETRO, Points.POINT_E, new Vec3(523, 10, -33));
+        addLocation(RivalsMap.RETRO, Points.POINT_A, new Vec3(177, 6, -761));
+        addLocation(RivalsMap.RETRO, Points.POINT_B, new Vec3(155, 20, -788));
+        addLocation(RivalsMap.RETRO, Points.POINT_C, new Vec3(207, 20, -726));
+        addLocation(RivalsMap.RETRO, Points.POINT_D, new Vec3(230, 6, -814));
+        addLocation(RivalsMap.RETRO, Points.POINT_E, new Vec3(154, 14, -714));
+
+        addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_A, new Vec3(38, 16, -1776));
+        addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_B, new Vec3(2, 27, -1818));
+        addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_C, new Vec3(72, 23, -1818));
+        addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_D, new Vec3(83, 9, -1726));
+        addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_E, new Vec3(-3, 14, -1735));
     }
 
     public static void addLocation(RivalsMap map, Points point, Vec3 vec) {
@@ -37,6 +44,8 @@ public class CapturePointLocations {
             SANDSTORM_pointLocations.put(point, vec);
         } else if (map == RivalsMap.RETRO) {
             RETRO_pointLocations.put(point, vec);
+        } else if (map == RivalsMap.GOOD_INTENTIONS) {
+            GOOD_INTENTIONS_pointLocations.put(point, vec);
         }
     }
 
@@ -45,6 +54,8 @@ public class CapturePointLocations {
             return SANDSTORM_pointLocations;
         } else if (map == RivalsMap.RETRO) {
             return RETRO_pointLocations;
+        } else if (map == RivalsMap.GOOD_INTENTIONS) {
+            return GOOD_INTENTIONS_pointLocations;
         }
 
         return TERRA_pointLocations;

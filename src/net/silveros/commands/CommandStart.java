@@ -24,7 +24,7 @@ public class CommandStart implements CommandExecutor, Color {
                 RivalsMap selectedMap = null;
 
                 for (RivalsMap map : RivalsMap.values()) {
-                    if (s.equalsIgnoreCase(map.displayName)) {
+                    if (s.equalsIgnoreCase(map.name())) {
                         selectedMap = map;
                     }
                 }

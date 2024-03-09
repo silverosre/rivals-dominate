@@ -61,6 +61,17 @@ public class Util {
         return null;
     }
 
+    public static float getTickDelta() {
+        return Bukkit.getServer().getServerTickManager().getTickRate();
+    }
+
+    /**
+     * formula: start + (end - start) * percentage
+     */
+    public static float lerp_f(float percentage, float start, float end) {
+        return start + (end - start) * percentage;
+    }
+
     /**Can return null!*/
     public static Player getPlayerFromId(UUID uuid) {
         return server().getPlayer(uuid);
