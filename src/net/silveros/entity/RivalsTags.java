@@ -23,6 +23,7 @@ public class RivalsTags {
     public static final String RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.restock_cooldown_text";
     public static final String SCORE_BLOCK_COOLDOWN_TEXT_ENTITY = "rivals.score_block_cooldown_text";
 
+    public static final String ITEM_DISPLAY = "rivals.item_display";
     public static final String ENERGY_BLOCK_ITEM_DISPLAY = "rivals.energy_block_item";
     public static final String RESTOCK_BLOCK_ITEM_DISPLAY = "rivals.restock_block_item";
     public static final String SCORE_BLOCK_ITEM_DISPLAY = "rivals.score_block_item";

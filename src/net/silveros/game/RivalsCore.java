@@ -14,18 +14,14 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
-import org.bukkit.util.Transformation;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class RivalsCore implements Color {
     public ScoreboardManager manager;
@@ -634,34 +630,39 @@ public class RivalsCore implements Color {
             }
         }
 
+        //Score block, energy block, & restock block item displays
         for (ItemDisplay e : world.getEntitiesByClass(ItemDisplay.class)) {
-            byte count = 10;
-            double xd = 0.25;
-            double yd = 0.05;
-            float subs = 1.325f;
+            if (e.getScoreboardTags().contains(RivalsTags.ITEM_DISPLAY)) {
+                boolean isBlockUsed = world.getBlockAt(e.getLocation().subtract(0, 2, 0)).getType() == Material.IRON_BLOCK;
+                Material block = Material.DIAMOND_BLOCK;
+                Particle particle = isBlockUsed ? Particle.BLOCK_CRACK : Particle.REDSTONE;
+                org.bukkit.Color color = org.bukkit.Color.AQUA;
 
-            if (e.getScoreboardTags().contains(RivalsTags.ENERGY_BLOCK_ITEM_DISPLAY)) {
-                e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
+                int count = isBlockUsed ? 5 : 10;
+                float xd = isBlockUsed ? 0 : 0.25f;
+                float yd = 0.05f;
+                float subs = 1.375f;
+
                 int ticks = e.getTicksLived() * 4;
+                Location l = e.getLocation();
+                Location prl = l.subtract(0, subs, 0);
 
-                e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
-                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.AQUA, 1));
-            }
-
-            if (e.getScoreboardTags().contains(RivalsTags.RESTOCK_BLOCK_ITEM_DISPLAY)) {
                 e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
-                int ticks = e.getTicksLived() * 4;
-
                 e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
-                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.YELLOW, 1));
-            }
 
-            if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_ITEM_DISPLAY)) {
-                e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.GROUND);
-                int ticks = e.getTicksLived() * 4;
+                if (e.getScoreboardTags().contains(RivalsTags.SCORE_BLOCK_ITEM_DISPLAY)) {
+                    e.setCustomName((isBlockUsed ? DARK_GREEN : GREEN) + BOLD + "Score Block");
+                    block = Material.EMERALD_BLOCK;
+                    color = org.bukkit.Color.LIME;
+                } else if (e.getScoreboardTags().contains(RivalsTags.RESTOCK_BLOCK_ITEM_DISPLAY)) {
+                    e.setCustomName((isBlockUsed ? GOLD : YELLOW) + BOLD + "Restock Block");
+                    block = Material.GOLD_BLOCK;
+                    color = org.bukkit.Color.YELLOW;
+                } else {
+                    e.setCustomName((isBlockUsed ? DARK_AQUA : AQUA) + BOLD + "Energy Block");
+                }
 
-                e.setRotation(Util.lerp_f(Util.getTickDelta(), ticks, ticks + 1), 0);
-                world.spawnParticle(Particle.REDSTONE, e.getLocation().subtract(0, subs, 0), count, xd, yd, xd, 0.01, new Particle.DustOptions(org.bukkit.Color.LIME, 1));
+                world.spawnParticle(particle, prl, count, xd, yd, xd, 0.01, isBlockUsed ? block.createBlockData() : new Particle.DustOptions(color, 1));
             }
         }
 

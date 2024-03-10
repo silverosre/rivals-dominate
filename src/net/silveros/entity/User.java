@@ -163,7 +163,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
@@ -196,7 +196,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.RESTOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
@@ -229,7 +229,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.SCORE_BLOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.LIME);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
