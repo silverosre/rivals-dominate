@@ -11,8 +11,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class KitHerobrine extends Kit {
-    public static final byte SLOT_HEROBRINE_POWER = 3;
-    public static final byte SLOT_FOG_CLOAK = 4;
+    public static final byte SLOT_FOG_CLOAK = 3;
+    public static final byte SLOT_HEROBRINE_POWER = 4;
 
     public KitHerobrine(int id, String name) {
         super(id, name);
@@ -24,8 +24,8 @@ public class KitHerobrine extends Kit {
 
         inv.setItem(0, ItemRegistry.WEAPON_HerobrineAxe);
         inv.setItem(1, ItemRegistry.WEAPON_HerobrineBow);
-        inv.setItem(SLOT_FOG_CLOAK, ItemRegistry.ABILITY_HerobrinePower);
-        inv.setItem(SLOT_HEROBRINE_POWER, ItemRegistry.ABILITY_FogCloak);
+        inv.setItem(SLOT_FOG_CLOAK, ItemRegistry.ABILITY_FogCloak);
+        inv.setItem(SLOT_HEROBRINE_POWER, ItemRegistry.ABILITY_HerobrinePower);
         inv.setItem(7, ItemRegistry.WEAPON_HerobrineArrows);
 
         inv.setHelmet(ItemRegistry.SKULL_Herobrine);

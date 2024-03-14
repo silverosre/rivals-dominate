@@ -49,6 +49,7 @@ public class KitWizard extends Kit {
         Item zap = world.dropItemNaturally(local, new ItemStack(Material.REDSTONE_LAMP));
         zap.setPickupDelay(Integer.MAX_VALUE);
         zap.addScoreboardTag(RivalsTags.ZAP_ENTITY);
+        zap.addScoreboardTag(RivalsTags.REMOVABLE);
         zap.setVelocity(local.getDirection().multiply(0.75));
         zap.setInvulnerable(true);
         RivalsCore.addEntryToTeam(user.getTeam(), zap);
@@ -63,6 +64,7 @@ public class KitWizard extends Kit {
         fireball.setYield(1.25f);
         fireball.setShooter(player);
         fireball.setVelocity(local.getDirection().multiply(0.25));
+        fireball.addScoreboardTag(RivalsTags.REMOVABLE);
 
         world.playSound(local, Sound.ENTITY_BLAZE_SHOOT, 0.75f, 1);
         inv.clear(SLOT_FIREBALL);

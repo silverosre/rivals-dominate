@@ -3,6 +3,8 @@ package net.silveros.events;
 import net.silveros.entity.User;
 import net.silveros.game.RivalsCore;
 import net.silveros.kits.ItemRegistry;
+import net.silveros.kits.Kit;
+import net.silveros.kits.KitHerobrine;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
@@ -87,7 +89,23 @@ public class PlayerEvents implements Listener, Color {
 
     @EventHandler(ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
-        for(Entity entity : event.getEntity().getNearbyEntities(5, 5, 5)) {
+        Entity eveEnt = event.getEntity();
+
+        if (eveEnt instanceof Player) {
+            User user = Util.getUserFromId(eveEnt.getUniqueId());
+
+            if (user.getIsFalling() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                user.setFallingState(false);
+                event.setCancelled(true);
+                return;
+            }
+
+            if (user.getFogCloak()) {
+                KitHerobrine.activateUncloak(eveEnt.getWorld(), eveEnt.getLocation(), user.getPlayer(), user.getInv(), user);
+            }
+        }
+
+        for (Entity entity : eveEnt.getNearbyEntities(5, 5, 5)) {
             if (!(entity instanceof Firework)) {
                 continue;
             }
@@ -99,6 +117,20 @@ public class PlayerEvents implements Listener, Color {
         }
     }
 
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager();
+
+        if (damager instanceof Player) {
+            User user = Util.getUserFromId(damager.getUniqueId());
+
+            if (user.getFogCloak()) {
+                KitHerobrine.activateUncloak(damager.getWorld(), damager.getLocation(), user.getPlayer(), user.getInv(), user);
+            }
+        }
+    }
+
+    //sketchy code i stole
     @EventHandler(ignoreCancelled = true)
     public void onExplosion(FireworkExplodeEvent event) {
         final Firework firework = event.getEntity();

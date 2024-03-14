@@ -52,6 +52,7 @@ public class KitRogue extends Kit {
         Item curse = world.dropItemNaturally(local, new ItemStack(Material.RED_SAND));
         curse.setPickupDelay(Integer.MAX_VALUE);
         curse.addScoreboardTag(RivalsTags.CURSE_ENTITY);
+        curse.addScoreboardTag(RivalsTags.REMOVABLE);
         curse.setVelocity(local.getDirection().multiply(0.75));
         curse.setInvulnerable(true);
         RivalsCore.addEntryToTeam(user.getTeam(), curse);

@@ -51,6 +51,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Curse = item;
     }
+
     private static void generateIncantation(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.INCANTATION);
         ItemMeta meta = item.getItemMeta();
@@ -65,6 +66,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Incantation = item;
     }
+
     private static void generateSwift(int cost) {
         ItemAbility item = getBlankAbility(cost, Abilities.SWIFT);
         ItemMeta meta = item.getItemMeta();
@@ -79,6 +81,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Swift = item;
     }
+
     private static void generateRogueSword() {
         ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
@@ -91,6 +94,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_RogueSword = item;
     }
+
     private static void generateDarkSister() {
         ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
         ItemMeta meta = item.getItemMeta();
@@ -104,6 +108,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.WEAPON_DarkSister = item;
     }
+
     private static void generateRogueChestplate() {
         ItemStack item = new ItemStack(Material.IRON_CHESTPLATE, 1);
         ArmorMeta meta = (ArmorMeta)item.getItemMeta();
@@ -113,17 +118,19 @@ public class ItemsRogue extends Items{
 
         meta.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, TrimPattern.EYE));
 
-        AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "generic.armor", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
+        AttributeModifier armor = new AttributeModifier(UUID.randomUUID(), "generic.armor", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, armor);
 
         meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
 
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_RogueChestplate = item;
     }
+
     private static void generateRogueLeggings() {
         ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();
@@ -139,6 +146,7 @@ public class ItemsRogue extends Items{
         item.setItemMeta(meta);
         ItemRegistry.ARMOR_RogueLeggings = item;
     }
+
     private static void generateRogueBoots() {
         ItemStack item = new ItemStack(Material.LEATHER_BOOTS, 1);
         LeatherArmorMeta meta = (LeatherArmorMeta)item.getItemMeta();

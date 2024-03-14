@@ -36,7 +36,6 @@ public class User {
     private static final int PRESET_StinkBomb = 30 * 20;
     private static final int PRESET_FogCloak = 30 * 20;
     private static final int PRESET_Uncloak = 2 * 20;
-    private static final int PRESET_FogCloakMin = 2 * 20;
     private static final int PRESET_HerobrinePower = 55 * 20;
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
     private static final int PRESET_Zap = 5 * 20;
@@ -44,6 +43,9 @@ public class User {
     private static final int PRESET_Freeze = 20 * 20;
     private static final int PRESET_Steal = 1 * 20;
     private static final int PRESET_Give = 2 * 20;
+
+    private static final int PRESET_TimeUntil_Swift = 45 * 20;
+    private static final int PRESET_TimeUntil_BearAbilities = 2 * 20;
 
     //Ability cooldowns
 
@@ -66,7 +68,6 @@ public class User {
     //herobrine
     public int cooldown_FogCloak = PRESET_FogCloak;
     public int cooldown_Uncloak = PRESET_Uncloak;
-    public int cooldown_FogCloakMin = PRESET_FogCloakMin;
     public int cooldown_HerobrinePower = PRESET_HerobrinePower;
     public int cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
     //wizard
@@ -80,8 +81,8 @@ public class User {
     public int bulletCount = 3;
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 45 * 20;
-    public int timeUntil_BearAbilities = 40;
+    public int timeUntil_Swift = PRESET_TimeUntil_Swift;
+    public int timeUntil_BearAbilities = PRESET_TimeUntil_BearAbilities;
 
     //Misc
     public boolean bearAbility = false;
@@ -93,6 +94,7 @@ public class User {
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
     public boolean isDead = false;
+    private boolean isFalling = false;
 
     //random number generator
     public double randomPosition (double min, double max) {
@@ -167,7 +169,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.ENERGY_BLOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.AQUA);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.ENERGY_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
@@ -200,7 +202,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.RESTOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.YELLOW);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.RESTOCK_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
@@ -233,7 +235,7 @@ public class User {
                                 cooldown.setScore(RivalsCore.SCORE_BLOCK_TIMER);
                                 RivalsCore.spawnFirework(e.getLocation(), Color.LIME);
 
-                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1.5, 0), EntityType.TEXT_DISPLAY);
+                                TextDisplay text = (TextDisplay)world.spawnEntity(e.getLocation().add(0, 1, 0), EntityType.TEXT_DISPLAY);
                                 text.addScoreboardTag(RivalsTags.SCORE_BLOCK_COOLDOWN_TEXT_ENTITY);
                                 text.setBillboard(Display.Billboard.VERTICAL);
                                 text.setDisplayWidth(1f);
@@ -250,6 +252,45 @@ public class User {
         }
 
         //Kit cooldowns
+        if (RivalsCore.gameInProgress) {
+            this.tickKitAbilities(world, player, inv, local);
+        } else {
+            this.setFogCloakState(false);
+
+            //bunket
+            this.cooldown_ShieldUp = PRESET_ShieldUp;
+            //archer
+            this.cooldown_Fletch = PRESET_Fletch;
+            this.cooldown_Snare = PRESET_Snare;
+            this.cooldown_FromAbove = PRESET_FromAbove;
+            //rogue
+            this.cooldown_Incantation = PRESET_Incantation;
+            this.cooldown_IncantationActive = PRESET_IncantationActive;
+            this.cooldown_Curse = PRESET_Curse;
+            this.timeUntil_Swift = PRESET_TimeUntil_Swift;
+            //gummybear
+            this.cooldown_NormalBear = PRESET_NormalBear;
+            this.cooldown_Numb = PRESET_Numb;
+            this.cooldown_NumbActive = PRESET_NumbActive;
+            this.cooldown_ChaosZone = PRESET_ChaosZone;
+            this.cooldown_StinkBomb = PRESET_StinkBomb;
+            this.timeUntil_BearAbilities = PRESET_TimeUntil_BearAbilities;
+            //herobrine
+            this.cooldown_FogCloak = PRESET_FogCloak;
+            this.cooldown_Uncloak = PRESET_Uncloak;
+            this.cooldown_HerobrinePower = PRESET_HerobrinePower;
+            this.cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
+            //wizard
+            this.cooldown_Zap = PRESET_Zap;
+            this.cooldown_Fireball = PRESET_Fireball;
+            this.cooldown_Freeze = PRESET_Freeze;
+            //goblin
+            this.cooldown_Steal = PRESET_Steal;
+            this.cooldown_Give = PRESET_Give;
+        }
+    }
+
+    private void tickKitAbilities(World world, Player player, PlayerInventory inv, Location local) {
         if (this.currentKit == Kit.BUNKET.kitID) {
             if (!inv.contains(ItemRegistry.ABILITY_ShieldUp)) {
                 if (this.cooldown_ShieldUp > 0) {
@@ -477,7 +518,7 @@ public class User {
                 this.cloakTime++;
 
                 if (this.cloakTime >= MAX_CLOAK_TIME) {
-                    this.setFogCloakState(false);
+                    this.setFogCloakState(true);
                 }
 
                 if (this.cooldown_Uncloak > 0) {
@@ -489,6 +530,7 @@ public class User {
             } else {
                 if (this.cloakTime > 0) {
                     KitHerobrine.activateUncloak(world, local, player, inv, this);
+                    this.cloakTime = 0;
                 }
 
                 if (inv.contains(ItemRegistry.ABILITY_Uncloak)) {
@@ -686,5 +728,13 @@ public class User {
         }
 
         this.usingFogCloak = state;
+    }
+
+    public void setFallingState(boolean state) {
+        this.isFalling = state;
+    }
+
+    public boolean getIsFalling() {
+        return this.isFalling;
     }
 }
