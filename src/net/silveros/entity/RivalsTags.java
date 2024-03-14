@@ -28,6 +28,8 @@ public class RivalsTags {
     public static final String RESTOCK_BLOCK_ITEM_DISPLAY = "rivals.restock_block_item";
     public static final String SCORE_BLOCK_ITEM_DISPLAY = "rivals.score_block_item";
 
+    public static final String LAUNCH_PAD = "rivals.launch_pad";
+
     public static final String CAPTURE_POINT = "rivals.capture_point";
     public static final String CAPTURE_POINT_SCORE = "rivals.capture_point_score";
     public static final String POINT_A = "rivals.point_a";
@@ -46,4 +48,5 @@ public class RivalsTags {
     public static final String MAP_SANDSTORM = "rivals.map_sandstorm";
     public static final String MAP_RETRO = "rivals.map_retro";
     public static final String MAP_GOOD_INTENTIONS = "rivals.map_good_intentions";
+    public static final String MAP_MELT = "rivals.map_melt";
 }

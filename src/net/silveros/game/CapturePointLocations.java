@@ -10,6 +10,7 @@ public class CapturePointLocations {
     public static Map<Points, Vec3> SANDSTORM_pointLocations = new HashMap<>();
     public static Map<Points, Vec3> RETRO_pointLocations = new HashMap<>();
     public static Map<Points, Vec3> GOOD_INTENTIONS_pointLocations = new HashMap<>();
+    public static Map<Points, Vec3> MELT_pointLocations = new HashMap<>();
 
     public static void init() {
         addLocation(RivalsMap.TERRA, Points.POINT_A, new Vec3(-344, 10, -353));
@@ -35,29 +36,46 @@ public class CapturePointLocations {
         addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_C, new Vec3(72, 23, -1818));
         addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_D, new Vec3(83, 9, -1726));
         addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_E, new Vec3(-3, 14, -1735));
+
+        addLocation(RivalsMap.MELT, Points.POINT_A, new Vec3(38, 16, -1776));
+        addLocation(RivalsMap.MELT, Points.POINT_B, new Vec3(2, 27, -1818));
+        addLocation(RivalsMap.MELT, Points.POINT_C, new Vec3(72, 23, -1818));
+        addLocation(RivalsMap.MELT, Points.POINT_D, new Vec3(83, 9, -1726));
+        addLocation(RivalsMap.MELT, Points.POINT_E, new Vec3(-3, 14, -1735));
     }
 
     public static void addLocation(RivalsMap map, Points point, Vec3 vec) {
-        if (map == RivalsMap.TERRA) {
-            TERRA_pointLocations.put(point, vec);
-        } else if (map == RivalsMap.SANDSTORM) {
-            SANDSTORM_pointLocations.put(point, vec);
-        } else if (map == RivalsMap.RETRO) {
-            RETRO_pointLocations.put(point, vec);
-        } else if (map == RivalsMap.GOOD_INTENTIONS) {
-            GOOD_INTENTIONS_pointLocations.put(point, vec);
+        switch (map) {
+            case SANDSTORM:
+                SANDSTORM_pointLocations.put(point, vec);
+                break;
+            case RETRO:
+                RETRO_pointLocations.put(point, vec);
+                break;
+            case GOOD_INTENTIONS:
+                GOOD_INTENTIONS_pointLocations.put(point, vec);
+                break;
+            case MELT:
+                MELT_pointLocations.put(point, vec);
+                break;
+            default:
+                TERRA_pointLocations.put(point, vec);
+                break;
         }
     }
 
     public static Map<Points, Vec3> getPointLocations(RivalsMap map) {
-        if (map == RivalsMap.SANDSTORM) {
-            return SANDSTORM_pointLocations;
-        } else if (map == RivalsMap.RETRO) {
-            return RETRO_pointLocations;
-        } else if (map == RivalsMap.GOOD_INTENTIONS) {
-            return GOOD_INTENTIONS_pointLocations;
+        switch (map) {
+            case SANDSTORM:
+                return SANDSTORM_pointLocations;
+            case RETRO:
+                return RETRO_pointLocations;
+            case GOOD_INTENTIONS:
+                return GOOD_INTENTIONS_pointLocations;
+            case MELT:
+                return MELT_pointLocations;
+            default:
+                return TERRA_pointLocations;
         }
-
-        return TERRA_pointLocations;
     }
 }
