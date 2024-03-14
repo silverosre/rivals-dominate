@@ -67,6 +67,7 @@ public class KitArcher extends Kit {
     public static void activateSnare(World world, Location local, Player player, PlayerInventory inv, User user) {
         Marker snare = (Marker)world.spawnEntity(local, EntityType.MARKER);
         snare.addScoreboardTag(RivalsTags.SNARE_ENTITY);
+        snare.addScoreboardTag(RivalsTags.REMOVABLE);
         RivalsCore.addEntryToTeam(user.getTeam(), snare);
 
         world.playSound(local, Sound.BLOCK_WET_GRASS_PLACE, 0.75f, 0.5f);
@@ -77,6 +78,7 @@ public class KitArcher extends Kit {
         Item flare = world.dropItemNaturally(local, new ItemStack(user.getTeam(RivalsPlugin.core.TEAM_BLUE) ? Material.BLUE_CANDLE : Material.RED_CANDLE));
         flare.setPickupDelay(Integer.MAX_VALUE);
         flare.addScoreboardTag(RivalsTags.FLARE_ENTITY);
+        flare.addScoreboardTag(RivalsTags.REMOVABLE);
         flare.setVelocity(local.getDirection().add(new Vector(0, 0.1f, 0)));
         flare.setInvulnerable(true);
         flare.setOwner(player.getUniqueId());

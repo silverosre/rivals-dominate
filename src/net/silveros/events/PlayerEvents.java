@@ -88,6 +88,12 @@ public class PlayerEvents implements Listener, Color {
         if (eveEnt instanceof Player) {
             User user = Util.getUserFromId(eveEnt.getUniqueId());
 
+            if (user.getIsFalling() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                user.setFallingState(false);
+                event.setCancelled(true);
+                return;
+            }
+
             if (user.getFogCloak()) {
                 KitHerobrine.activateUncloak(eveEnt.getWorld(), eveEnt.getLocation(), user.getPlayer(), user.getInv(), user);
             }

@@ -44,6 +44,9 @@ public class User {
     private static final int PRESET_Steal = 1 * 20;
     private static final int PRESET_Give = 2 * 20;
 
+    private static final int PRESET_TimeUntil_Swift = 45 * 20;
+    private static final int PRESET_TimeUntil_BearAbilities = 2 * 20;
+
     //Ability cooldowns
 
     //bunket
@@ -76,8 +79,8 @@ public class User {
     public int cooldown_Give = PRESET_Give;
 
     //Time until abilities can be used
-    public int timeUntil_Swift = 45 * 20;
-    public int timeUntil_BearAbilities = 40;
+    public int timeUntil_Swift = PRESET_TimeUntil_Swift;
+    public int timeUntil_BearAbilities = PRESET_TimeUntil_BearAbilities;
 
     //Misc
     public boolean bearAbility = false;
@@ -89,6 +92,7 @@ public class User {
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
     public boolean isDead = false;
+    private boolean isFalling = false;
 
     //random number generator
     public double randomPosition (double min, double max) {
@@ -246,7 +250,42 @@ public class User {
         }
 
         //Kit cooldowns
-        this.tickKitAbilities(world, player, inv, local);
+        if (RivalsCore.gameInProgress) {
+            this.tickKitAbilities(world, player, inv, local);
+        } else {
+            this.setFogCloakState(false);
+
+            //bunket
+            this.cooldown_ShieldUp = PRESET_ShieldUp;
+            //archer
+            this.cooldown_Fletch = PRESET_Fletch;
+            this.cooldown_Snare = PRESET_Snare;
+            this.cooldown_FromAbove = PRESET_FromAbove;
+            //rogue
+            this.cooldown_Incantation = PRESET_Incantation;
+            this.cooldown_IncantationActive = PRESET_IncantationActive;
+            this.cooldown_Curse = PRESET_Curse;
+            this.timeUntil_Swift = PRESET_TimeUntil_Swift;
+            //gummybear
+            this.cooldown_NormalBear = PRESET_NormalBear;
+            this.cooldown_Numb = PRESET_Numb;
+            this.cooldown_NumbActive = PRESET_NumbActive;
+            this.cooldown_ChaosZone = PRESET_ChaosZone;
+            this.cooldown_StinkBomb = PRESET_StinkBomb;
+            this.timeUntil_BearAbilities = PRESET_TimeUntil_BearAbilities;
+            //herobrine
+            this.cooldown_FogCloak = PRESET_FogCloak;
+            this.cooldown_Uncloak = PRESET_Uncloak;
+            this.cooldown_HerobrinePower = PRESET_HerobrinePower;
+            this.cooldown_HerobrinePowerActive = PRESET_HerobrinePowerActive;
+            //wizard
+            this.cooldown_Zap = PRESET_Zap;
+            this.cooldown_Fireball = PRESET_Fireball;
+            this.cooldown_Freeze = PRESET_Freeze;
+            //goblin
+            this.cooldown_Steal = PRESET_Steal;
+            this.cooldown_Give = PRESET_Give;
+        }
     }
 
     private void tickKitAbilities(World world, Player player, PlayerInventory inv, Location local) {
@@ -680,5 +719,13 @@ public class User {
         }
 
         this.usingFogCloak = state;
+    }
+
+    public void setFallingState(boolean state) {
+        this.isFalling = state;
+    }
+
+    public boolean getIsFalling() {
+        return this.isFalling;
     }
 }
