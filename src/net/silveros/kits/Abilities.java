@@ -36,6 +36,6 @@ public enum Abilities {
     //Goblin
     STEAL,
     GIVE,
-    SNEAKY,
     SWARM,
+    RELOAD,
 }

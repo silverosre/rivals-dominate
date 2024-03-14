@@ -25,7 +25,7 @@ public class ItemRegistry implements Color {
         new ItemsAttackBear().prepareItems();
         new ItemsSpeedBear().prepareItems();
         new ItemsWizard().prepareItems();
-        new ItemsGoblin().prepareItems();
+        new ItemsBandit().prepareItems();
 
         //Bunket
         addToMap(ABILITY_ShieldUp);
@@ -55,10 +55,10 @@ public class ItemRegistry implements Color {
         addToMap(ABILITY_Zap);
         addToMap(ABILITY_Fireball);
         addToMap(ABILITY_Freeze);
-        //Goblin
+        //Bandit
         addToMap(ABILITY_Steal);
         addToMap(ABILITY_Give);
-        addToMap(ABILITY_Swarm);
+        addToMap(ABILITY_Reload);
     }
 
     private static void addToMap(ItemAbility ability) {
@@ -164,12 +164,13 @@ public class ItemRegistry implements Color {
     public static ItemStack ARMOR_WizardLeggings;
     public static ItemStack ARMOR_WizardBoots;
 
-    //Goblin
+    //Bandit
     public static ItemAbility ABILITY_Steal;
     public static ItemAbility ABILITY_Give;
-    public static ItemAbility ABILITY_Swarm;
-    public static ItemStack SKULL_Goblin;
-    public static ItemStack ARMOR_GoblinChestplate;
-    public static ItemStack ARMOR_GoblinLeggings;
-    public static ItemStack ARMOR_GoblinBoots;
+    public static ItemAbility ABILITY_Reload;
+    public static ItemStack SKULL_Bandit;
+    public static ItemStack WEAPON_Sixshooter;
+    public static ItemStack ARMOR_BanditChestplate;
+    public static ItemStack ARMOR_BanditLeggings;
+    public static ItemStack ARMOR_BanditBoots;
 }
