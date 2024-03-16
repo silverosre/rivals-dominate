@@ -102,6 +102,7 @@ public class PlayerEvents implements Listener, Color {
         Entity eveEnt = event.getEntity();
 
         if (eveEnt instanceof Player) {
+            Player player = (Player)eveEnt;
             User user = Util.getUserFromId(eveEnt.getUniqueId());
 
             if (user.getIsFalling() && event.getCause() == EntityDamageEvent.DamageCause.FALL) {

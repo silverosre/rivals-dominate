@@ -251,6 +251,10 @@ public class User {
             }
         }
 
+        if (local.getBlock().getType() == Material.LAVA) {
+            player.setHealth(0);
+        }
+
         //Kit cooldowns
         if (RivalsCore.gameInProgress) {
             this.tickKitAbilities(world, player, inv, local);
