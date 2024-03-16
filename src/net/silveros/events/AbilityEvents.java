@@ -72,7 +72,7 @@ public class AbilityEvents implements Listener, Color {
         ItemStack item = event.getItem();
         World world = player.getWorld();
 
-        if (eitherAction(event)) {
+        if (Util.eitherAction(event)) {
             if (item != null) {
                 if (item.getType() == Material.ENCHANTED_BOOK) {
                     ItemMeta meta = item.getItemMeta();
@@ -168,9 +168,5 @@ public class AbilityEvents implements Listener, Color {
                 }
             }
         }
-    }
-
-    private static boolean eitherAction(PlayerInteractEvent event) {
-        return event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR;
     }
 }

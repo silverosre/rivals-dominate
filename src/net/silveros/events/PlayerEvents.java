@@ -3,27 +3,25 @@ package net.silveros.events;
 import net.silveros.entity.User;
 import net.silveros.game.RivalsCore;
 import net.silveros.kits.ItemRegistry;
-import net.silveros.kits.Kit;
+import net.silveros.kits.KitBandit;
 import net.silveros.kits.KitHerobrine;
 import net.silveros.main.RivalsPlugin;
 import net.silveros.utility.Color;
 import net.silveros.utility.Util;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +47,21 @@ public class PlayerEvents implements Listener, Color {
 
     @EventHandler
     public static void onConsumption(PlayerItemConsumeEvent event) {
+        ItemStack item = event.getItem();
         Player player = event.getPlayer();
-        if (event.getItem().getType() == Material.APPLE) {
+        if (item.getType() == Material.APPLE) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 30, 2, false, false));
+        } else if (item.equals(ItemRegistry.WEAPON_SixShooter)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public static void onArrowFired(EntityShootBowEvent event) {
+        ItemStack item = event.getBow();
+
+        if (ItemRegistry.WEAPON_SixShooter.equals(item)) {
+            event.setCancelled(true);
         }
     }
 
@@ -175,24 +185,35 @@ public class PlayerEvents implements Listener, Color {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        ItemStack item = event.getItem();
         Player player = event.getPlayer();
         User user = Util.getUserFromId(player.getUniqueId());
-        if (event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+        World world = player.getWorld();
+        ItemStack item = event.getItem();
+
+        if (Util.eitherAction(event)) {
             if (item != null) {
-                if (user != null) {
-                    if (!user.usedSixshooter) {
+                if (item.equals(ItemRegistry.WEAPON_SixShooter)) {
+                    if (!user.usedSixShooter) {
                         if (user.bulletCount > 0) {
-                            if (item.equals(ItemRegistry.WEAPON_Sixshooter)) {
-                                user.usedSixshooter = true;
-                            }
+                            KitBandit.useSixShooter(world, player, user);
+                            user.usedSixShooter = true;
                         } else {
                             player.sendMessage(RED + "No bullets!");
-                            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+                            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1.5f);
                         }
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public static void onDeath(PlayerDeathEvent event) {
+        Player victim = event.getEntity();
+        Player killer = event.getEntity().getKiller();
+
+        if (killer != null) {
+            Util.getUserFromId(killer.getUniqueId()).addEnergy(1);
         }
     }
 

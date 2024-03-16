@@ -77,8 +77,6 @@ public class User {
     //bandit
     public int cooldown_Steal = PRESET_Steal;
     public int cooldown_Give = PRESET_Give;
-    public boolean usedSixshooter = false;
-    public int bulletCount = 3;
 
     //Time until abilities can be used
     public int timeUntil_Swift = PRESET_TimeUntil_Swift;
@@ -90,6 +88,8 @@ public class User {
     private boolean usingFogCloak = false;
     private int cloakTime = 0;
     private static final int MAX_CLOAK_TIME = 20 * 20;
+    public boolean usedSixShooter = false;
+    public int bulletCount = KitBandit.DEFAULT_BULLETS;
 
     private int totalEnergy = 0;
     private int respawnTimer = 0; // will tick down if above zero
@@ -284,9 +284,10 @@ public class User {
             this.cooldown_Zap = PRESET_Zap;
             this.cooldown_Fireball = PRESET_Fireball;
             this.cooldown_Freeze = PRESET_Freeze;
-            //goblin
+            //bandit
             this.cooldown_Steal = PRESET_Steal;
             this.cooldown_Give = PRESET_Give;
+
         }
     }
 
@@ -547,15 +548,23 @@ public class User {
                 }
             }
         }
-        //bandit
+
         if (this.currentKit == Kit.BANDIT.kitID) {
-            if (usedSixshooter) {
-                if(bulletCount > 0) {
-                    bulletCount--;
+            player.setLevel(this.bulletCount);
+
+            /* for the crossbow shenanigans
+            if (!ItemRegistry.WEAPON_SixShooter.equals(inv.getItem(KitBandit.SLOT_SIX_SHOOTER))) {
+                inv.setItem(KitBandit.SLOT_SIX_SHOOTER, ItemRegistry.WEAPON_SixShooter);
+            }*/
+
+            if (this.usedSixShooter) {
+                if(this.bulletCount > 0) {
+                    this.bulletCount--;
                 }
-                player.setLevel(bulletCount);
-                usedSixshooter = false;
+
+                this.usedSixShooter = false;
             }
+
             if (this.cooldown_Steal > 0) {
                 this.cooldown_Steal--;
             } else {
@@ -736,5 +745,10 @@ public class User {
 
     public boolean getIsFalling() {
         return this.isFalling;
+    }
+
+    public void setBulletCount(int num) {
+        this.bulletCount = num;
+        this.getPlayer().setLevel(this.bulletCount);
     }
 }

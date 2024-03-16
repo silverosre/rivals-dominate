@@ -28,12 +28,12 @@ public class KitGoblin extends Kit implements Color {
 
         inv.setItem(SLOT_STEAL, ItemRegistry.ABILITY_Steal);
         inv.setItem(SLOT_GIVE, ItemRegistry.ABILITY_Give);
-        inv.setItem(SLOT_SWARM, ItemRegistry.ABILITY_Swarm);
+        /*inv.setItem(SLOT_SWARM, ItemRegistry.ABILITY_Swarm);
 
         inv.setChestplate(ItemRegistry.ARMOR_GoblinChestplate);
         inv.setLeggings(ItemRegistry.ARMOR_GoblinLeggings);
         inv.setBoots(ItemRegistry.ARMOR_GoblinBoots);
-        inv.setHelmet(ItemRegistry.SKULL_Goblin);
+        inv.setHelmet(ItemRegistry.SKULL_Goblin);*/
 
         //player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
     }
@@ -105,7 +105,7 @@ public class KitGoblin extends Kit implements Color {
         user.addEnergy(1);
     }
 
-    public static void activateSwarm(World world, Location local, Player player, PlayerInventory inv, User user) {
+    /*public static void activateSwarm(World world, Location local, Player player, PlayerInventory inv, User user) {
         for (Entity e : player.getNearbyEntities(2.5, 1, 2.5)) {
             if (e instanceof Player) {
                 Player other = (Player)e;
@@ -131,5 +131,5 @@ public class KitGoblin extends Kit implements Color {
         player.playSound(player, Sound.ENTITY_VILLAGER_NO, 0.75f, 1);
         player.sendMessage(RED + "No player to give Swarm effects to within range!");
         user.addEnergy(ItemRegistry.ABILITY_Swarm.energyCost);
-    }
+    }*/
 }

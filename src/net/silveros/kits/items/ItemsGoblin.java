@@ -29,7 +29,7 @@ public class ItemsGoblin extends Items {
         generateGoblinChestplate();
         generateGoblinLeggings();
         generateGoblinBoots();
-        ItemRegistry.SKULL_Goblin = getSkull(Skulls.GOBLIN, "Goblin Head");
+        //ItemRegistry.SKULL_Goblin = getSkull(Skulls.GOBLIN, "Goblin Head");
     }
 
     private static void generateSteal(int cost) {
@@ -74,7 +74,7 @@ public class ItemsGoblin extends Items {
         ));
 
         item.setItemMeta(meta);
-        ItemRegistry.ABILITY_Swarm = item;
+        //ItemRegistry.ABILITY_Swarm = item;
     }
 
     private static void generateGoblinChestplate() {
@@ -96,7 +96,7 @@ public class ItemsGoblin extends Items {
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
-        ItemRegistry.ARMOR_GoblinChestplate = item;
+        //ItemRegistry.ARMOR_GoblinChestplate = item;
     }
 
     private static void generateGoblinLeggings() {
@@ -112,7 +112,7 @@ public class ItemsGoblin extends Items {
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
-        ItemRegistry.ARMOR_GoblinLeggings = item;
+        //ItemRegistry.ARMOR_GoblinLeggings = item;
     }
 
     private static void generateGoblinBoots() {
@@ -128,6 +128,6 @@ public class ItemsGoblin extends Items {
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 
         item.setItemMeta(meta);
-        ItemRegistry.ARMOR_GoblinBoots = item;
+        //ItemRegistry.ARMOR_GoblinBoots = item;
     }
 }

@@ -3,8 +3,8 @@ package net.silveros.game;
 import net.silveros.entity.RivalsTags;
 
 public enum RivalsMap {
-    TERRA(RivalsTags.MAP_TERRA, "Terra", Weather.RAIN),
-    SANDSTORM(RivalsTags.MAP_SANDSTORM, "Sandstorm", Weather.THUNDER),
+    TERRA(RivalsTags.MAP_TERRA, "Terra"),
+    SANDSTORM(RivalsTags.MAP_SANDSTORM, "Sandstorm"),
     RETRO(RivalsTags.MAP_RETRO, "Retro"),
     GOOD_INTENTIONS(RivalsTags.MAP_GOOD_INTENTIONS, "Good Intentions", 13000),
     MELT(RivalsTags.MAP_MELT, "Melt", 12500, Weather.THUNDER),;

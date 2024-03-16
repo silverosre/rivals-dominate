@@ -37,11 +37,11 @@ public class CapturePointLocations {
         addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_D, new Vec3(83, 9, -1726));
         addLocation(RivalsMap.GOOD_INTENTIONS, Points.POINT_E, new Vec3(-3, 14, -1735));
 
-        addLocation(RivalsMap.MELT, Points.POINT_A, new Vec3(38, 16, -1776));
-        addLocation(RivalsMap.MELT, Points.POINT_B, new Vec3(2, 27, -1818));
-        addLocation(RivalsMap.MELT, Points.POINT_C, new Vec3(72, 23, -1818));
-        addLocation(RivalsMap.MELT, Points.POINT_D, new Vec3(83, 9, -1726));
-        addLocation(RivalsMap.MELT, Points.POINT_E, new Vec3(-3, 14, -1735));
+        addLocation(RivalsMap.MELT, Points.POINT_A, new Vec3(1091, 19, -800));
+        addLocation(RivalsMap.MELT, Points.POINT_B, new Vec3(1135, 19, -800));
+        addLocation(RivalsMap.MELT, Points.POINT_C, new Vec3(1047, 19, -800));
+        addLocation(RivalsMap.MELT, Points.POINT_D, new Vec3(1091, 19, -844));
+        addLocation(RivalsMap.MELT, Points.POINT_E, new Vec3(1091, 19, -755));
     }
 
     public static void addLocation(RivalsMap map, Points point, Vec3 vec) {

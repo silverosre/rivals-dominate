@@ -169,7 +169,7 @@ public class ItemRegistry implements Color {
     public static ItemAbility ABILITY_Give;
     public static ItemAbility ABILITY_Reload;
     public static ItemStack SKULL_Bandit;
-    public static ItemStack WEAPON_Sixshooter;
+    public static ItemStack WEAPON_SixShooter;
     public static ItemStack ARMOR_BanditChestplate;
     public static ItemStack ARMOR_BanditLeggings;
     public static ItemStack ARMOR_BanditBoots;
