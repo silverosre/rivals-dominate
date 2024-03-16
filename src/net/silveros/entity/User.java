@@ -251,6 +251,7 @@ public class User {
             }
         }
 
+        //kill players if in lava
         if (local.getBlock().getType() == Material.LAVA) {
             player.setHealth(0);
         }
