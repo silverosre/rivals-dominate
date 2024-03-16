@@ -18,7 +18,7 @@ public class KitBandit extends Kit implements Color {
     public static final byte SLOT_STEAL = 3;
     public static final byte SLOT_GIVE = 4;
     public static final byte SLOT_RELOAD = 5;
-    public static final int DEFAULT_BULLETS = 3;
+    public static final int DEFAULT_BULLETS = 2;
     public static final byte SLOT_SIX_SHOOTER = 0;
 
     public KitBandit(int id, String name) {
@@ -135,7 +135,7 @@ public class KitBandit extends Kit implements Color {
         Location eyes = player.getEyeLocation();
         Vector dir = eyes.getDirection().multiply(1.5);
         int distance = 16;
-        int dmg = 6;
+        int dmg = 5;
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 3, false, false));
 
