@@ -30,18 +30,47 @@ public abstract class Items implements Color {
     protected abstract void prepareArmor();
 
     //Utility
-    protected static ItemAbility getBlankAbility(int cost, Abilities ability) {
+    /*protected static ItemAbility getBlankAbility(int cost, Abilities ability) {
         return new ItemAbility(Material.ENCHANTED_BOOK, 1, cost, ability);
+    }*/
+
+    protected static ItemAbility getBlankAbility(Abilities ability) {
+        return new ItemAbility(Material.ENCHANTED_BOOK, 1, ability.getCost(), ability);
     }
 
     protected static ItemStack getArrows(int count) {
         return new ItemStack(Material.ARROW, count);
     }
 
+    /**Used for item names.*/
     protected static String itemCost(int cost) {
-        return LIGHT_PURPLE + "(" + DARK_AQUA + BOLD + cost + RESET + LIGHT_PURPLE + ")";
+        return LIGHT_PURPLE + " (" + AQUA + BOLD + cost + RESET + LIGHT_PURPLE + ")";
     }
 
+    /**Used for item names.*/
+    protected static String abilityName(String ability) {
+        return GREEN + BOLD + "Ability" + GOLD + ": " + WHITE + ability;
+    }
+
+    /*protected static List<String> addLore(String... args) {
+        return new ArrayList<>(Arrays.asList(args));
+    }*/
+
+    protected static List<String> addLore(Abilities ability, String... args) {
+        ArrayList<String> lore = new ArrayList<>(Arrays.asList(args));
+
+        String cooldown = ability.getCooldownForDisplay() + GRAY + "s";
+        if (ability.getCooldown() < 0) {
+            cooldown = "One-time use";
+        }
+
+        lore.add(AQUA + BOLD + "Energy Cost" + GOLD + ": " + GRAY + ability.getCost());
+        lore.add(LIGHT_PURPLE + BOLD + "Ability Cooldown" + GOLD + ": " + GRAY + cooldown);
+
+        return lore;
+    }
+
+    /**Do not use this for abilities.*/
     protected static List<String> addLore(String... args) {
         return new ArrayList<>(Arrays.asList(args));
     }

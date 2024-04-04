@@ -21,9 +21,9 @@ public class ItemsBunket extends Items {
     @Override
     protected void prepareFeatures() {
         generateBunketShield(35);
-        generateEmergencyRepairs(3);
-        generateSelfDestruct(3);
-        generateShieldUp(2);
+        generateEmergencyRepairs(Abilities.EMERGENCY_REPAIRS, "Emergency Repairs");
+        generateSelfDestruct(Abilities.SELF_DESTRUCT, "Self Destruct");
+        generateShieldUp(Abilities.SHIELD_UP, "Shield Up");
     }
 
     @Override
@@ -45,44 +45,44 @@ public class ItemsBunket extends Items {
         ItemRegistry.WEAPON_BunketShield = item;
     }
 
-    private static void generateEmergencyRepairs(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.EMERGENCY_REPAIRS);
+    private static void generateEmergencyRepairs(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Emergency Repairs " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Quickly heal back to full health",
                 WHITE + ITALIC + "at the cost of your passive ability",
-                WHITE + ITALIC + "and a bit of time.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                WHITE + ITALIC + "and a bit of time."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_EmergencyRepairs = item;
     }
 
-    private static void generateSelfDestruct(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.SELF_DESTRUCT);
+    private static void generateSelfDestruct(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Self Destruct " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Go out with a bang.",
-                DARK_AQUA + "Costs " + cost + " energy: one time use"
+                ability,
+                WHITE + ITALIC + "Go out with a bang."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_SelfDestruct = item;
     }
 
-    private static void generateShieldUp(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.SHIELD_UP);
+    private static void generateShieldUp(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Shield Up " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Recover your shield.",
-                DARK_AQUA + "Costs " + cost + " energy: 55 second cooldown"
+                ability,
+                WHITE + ITALIC + "Recover your shield."
         ));
 
         item.setItemMeta(meta);

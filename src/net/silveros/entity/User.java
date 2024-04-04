@@ -22,29 +22,29 @@ public class User {
     public int currentKit = -1; // -1 means no kit, refer to Kit.java for kit values
 
     //Ability cooldown presets (formula: seconds * 20)
-    private static final int PRESET_ShieldUp = 55 * 20;
-    private static final int PRESET_Fletch = 2 * 20;
-    private static final int PRESET_Snare = 2 * 20;
-    private static final int PRESET_FromAbove = 55 * 20;
-    private static final int PRESET_Incantation = 30 * 20;
+    private static final int PRESET_ShieldUp = Abilities.SHIELD_UP.getCooldown();
+    private static final int PRESET_Fletch = Abilities.FLETCH.getCooldown();
+    private static final int PRESET_Snare = Abilities.SNARE.getCooldown();
+    private static final int PRESET_FromAbove = Abilities.FROM_ABOVE.getCooldown();
+    private static final int PRESET_Incantation = Abilities.INCANTATION.getCooldown();
     private static final int PRESET_IncantationActive = 5 * 20;
-    private static final int PRESET_Curse = 10 * 20;
+    private static final int PRESET_Curse = Abilities.CURSE.getCooldown();
     private static final int PRESET_NormalBear = 5 * 20;
     private static final int PRESET_NumbActive = 10 * 20;
     private static final int PRESET_Numb = 30 * 20;
     private static final int PRESET_ChaosZone = 30 * 20;
     private static final int PRESET_StinkBomb = 30 * 20;
-    private static final int PRESET_FogCloak = 30 * 20;
-    private static final int PRESET_Uncloak = 2 * 20;
-    private static final int PRESET_HerobrinePower = 55 * 20;
+    private static final int PRESET_FogCloak = Abilities.FOG_CLOAK.getCooldown();
+    private static final int PRESET_Uncloak = Abilities.UNCLOAK.getCooldown();
+    private static final int PRESET_HerobrinePower = Abilities.HEROBRINE_POWER.getCooldown();
     private static final int PRESET_HerobrinePowerActive = 10 * 20;
-    private static final int PRESET_Zap = 5 * 20;
-    private static final int PRESET_Fireball = 5 * 20;
-    private static final int PRESET_Freeze = 20 * 20;
-    private static final int PRESET_Steal = 1 * 20;
-    private static final int PRESET_Give = 2 * 20;
+    private static final int PRESET_Zap = Abilities.ZAP.getCooldown();
+    private static final int PRESET_Fireball = Abilities.FIREBALL.getCooldown();
+    private static final int PRESET_Freeze = Abilities.FREEZE.getCooldown();
+    private static final int PRESET_Steal = Abilities.STEAL.getCooldown();
+    private static final int PRESET_Give = Abilities.GIVE.getCooldown();
 
-    private static final int PRESET_TimeUntil_Swift = 45 * 20;
+    private static final int PRESET_TimeUntil_Swift = Abilities.SWIFT.getCooldown();
     private static final int PRESET_TimeUntil_BearAbilities = 2 * 20;
 
     //Ability cooldowns
@@ -369,7 +369,7 @@ public class User {
                     this.timeUntil_Swift--;
                 } else {
                     inv.setItem(KitRogue.SLOT_SWIFT, ItemRegistry.ABILITY_Swift);
-                    this.timeUntil_Swift = 45 * 20;
+                    this.timeUntil_Swift = PRESET_TimeUntil_Swift;
                 }
             }
 

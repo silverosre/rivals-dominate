@@ -13,8 +13,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class ItemsDefenseBear extends Items {
     @Override
     protected void prepareFeatures() {
-        generateDefenseBear(1);
-        generateChaosZone(3);
+        generateDefenseBear(Abilities.DEFENSE_BEAR, "Defense Bear");
+        generateChaosZone(Abilities.CHAOS_ZONE, "Chaos Zone");
     }
 
     @Override
@@ -25,31 +25,31 @@ public class ItemsDefenseBear extends Items {
         ItemRegistry.SKULL_DefenseBear = getSkull(Skulls.DEFENSE_BEAR, "Defense Bear Head");
     }
 
-    private static void generateDefenseBear(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.DEFENSE_BEAR);
+    private static void generateDefenseBear(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Defense Bear " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Increases Defensive abilities",
-                WHITE + ITALIC + "at the cost of some Attack and Speed.",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "at the cost of some Attack and Speed."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_DefenseBear = item;
     }
 
-    private static void generateChaosZone(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.CHAOS_ZONE);
+    private static void generateChaosZone(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Chaos Zone " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Places a circle at your feet",
                 WHITE + ITALIC + "that increases you and your team's attack",
-                WHITE + ITALIC + "and damages enemy players in the zone",
-                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+                WHITE + ITALIC + "and damages enemy players in the zone"
         ));
 
         item.setItemMeta(meta);

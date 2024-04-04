@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class ItemsGummybear extends Items {
     @Override
     protected void prepareFeatures() {
-        generateNormalBear(0);
+        generateNormalBear(Abilities.NORMAL_BEAR, "Normal Bear");
         generateGummyClub();
         generateGummyEssence();
     }
@@ -25,15 +25,15 @@ public class ItemsGummybear extends Items {
         ItemRegistry.SKULL_GummyBear = getSkull(Skulls.GUMMY_BEAR, "Gummy Bear Head");
     }
 
-    private static void generateNormalBear(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.NORMAL_BEAR);
+    private static void generateNormalBear(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Normal Bear " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Changes you back into",
-                WHITE + ITALIC + "your average bear!",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "your average bear!"
         ));
 
         item.setItemMeta(meta);

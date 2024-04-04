@@ -19,9 +19,9 @@ import java.util.UUID;
 public class ItemsArcher extends Items {
     @Override
     protected void prepareFeatures() {
-        generateFletch(1);
-        generateSnare(1);
-        generateFromAbove(3);
+        generateFletch(Abilities.FLETCH, "Fletch");
+        generateSnare(Abilities.SNARE, "Snare");
+        generateFromAbove(Abilities.FROM_ABOVE, "From Above");
         generateArcherBow();
         generateArcherSword();
         ItemRegistry.WEAPON_ArcherArrows = getArrows(10);
@@ -34,44 +34,46 @@ public class ItemsArcher extends Items {
         ItemRegistry.SKULL_Archer = getSkull(Skulls.ARCHER, "Archer Head");
     }
 
-    private static void generateFletch(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.FLETCH);
+    private static void generateFletch(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Fletch " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Fletch some arrows.",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                ability,
+                WHITE + ITALIC + "Fletch some arrows."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Fletch = item;
     }
 
-    private static void generateSnare(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.SNARE);
+    private static void generateSnare(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Snare " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Places a small trap that slows",
-                WHITE + ITALIC + "enemies.",
-                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+                WHITE + ITALIC + "enemies."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Snare = item;
     }
 
-    private static void generateFromAbove(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.FROM_ABOVE);
+    private static void generateFromAbove(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: From Above " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + "Tosses a flare that marks an",
-                WHITE + ITALIC + "area for air strike by arrows.",
-                DARK_AQUA + "Costs " + cost + " energy: 20 second cooldown"
+                ability,
+                WHITE + "Tosses a flare that marks an",
+                WHITE + "area for air strike by arrows."
+                //GRAY + ITALIC + "\"And just when we thought we could",
+                //GRAY + ITALIC + "escape, they attacked us from above.\""
         ));
 
         item.setItemMeta(meta);

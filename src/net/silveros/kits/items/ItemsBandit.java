@@ -25,9 +25,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class ItemsBandit extends Items{
     @Override
     protected void prepareFeatures() {
-        generateSteal(0);
-        generateGive(1);
-        generateReload(2);
+        generateSteal(Abilities.STEAL, "Steal");
+        generateGive(Abilities.GIVE, "Give");
+        generateReload(Abilities.RELOAD, "Reload");
         generateSixShooter();
     }
     @Override
@@ -38,45 +38,45 @@ public class ItemsBandit extends Items{
         ItemRegistry.SKULL_Bandit = getSkull(Skulls.BANDIT, "Bandit Head");
     }
 
-    private static void generateSteal(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.STEAL);
+    private static void generateSteal(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Steal " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + BOLD + ITALIC + "Steals an Energy from a nearby enemy",
-                GRAY + ITALIC + "Slow your roll cowpoke, there are more riches further west",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy: 1 second cooldown"
+                ability,
+                WHITE + ITALIC + "Steals an Energy from a nearby enemy"
+                //GRAY + ITALIC + "Slow your roll cowpoke, there are more riches further west",
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Steal = item;
     }
 
-    private static void generateGive(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.GIVE);
+    private static void generateGive(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Give " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + BOLD + ITALIC + "Gives an Energy to a nearby ally",
-                GRAY + ITALIC + "They call me Robin Hood this side of the Mississippi",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy: 2 second cooldown"
+                ability,
+                WHITE + ITALIC + "Gives an Energy to a nearby ally"
+                //GRAY + ITALIC + "They call me Robin Hood this side of the Mississippi"
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Give = item;
     }
 
-    private static void generateReload(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.RELOAD);
+    private static void generateReload(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Reload " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + BOLD + ITALIC + "Loads two bullets into your Six-Shooter",
-                GRAY + ITALIC + "More'n one way to tango, darlin'",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy, 1.5 second cooldown"
+                ability,
+                WHITE + ITALIC + "Loads two bullets into your Six-Shooter"
+                //GRAY + ITALIC + "More'n one way to tango, darlin'"
         ));
 
         item.setItemMeta(meta);
@@ -160,9 +160,8 @@ public class ItemsBandit extends Items{
 
         meta.setDisplayName(YELLOW + BOLD + "Six Shooter");
         meta.setLore(addLore(
-                WHITE + BOLD + ITALIC + "Right-click to use.  Ammo shown above hotbar.",
-                GRAY + ITALIC + "Quicker than lightnin'",
-                DARK_AQUA + BOLD + "Costs 1 ammo, no cooldown"
+                WHITE + ITALIC + "Right-click to use.  Ammo shown above hotbar.",
+                GRAY + ITALIC + "Quicker than lightnin'"
         ));
 
         item.setItemMeta(meta);

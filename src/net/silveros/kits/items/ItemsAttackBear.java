@@ -13,8 +13,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class ItemsAttackBear extends Items {
     @Override
     protected void prepareFeatures() {
-        generateAttackBear(1);
-        generateNumb(3);
+        generateAttackBear(Abilities.ATTACK_BEAR, "Attack Bear");
+        generateNumb(Abilities.NUMB, "Numb");
         generateNumbness();
     }
 
@@ -26,30 +26,30 @@ public class ItemsAttackBear extends Items {
         ItemRegistry.SKULL_AttackBear = getSkull(Skulls.ATTACK_BEAR, "Attack Bear Head");
     }
 
-    private static void generateAttackBear(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.ATTACK_BEAR);
+    private static void generateAttackBear(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Attack Bear " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Increases Attack",
-                WHITE + ITALIC + "At the cost of Defense and some Speed",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "At the cost of Defense and some Speed"
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_AttackBear = item;
     }
 
-    private static void generateNumb(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.NUMB);
+    private static void generateNumb(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Numb " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Damage you take is tallied up",
-                WHITE + ITALIC + "and delivered after 10 seconds",
-                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+                WHITE + ITALIC + "and delivered after 10 seconds"
         ));
 
         item.setItemMeta(meta);

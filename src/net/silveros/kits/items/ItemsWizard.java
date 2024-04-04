@@ -15,9 +15,9 @@ public class ItemsWizard extends Items {
     @Override
     protected void prepareFeatures() {
         generateWizardStaff();
-        generateZap(2);
-        generateFireball(5);
-        generateFreeze(1);
+        generateZap(Abilities.ZAP, "Zap");
+        generateFireball(Abilities.FIREBALL, "Fireball");
+        generateFreeze(Abilities.FREEZE, "Freeze");
     }
 
     @Override
@@ -28,47 +28,47 @@ public class ItemsWizard extends Items {
         ItemRegistry.SKULL_Wizard = getSkull(Skulls.WIZARD, "Wizard Head");
     }
 
-    private static void generateZap(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.ZAP);
+    private static void generateZap(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Zap " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Places a bomb on the ground",
-                WHITE + ITALIC + "that after a second explodes",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "that after a second explodes"
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Zap = item;
     }
 
-    private static void generateFireball(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.FIREBALL);
+    private static void generateFireball(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Fireball " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Shoots a huge",
                 WHITE + ITALIC + "fireball that explodes",
-                WHITE + ITALIC + "when it hits something.",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "when it hits something."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Fireball = item;
     }
 
-    private static void generateFreeze(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.FREEZE);
+    private static void generateFreeze(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Freeze " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Freezes your feet",
                 WHITE + ITALIC + "allows you to walk on water",
-                WHITE + ITALIC + "and slows down nearby enemies",
-                DARK_AQUA + "Costs " + cost + " energy: 20 second cooldown"
+                WHITE + ITALIC + "and slows down nearby enemies"
         ));
 
         item.setItemMeta(meta);

@@ -12,8 +12,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 public class ItemsSpeedBear extends Items {
     @Override
     protected void prepareFeatures() {
-        generateSpeedBear(1);
-        generateStinkBomb(2);
+        generateSpeedBear(Abilities.SPEED_BEAR, "Speed Bear");
+        generateStinkBomb(Abilities.STINK_BOMB, "Stink Bomb");
     }
 
     @Override
@@ -24,30 +24,30 @@ public class ItemsSpeedBear extends Items {
         ItemRegistry.SKULL_SpeedBear = getSkull(Skulls.SPEED_BEAR, "Speed Bear Head");
     }
 
-    private static void generateSpeedBear(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.SPEED_BEAR);
+    private static void generateSpeedBear(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Speed Bear " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Increase Speed Substantially",
-                WHITE + ITALIC + "At the cost of Defense and Attack",
-                DARK_AQUA + "Costs " + cost + " energy: 5 second cooldown"
+                WHITE + ITALIC + "At the cost of Defense and Attack"
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_SpeedBear = item;
     }
 
-    private static void generateStinkBomb(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.STINK_BOMB);
+    private static void generateStinkBomb(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Stink Bomb " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
+                ability,
                 WHITE + ITALIC + "Creates a nauseating, blinding smoke",
-                WHITE + ITALIC + "Smoke screen lasts 10 seconds",
-                DARK_AQUA + "Costs " + cost + " energy: 30 second cooldown"
+                WHITE + ITALIC + "Smoke screen lasts 10 seconds"
         ));
 
         item.setItemMeta(meta);

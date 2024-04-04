@@ -23,9 +23,9 @@ import java.util.UUID;
 public class ItemsRogue extends Items{
     @Override
     protected void prepareFeatures() {
-        generateCurse(1);
-        generateIncantation(3);
-        generateSwift(2);
+        generateCurse(Abilities.CURSE, "Curse");
+        generateIncantation(Abilities.INCANTATION, "Incantation");
+        generateSwift(Abilities.SWIFT, "Swift");
         generateRogueSword();
         generateDarkSister();
     }
@@ -37,45 +37,45 @@ public class ItemsRogue extends Items{
         ItemRegistry.SKULL_Rogue = getSkull(Skulls.ROGUE, "Rogue Head");
     }
 
-    private static void generateCurse(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.CURSE);
+    private static void generateCurse(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Curse " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + BOLD + "Throws a blinding bomb on the ground",
-                GRAY + ITALIC + "Use it wisely...",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy: 10 second cooldown"
+                ability,
+                WHITE + ITALIC + "Throws a blinding bomb on the ground"
+                //GRAY + ITALIC + "Use it wisely...",
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Curse = item;
     }
 
-    private static void generateIncantation(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.INCANTATION);
+    private static void generateIncantation(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Incantation " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + BOLD + "Increases your sword's damage for 10 seconds",
-                GRAY + ITALIC + "Let the darkness surround your blade.",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy: 30 second cooldown"
+                ability,
+                WHITE + ITALIC + "Increases your sword's damage for 10 seconds"
+                //GRAY + ITALIC + "Let the darkness surround your blade."
         ));
 
         item.setItemMeta(meta);
         ItemRegistry.ABILITY_Incantation = item;
     }
 
-    private static void generateSwift(int cost) {
-        ItemAbility item = getBlankAbility(cost, Abilities.SWIFT);
+    private static void generateSwift(Abilities ability, String name) {
+        ItemAbility item = getBlankAbility(ability);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(LIGHT_PURPLE + "Ability: Swift " + itemCost(cost));
+        meta.setDisplayName(abilityName(name) + itemCost(ability.getCost()));
         meta.setLore(addLore(
-                WHITE + ITALIC + BOLD + "Increases your speed substantially for a short time",
-                GRAY + ITALIC + "Run away, all of your problems have been solved this way.",
-                DARK_AQUA + BOLD + "Costs " + cost + " energy: 45 second cooldown"
+                ability,
+                WHITE + ITALIC + BOLD + "Increases your speed substantially for a short time"
+                //GRAY + ITALIC + "Run away, all of your problems have been solved this way.",
         ));
 
         item.setItemMeta(meta);
