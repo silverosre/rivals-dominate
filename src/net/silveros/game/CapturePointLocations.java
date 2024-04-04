@@ -41,7 +41,7 @@ public class CapturePointLocations {
         addLocation(RivalsMap.MELT, Points.POINT_B, new Vec3(1135, 19, -800));
         addLocation(RivalsMap.MELT, Points.POINT_C, new Vec3(1047, 19, -800));
         addLocation(RivalsMap.MELT, Points.POINT_D, new Vec3(1091, 19, -844));
-        addLocation(RivalsMap.MELT, Points.POINT_E, new Vec3(1091, 19, -755));
+        addLocation(RivalsMap.MELT, Points.POINT_E, new Vec3(1091, 19, -756));
     }
 
     public static void addLocation(RivalsMap map, Points point, Vec3 vec) {
