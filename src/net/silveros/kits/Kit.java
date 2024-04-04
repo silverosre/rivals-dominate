@@ -17,7 +17,6 @@ public abstract class Kit {
     public static Kit HEROBRINE;
     public static Kit GUMMY_BEAR;
     public static Kit WIZARD;
-    public static Kit GOBLIN;
     public static Kit BANDIT;
 
     public final String kitName;
