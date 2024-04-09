@@ -24,6 +24,7 @@ import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
 
 import java.util.*;
+import java.util.List;
 
 public class RivalsCore implements Color {
     public ScoreboardManager manager;
@@ -62,8 +63,8 @@ public class RivalsCore implements Color {
     public static PointState pointCState = PointState.UNDEFINED;
     public static PointState pointDState = PointState.UNDEFINED;
     public static PointState pointEState = PointState.UNDEFINED;
-    public static final Material[] WOOLS = {Material.WHITE_WOOL, Material.RED_WOOL, Material.BLUE_WOOL};
-    public static final Material[] GLASS = {Material.WHITE_STAINED_GLASS, Material.RED_STAINED_GLASS, Material.BLUE_STAINED_GLASS};
+    public static Map<Integer, Integer> blocksToChangeX = new HashMap<>(20);
+    public static Map<Integer, Integer> blocksToChangeZ = new HashMap<>(20);
 
     //formula: seconds * 20
     public static final int ENERGY_BLOCK_TIMER = 60 * 20;
@@ -89,8 +90,8 @@ public class RivalsCore implements Color {
         this.board  = this.manager.getNewScoreboard();
 
         this.initTeams();
-        this.addViablePointBlocks();
         CapturePointLocations.init();
+        this.addBlocksToChange();
 
         fireworks = new HashSet<>();
 
@@ -113,6 +114,8 @@ public class RivalsCore implements Color {
     public void startDominateGame(RivalsMap map) {
         gamemode = Gamemode.DOMINATE;
         this.currentMap = map;
+
+        this.addViablePointBlocks(map);
         this.setupCapturePoints(this.currentMap);
         this.toggleDominateProgressBars(true);
 
@@ -278,13 +281,58 @@ public class RivalsCore implements Color {
         this.TEAM_SPECTATOR.setAllowFriendlyFire(false);
     }
 
-    private void addViablePointBlocks() {
-        viablePointBlocks.add(Material.WHITE_WOOL);
-        viablePointBlocks.add(Material.BLUE_WOOL);
-        viablePointBlocks.add(Material.RED_WOOL);
-        viablePointBlocks.add(Material.WHITE_STAINED_GLASS);
-        viablePointBlocks.add(Material.BLUE_STAINED_GLASS);
-        viablePointBlocks.add(Material.RED_STAINED_GLASS);
+    private void addViablePointBlocks(RivalsMap map) {
+        viablePointBlocks.add(RivalsMap.BlockColor.WHITE.getWoolBlock());
+        viablePointBlocks.add(map.colorBlue.getWoolBlock());
+        viablePointBlocks.add(map.colorRed.getWoolBlock());
+        viablePointBlocks.add(RivalsMap.BlockColor.WHITE.getGlassBlock());
+        viablePointBlocks.add(map.colorBlue.getGlassBlock());
+        viablePointBlocks.add(map.colorRed.getGlassBlock());
+    }
+
+    /**do not call this method*/
+    private void addBlocksToChange() {
+        blocksToChangeX.put(0, 1);
+        blocksToChangeX.put(1, 0);
+        blocksToChangeX.put(2, -2);
+        blocksToChangeX.put(3, 1);
+        blocksToChangeX.put(4, -2);
+        blocksToChangeX.put(5, 0);
+        blocksToChangeX.put(6, 2);
+        blocksToChangeX.put(7, -1);
+        blocksToChangeX.put(8, 0);
+        blocksToChangeX.put(9, -1);
+        blocksToChangeX.put(10, 1);
+        blocksToChangeX.put(11, -2);
+        blocksToChangeX.put(12, 2);
+        blocksToChangeX.put(13, 0);
+        blocksToChangeX.put(14, -1);
+        blocksToChangeX.put(15, 1);
+        blocksToChangeX.put(16, -1);
+        blocksToChangeX.put(17, -1);
+        blocksToChangeX.put(18, 2);
+        blocksToChangeX.put(19, 1);
+
+        blocksToChangeZ.put(0, 1);
+        blocksToChangeZ.put(1, -1);
+        blocksToChangeZ.put(2, 1);
+        blocksToChangeZ.put(3, -2);
+        blocksToChangeZ.put(4, -1);
+        blocksToChangeZ.put(5, 2);
+        blocksToChangeZ.put(6, 0);
+        blocksToChangeZ.put(7, 0);
+        blocksToChangeZ.put(8, -2);
+        blocksToChangeZ.put(9, 2);
+        blocksToChangeZ.put(10, 0);
+        blocksToChangeZ.put(11, 0);
+        blocksToChangeZ.put(12, -1);
+        blocksToChangeZ.put(13, 1);
+        blocksToChangeZ.put(14, -1);
+        blocksToChangeZ.put(15, 2);
+        blocksToChangeZ.put(16, -2);
+        blocksToChangeZ.put(17, 1);
+        blocksToChangeZ.put(18, 1);
+        blocksToChangeZ.put(19, -1);
     }
 
     private void setPointScore(List<User> teammates, Points point, Marker entity, Score score, int rate, boolean blueTeam) {
@@ -358,7 +406,8 @@ public class RivalsCore implements Color {
                         break;
                 }
 
-                this.setBlocksForPoint(entity.getWorld(), entity.getLocation(), this.getPointState(point));
+                this.setBlocksForPointSlowly(entity.getWorld(), entity.getLocation(), this.currentMap.colorBlue, score);
+                //this.setBlocksForPoint(entity.getWorld(), entity.getLocation(), this.getPointState(point));
             } else if (!blueTeam && score.getScore() < 0) {
                 switch (point) {
                     case POINT_A:
@@ -388,7 +437,10 @@ public class RivalsCore implements Color {
                         break;
                 }
 
-                this.setBlocksForPoint(entity.getWorld(), entity.getLocation(), this.getPointState(point));
+                this.setBlocksForPointSlowly(entity.getWorld(), entity.getLocation(), this.currentMap.colorRed, score);
+                //this.setBlocksForPoint(entity.getWorld(), entity.getLocation(), this.getPointState(point));
+            } else {
+                this.setBlocksForPointSlowly(entity.getWorld(), entity.getLocation(), RivalsMap.BlockColor.WHITE, score);
             }
         }
 
@@ -433,6 +485,26 @@ public class RivalsCore implements Color {
         return point == Points.POINT_A ? pointAState : point == Points.POINT_B ? pointBState : point == Points.POINT_C ? pointCState : point == Points.POINT_D ? pointDState : pointEState;
     }
 
+    private void setBlocksForPointSlowly(World world, Location l, RivalsMap.BlockColor blockColor, Score score) {
+        int ox = l.getBlockX();
+        int y = l.getBlockY() - 1;
+        int oz = l.getBlockZ();
+
+        Material wool = blockColor.getWoolBlock();
+
+        int index = Math.abs(score.getScore() / 5);
+        System.out.println(index);
+
+        int xfn = ox + blocksToChangeX.get(index);
+        int zfn = oz + blocksToChangeZ.get(index);
+
+        world.setBlockData(xfn, y, zfn, wool.createBlockData());
+
+        if (blockColor != RivalsMap.BlockColor.WHITE) {
+            world.setBlockData(ox, y, oz, RivalsMap.BlockColor.WHITE.getGlassBlock().createBlockData());
+        }
+    }
+
     private void setBlocksForPoint(World world, Location l, PointState state) {
         int ox = l.getBlockX();
         int y = l.getBlockY() - 1;
@@ -440,20 +512,33 @@ public class RivalsCore implements Color {
 
         //boolean isStateDefined = state == PointState.BLUE || state == PointState.RED;
 
+        Material wool = RivalsMap.BlockColor.WHITE.getWoolBlock(), glass = RivalsMap.BlockColor.WHITE.getGlassBlock();
+        switch (state.ordinal()) {
+            case 1:
+                wool = this.currentMap.colorRed.getWoolBlock();
+                glass = this.currentMap.colorRed.getGlassBlock();
+                break;
+            case 2:
+                wool = this.currentMap.colorBlue.getWoolBlock();
+                glass = this.currentMap.colorBlue.getGlassBlock();
+                break;
+        }
+
         for (int x=ox-3; x<ox+3; x++) {
             for (int z=oz-3; z<oz+3; z++) {
                 Material block = world.getBlockAt(x, y, z).getType();
-                boolean whiteWool = block == Material.WHITE_WOOL;
-                boolean blueWool = block == Material.BLUE_WOOL;
-                boolean redWool = block == Material.RED_WOOL;
+
+                boolean whiteWool = block == RivalsMap.BlockColor.WHITE.getWoolBlock();
+                boolean blueWool = block == this.currentMap.colorBlue.getWoolBlock();
+                boolean redWool = block == this.currentMap.colorRed.getWoolBlock();
 
                 if (whiteWool || blueWool || redWool) {
-                    world.setBlockData(x, y, z, WOOLS[state.ordinal()].createBlockData());
+                    world.setBlockData(x, y, z, wool.createBlockData());
                 }
             }
         }
 
-        world.setBlockData(ox, y, oz, GLASS[state.ordinal()].createBlockData());
+        world.setBlockData(ox, y, oz, glass.createBlockData());
     }
 
     private int getPointsCaptured(PointState state) {
